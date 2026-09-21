@@ -1,0 +1,179 @@
+:root{
+  --bg:#f7f8fb; --surface:#ffffff; --surface2:#f1f3f8; --ink:#1e2233; --ink2:#555b70; --muted:#8a90a3; --hair:#e6e8f0;
+  --focus:#578ed4;
+  /* bước: tone (nét), tint (nền), dark (chữ) */
+  --A:#578ed4; --A-t:#e6eefa; --A-d:#2e5a93;
+  --B:#ee9370; --B-t:#fcebe3; --B-d:#9e4e2e;
+  --C:#279479; --C-t:#dff2eb; --C-d:#1b6a56;
+  --D:#d7ac4a; --D-t:#fbf2dc; --D-d:#85631a;
+  --E:#8c6ebd; --E-t:#efeaf8; --E-d:#5d4690;
+  --F:#d87da2; --F-t:#fae5ee; --F-d:#944565;
+  --N:#8a90a3; --N-t:#eef0f5; --N-d:#454b61;
+  --I:#279479; --I-t:#e8f5f0; --I-d:#1b6a56;
+  /* biểu đồ (đã kiểm tra màu: band, chroma, CVD) */
+  --c1:#578ed4; --c2:#ee9370; --c3:#8c6ebd; --c4:#279479; --c5:#d7ac4a; --c6:#d87da2; --cgray:#b4b8c5; --cslate:#7a8095;
+  --o1:#bfd2f3; --o2:#8dabe4; --o3:#6380c8; --o4:#41559e;
+  --grid:#e6e8f0; --axis:#c9ccd8;
+  --shadow:0 1px 2px rgba(30,34,51,.05),0 6px 24px -12px rgba(30,34,51,.12);
+  --r:14px;
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#13151c; --surface:#1b1e27; --surface2:#222633; --ink:#e9ebf3; --ink2:#b3b8c9; --muted:#858ba0; --hair:#2c3040;
+    --A-t:#1f2a3e; --A-d:#9dbdea; --B-t:#35241e; --B-d:#f2b49a; --C-t:#16302a; --C-d:#7fd0b7; --D-t:#332a16; --D-d:#e6c983;
+    --E-t:#2a2340; --E-d:#c4b2e6; --F-t:#36212c; --F-d:#eeb0c9; --N-t:#252936; --N-d:#c3c7d6; --I-t:#172c27; --I-d:#7fd0b7;
+    --c1:#5d94da; --c2:#cf7855; --c3:#9577c7; --c4:#2f9a7f; --c5:#b48c2b; --c6:#cb7196; --cgray:#5d6275; --cslate:#8f95ab;
+    --o1:#384b79; --o2:#506fb2; --o3:#799bda; --o4:#b4ccf2; --grid:#2a2e3b; --axis:#3a3f50;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#13151c; --surface:#1b1e27; --surface2:#222633; --ink:#e9ebf3; --ink2:#b3b8c9; --muted:#858ba0; --hair:#2c3040;
+  --A-t:#1f2a3e; --A-d:#9dbdea; --B-t:#35241e; --B-d:#f2b49a; --C-t:#16302a; --C-d:#7fd0b7; --D-t:#332a16; --D-d:#e6c983;
+  --E-t:#2a2340; --E-d:#c4b2e6; --F-t:#36212c; --F-d:#eeb0c9; --N-t:#252936; --N-d:#c3c7d6; --I-t:#172c27; --I-d:#7fd0b7;
+  --c1:#5d94da; --c2:#cf7855; --c3:#9577c7; --c4:#2f9a7f; --c5:#b48c2b; --c6:#cb7196; --cgray:#5d6275; --cslate:#8f95ab;
+  --o1:#384b79; --o2:#506fb2; --o3:#799bda; --o4:#b4ccf2; --grid:#2a2e3b; --axis:#3a3f50;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 28px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,3vw,32px)}
+a{color:var(--A-d)}
+h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+code,.mono{font-family:var(--mono);font-size:.86em}
+.tab-nums{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:6px}
+
+/* ---------- thanh trên cùng */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:56px}
+.brand{font-weight:800;font-size:15px;white-space:nowrap;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand i{display:inline-grid;grid-template-columns:repeat(3,5px);gap:2px}
+.brand i b{width:5px;height:5px;border-radius:2px;display:block}
+.nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:13px;font-weight:500;color:var(--ink2);text-decoration:none;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.nav a:hover{background:var(--surface2);color:var(--ink)}
+.nav a.on{background:var(--ink);color:var(--bg)}
+.theme-btn{border:1px solid var(--hair);background:var(--surface);color:var(--ink2);border-radius:999px;height:32px;padding:0 12px;font:500 12px var(--font);cursor:pointer;white-space:nowrap}
+
+/* ---------- hero */
+.hero{padding-block:48px 28px}
+.hero .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:36px;align-items:end}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--E-d)}
+.hero h1{font-size:clamp(40px,6.4vw,76px);font-weight:800;line-height:1.02;letter-spacing:-.035em;margin-top:10px}
+.hero .lead{font-size:clamp(17px,2vw,21px);color:var(--ink2);margin-top:14px;max-width:34ch}
+.hero .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--hair);color:var(--ink2)}
+.chip b{color:var(--ink);font-weight:700}
+.hero-cta{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:11px 18px;font:600 14px var(--font);cursor:pointer;text-decoration:none}
+.btn.pri{background:var(--ink);color:var(--bg)}
+.btn.sec{background:var(--surface);color:var(--ink);border:1px solid var(--hair)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.hero-art{background:var(--E-t);border-radius:22px;padding:22px 22px 14px}
+.hero-art .cap{font-size:12px;color:var(--ink2);margin-top:6px}
+
+/* ---------- thông điệp */
+.msgs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.msg{border-radius:var(--r);padding:16px 16px 14px;background:var(--st-t);color:var(--ink)}
+.msg .k{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--st-d);text-transform:uppercase}
+.msg p{margin-top:6px;font-size:14.5px}
+.msg p b{font-weight:700}
+
+/* ---------- section */
+section.blk{padding-block:40px 8px;scroll-margin-top:64px}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:end;margin-bottom:18px}
+.sec-no{grid-row:span 2;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-weight:800;font-size:20px;background:var(--st-t);color:var(--st-d)}
+.sec-head .eyebrow{color:var(--st-d)}
+.sec-head h2{font-size:clamp(24px,3vw,32px);font-weight:750}
+.sec-lead{color:var(--ink2);max-width:75ch;margin-bottom:18px}
+.st-A{--st:var(--A);--st-t:var(--A-t);--st-d:var(--A-d)} .st-B{--st:var(--B);--st-t:var(--B-t);--st-d:var(--B-d)}
+.st-C{--st:var(--C);--st-t:var(--C-t);--st-d:var(--C-d)} .st-D{--st:var(--D);--st-t:var(--D-t);--st-d:var(--D-d)}
+.st-E{--st:var(--E);--st-t:var(--E-t);--st-d:var(--E-d)} .st-F{--st:var(--F);--st-t:var(--F-t);--st-d:var(--F-d)}
+.st-N{--st:var(--N);--st-t:var(--N-t);--st-d:var(--N-d)} .st-I{--st:var(--I);--st-t:var(--I-t);--st-d:var(--I-d)}
+
+/* ---------- thẻ phân tích */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card-top{display:flex;align-items:flex-start;gap:10px}
+.code{flex:none;font-size:12px;font-weight:700;padding:3px 8px;border-radius:8px;background:var(--st-t);color:var(--st-d);margin-top:3px}
+.card h3{font-size:18px;font-weight:700;line-height:1.3}
+.hyp{font-size:13px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.verdict{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+.v-U{background:var(--C-t);color:var(--C-d)} .v-M{background:var(--D-t);color:var(--D-d)} .v-B{background:var(--F-t);color:var(--F-d)}
+.ctrls{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.seg{display:inline-flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;color:var(--ink2);font:500 12.5px var(--font);padding:5px 10px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.chart{position:relative;width:100%;min-height:200px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.notes{display:grid;gap:8px}
+.note{background:var(--st-t);border-radius:10px;padding:9px 12px;font-size:13.5px;color:var(--ink)}
+.note b{color:var(--st-d)}
+.meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;border-top:1px dashed var(--hair);padding-top:8px}
+.meta b{color:var(--ink2);font-weight:600}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap}
+.linkbtn{border:0;background:none;color:var(--st-d,var(--A-d));font:600 12.5px var(--font);cursor:pointer;padding:0}
+.ai-box{background:var(--surface2);border-radius:10px;padding:10px 12px;font-size:13.5px;white-space:pre-wrap}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--hair);border-radius:10px}
+table.t{border-collapse:collapse;width:100%;font-size:13px}
+table.t th,table.t td{padding:7px 10px;border-bottom:1px solid var(--hair);text-align:left;vertical-align:top}
+table.t th{background:var(--surface2);font-weight:600;color:var(--ink2);font-size:12px}
+table.t td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t tr:last-child td{border-bottom:0}
+.small{font-size:12.5px;color:var(--ink2)}
+
+/* ---------- tooltip */
+.tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12.5px;padding:7px 10px;border-radius:8px;max-width:260px;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;transition:opacity .08s}
+.tip b{font-weight:700}
+
+/* ---------- hỏi dữ liệu */
+.ask{background:var(--surface);border:1px solid var(--hair);border-radius:20px;box-shadow:var(--shadow);padding:20px}
+.ask-row{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap}
+.ask textarea{flex:1 1 360px;min-height:52px;max-height:160px;resize:vertical;border:1px solid var(--hair);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px 14px;font:15px/1.45 var(--font)}
+.sugs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sug{border:1px solid var(--hair);background:var(--surface2);color:var(--ink2);border-radius:999px;padding:6px 12px;font:500 12.5px var(--font);cursor:pointer;text-align:left}
+.sug:hover{color:var(--ink);border-color:var(--axis)}
+.ask-status{font-size:13px;color:var(--ink2);margin-top:12px;min-height:20px}
+.answer{margin-top:14px;display:grid;gap:12px}
+.answer h3{font-size:19px}
+.insight{background:var(--E-t);border-radius:12px;padding:12px 14px;font-size:14px;white-space:pre-wrap}
+details.how{font-size:12.5px;color:var(--ink2)}
+details.how pre{white-space:pre-wrap;background:var(--surface2);border-radius:8px;padding:10px;font-family:var(--mono);font-size:12px;overflow-x:auto}
+.history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+/* ---------- tự khám phá */
+.explore{display:grid;grid-template-columns:280px 1fr;gap:16px}
+.panel{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r);padding:16px;display:grid;gap:12px;align-content:start}
+.panel label{font-size:12px;font-weight:600;color:var(--ink2);display:grid;gap:5px}
+.panel select{font:14px var(--font);padding:8px 10px;border-radius:10px;border:1px solid var(--hair);background:var(--bg);color:var(--ink);width:100%}
+
+/* ---------- bảng / phương pháp */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.box{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r);padding:16px}
+.box h4{font-size:15px;margin-bottom:8px}
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tier{border-radius:12px;padding:12px;background:var(--surface2)}
+.tier b{display:block;margin-bottom:4px}
+.tier span{font-size:12.5px;color:var(--ink2)}
+ul.clean{margin:0;padding-left:18px;display:grid;gap:6px}
+footer{padding-block:40px 60px;color:var(--muted);font-size:13px}
+
+@media (max-width:900px){
+  .hero .grid,.cards,.two,.explore{grid-template-columns:1fr}
+  .msgs{grid-template-columns:1fr 1fr}
+  .tiers{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .msgs,.tiers{grid-template-columns:1fr}
+  .card{padding:14px}
+  .top .wrap{gap:8px}
+  .brand span{display:none}
+}

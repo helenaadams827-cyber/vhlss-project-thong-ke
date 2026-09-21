@@ -1,0 +1,20 @@
+# Chỉ đưa lên GitHub: README, 2 file dữ liệu đã chọn và thư mục presentation
+/*
+!/.gitignore
+!/README.md
+!/processed/
+/processed/*
+!/processed/vhlss_clean.csv
+!/processed/vhlss_merged.csv
+!/presentation/
+
+# file tạm
+__pycache__/
+*.pyc
+*.log
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz

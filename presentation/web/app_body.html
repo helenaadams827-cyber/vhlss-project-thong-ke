@@ -1,0 +1,118 @@
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Project Thống Kê, về đầu trang"><i aria-hidden="true"><b style="background:var(--A)"></b><b style="background:var(--B)"></b><b style="background:var(--C)"></b><b style="background:var(--D)"></b><b style="background:var(--E)"></b><b style="background:var(--F)"></b></i><span>Project Thống Kê</span></a>
+    <nav class="nav" id="nav" aria-label="Mục lục">
+      <a href="#hoi">Hỏi dữ liệu</a>
+      <a href="#du-lieu">Dữ liệu</a>
+      <a href="#chia-nhom">Chia nhóm</a>
+      <a href="#buoc-A">1 · Ai giàu</a>
+      <a href="#buoc-B">2 · Thiết yếu</a>
+      <a href="#buoc-C">3 · Tiền đi đâu</a>
+      <a href="#buoc-D">4 · Tài sản</a>
+      <a href="#buoc-E">5 · Xu hướng</a>
+      <a href="#buoc-F">6 · Túi tiền hay nơi ở</a>
+      <a href="#ben-le">Bên lề</a>
+      <a href="#kham-pha">Tự khám phá</a>
+      <a href="#ket-luan">Kết luận</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Đổi giao diện sáng/tối">Giao diện</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap grid">
+      <div>
+        <div class="eyebrow">VHLSS 2010 · 2012 · 2014 · Tổng cục Thống kê</div>
+        <h1>Project<br>Thống Kê</h1>
+        <p class="lead">Hộ giàu, hộ nghèo chi tiêu và tích lũy thế nào? Túi tiền hay nơi ở quyết định?</p>
+        <div class="facts">
+          <span class="chip"><b>28.196</b> hộ</span>
+          <span class="chip"><b>63</b> tỉnh</span>
+          <span class="chip"><b>3</b> đợt khảo sát</span>
+          <span class="chip"><b>13</b> khoản chi · <b>10</b> loại tài sản</span>
+        </div>
+        <div class="hero-cta">
+          <a class="btn pri" href="#hoi">Hỏi dữ liệu bằng câu hỏi</a>
+          <a class="btn sec" href="#buoc-A">Xem 6 bước phân tích</a>
+        </div>
+      </div>
+      <figure class="hero-art" style="margin:0">
+        <div class="chart" id="heroChart" style="min-height:180px"></div>
+        <figcaption class="cap">Median thu nhập/người năm 2014 theo 4 nhóm thu nhập Q1–Q4 (triệu đồng). Tính trực tiếp từ dữ liệu trên trang.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="blk st-N" style="padding-top:8px">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">6</div><div class="eyebrow">Tóm tắt</div><h2>Sáu thông điệp chính</h2></div>
+      <div class="msgs" id="msgs"></div>
+    </div>
+  </section>
+
+  <section class="blk st-E" id="hoi">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">?</div><div class="eyebrow">Dùng Claude</div><h2>Hỏi dữ liệu</h2></div>
+      <p class="sec-lead">Gõ câu hỏi bằng tiếng Việt. Claude chuyển câu hỏi thành một phép tính; trang tự tính trên 28.196 hộ, vẽ biểu đồ, rồi Claude viết nhận xét từ đúng bảng số đó. Lần hỏi đầu, trình duyệt sẽ xin phép dùng Claude trên tài khoản của bạn.</p>
+      <div class="ask">
+        <div class="ask-row">
+          <textarea id="askInput" placeholder="Ví dụ: Tỉnh nào hộ nghèo khó đủ sống nhất? · Chi giáo dục theo Q ở thành thị và nông thôn · Tỷ lệ hộ có ô tô theo nhóm tỉnh qua các năm" aria-label="Câu hỏi về dữ liệu"></textarea>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn pri" id="askBtn" type="button">Hỏi</button>
+            <button class="btn sec" id="stopBtn" type="button" hidden>Dừng</button>
+          </div>
+        </div>
+        <div class="sugs" id="sugs"></div>
+        <div class="ask-status" id="askStatus" role="status" aria-live="polite"></div>
+        <div class="answer" id="answer" hidden></div>
+        <div class="history" id="history"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk st-N" id="du-lieu">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">D</div><div class="eyebrow">Trước khi phân tích</div><h2>Dữ liệu và làm sạch</h2></div>
+      <div class="cards" id="cards-data"></div>
+    </div>
+  </section>
+
+  <section class="blk st-N" id="chia-nhom">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">N</div><div class="eyebrow">Ba phạm vi so sánh</div><h2>Chia nhóm</h2></div>
+      <div class="cards" id="cards-group"></div>
+    </div>
+  </section>
+
+  <div id="steps"></div>
+
+  <section class="blk st-E" id="kham-pha">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">+</div><div class="eyebrow">Không cần Claude</div><h2>Tự khám phá</h2></div>
+      <p class="sec-lead">Chọn thước đo, cách chia nhóm và bộ lọc; biểu đồ và bảng tính lại ngay trên toàn bộ dữ liệu.</p>
+      <div class="explore">
+        <div class="panel" id="exPanel"></div>
+        <div class="card" style="box-shadow:none"><div class="chart" id="exChart"></div><div class="tbl-wrap" id="exTable"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk st-N" id="ket-luan">
+    <div class="wrap">
+      <div class="sec-head"><div class="sec-no">✓</div><div class="eyebrow">Đọc kết quả thế nào</div><h2>Hạn chế và kiến thức đã dùng</h2></div>
+      <div class="two">
+        <div class="box"><h4>Hạn chế</h4><ul class="clean small" id="limits"></ul></div>
+        <div class="box"><h4>Kiến thức môn học đã vận dụng</h4><div class="tbl-wrap" id="knowledge"></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Nguồn: Khảo sát Mức sống Hộ gia đình Việt Nam (VHLSS) 2010, 2012, 2014 · Tổng cục Thống kê. Mọi con số trên trang được tính trực tiếp từ dữ liệu đã làm sạch (28.196 hộ) nhúng trong trang; tiền tính theo nghìn đồng/năm, giá từng năm.</p>
+    <p style="margin-top:6px">Project Thống Kê · thống kê mô tả, không kiểm định giả thuyết.</p>
+  </div>
+</footer>
+<div class="tip" id="tip" role="tooltip"></div>
