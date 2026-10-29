@@ -35,6 +35,12 @@ const Eng = (() => {
     ids.sort((a, b) => V.inc_head[a] - V.inc_head[b] || a - b);
     ids.forEach((i, k) => V.decile[i] = Math.max(1, Math.ceil(k * 10 / (ids.length - 1))));   // giống pd.qcut(rank, 10)
   });
+  V.squart = new Float64Array(N).fill(NaN);                 // tứ phân vị chi tiêu/người trong từng năm (giống pd.qcut(rank, 4))
+  YEARS.forEach(y => {
+    const ids = []; for (let i = 0; i < N; i++) if (V.year[i] === y && V.tot[i] === V.tot[i]) ids.push(i);
+    ids.sort((a, b) => V.tot[a] / V.size[a] - V.tot[b] / V.size[b] || a - b);
+    ids.forEach((i, k) => V.squart[i] = Math.max(1, Math.ceil(k * 4 / (ids.length - 1))));
+  });
   const S = {                                                // biến chuỗi
     province: i => PROV[C.p[i]].name, tier: i => PROV[C.p[i]].tier,
     area: i => C.a[i] === 1 ? "Thành thị" : "Nông thôn",
@@ -57,7 +63,7 @@ const Eng = (() => {
     veh: "oto+moto+bicycle", tech: "tele+tv+emachine", furn: "bed+tab", durables: "tổng giá trị đồ dùng (không kể nhà)",
     burden: "nec/income (gánh nặng thiết yếu, tỷ số)", overspend: "1 nếu tot > income", short: "1 nếu nec > income (không đủ tiền cho thiết yếu)",
     house_to_inc: "house/income (số năm thu nhập để có căn nhà)", save: "% thu nhập để dành = (income − tot)/income × 100",
-    decile: "thập phân vị thu nhập/người trong từng năm, 1–10 (10 = 10% hộ giàu nhất)", fuel_na: "1 nếu ô nhiên liệu bị trống", asset_na: "1 nếu thiếu cả 9 cột tài sản",
+    decile: "thập phân vị thu nhập/người trong từng năm, 1–10 (10 = 10% hộ giàu nhất)", squart: "nhóm chi tiêu/người 1–4 trong từng năm (tứ phân vị của tot/size)", fuel_na: "1 nếu ô nhiên liệu bị trống", asset_na: "1 nếu thiếu cả 9 cột tài sản",
   };
 
   /* ---------- biểu thức: tokenizer + Pratt parser -> closure */
@@ -126,10 +132,11 @@ const Eng = (() => {
     province: { keys: i => [S.province(i)], order: PROV.map(p => p.name), label: v => v },
     size: { keys: i => [Math.min(7, V.size[i])], order: [1, 2, 3, 4, 5, 6, 7], label: v => v === 7 ? "7+" : String(v) },
     decile: { keys: i => [V.decile[i]], order: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], label: v => "D" + v },
+    S: { keys: i => V.squart[i] === V.squart[i] ? [V.squart[i]] : [], order: [1, 2, 3, 4], label: v => "S" + v },
     scope: { keys: i => ["Toàn quốc", S.area(i), S.tier(i)], order: SCOPES, label: v => v },
     all: { keys: () => ["Toàn quốc"], order: ["Toàn quốc"], label: v => v },
   };
-  const DIM_NOTE = "year, Q, area, tier, province, decile (D1–D10), size (7 = 7+ người), scope (mỗi hộ tính vào 'Toàn quốc', khu vực và nhóm tỉnh của nó), all";
+  const DIM_NOTE = "year, Q, area, tier, province, decile (D1–D10), S (nhóm chi tiêu/người S1–S4), size (7 = 7+ người), scope (mỗi hộ tính vào 'Toàn quốc', khu vực và nhóm tỉnh của nó), all";
 
   /* ---------- thống kê */
   const sortNum = a => a.sort((x, y) => x - y);
@@ -238,11 +245,11 @@ const Eng = (() => {
     arr.sort((a, b) => pos(dims[0], a.k[0]) - pos(dims[0], b.k[0]) || pos(dims[1], a.k[1]) - pos(dims[1], b.k[1]));
   }
   function label(g, dims) { return dims.map((d, j) => DIMS[d].label(g.k[j])).join(" · ") || "Toàn quốc"; }
-  const DIM_LABEL = { decile: "Thập phân vị", year: "Năm", Q: "Nhóm Q", area: "Khu vực", tier: "Nhóm tỉnh", province: "Tỉnh", size: "Số người/hộ", scope: "Phạm vi", all: "Nhóm" };
+  const DIM_LABEL = { S: "Nhóm chi tiêu", decile: "Thập phân vị", year: "Năm", Q: "Nhóm Q", area: "Khu vực", tier: "Nhóm tỉnh", province: "Tỉnh", size: "Số người/hộ", scope: "Phạm vi", all: "Nhóm" };
 
   /* ---------- màu theo chiều */
   function colorsFor(dim, keys) {
-    if (dim === "Q" || dim === "tier") return keys.map(k => ORD[(dim === "Q" ? k : +String(k)[1]) - 1]);
+    if (dim === "Q" || dim === "tier" || dim === "S") return keys.map(k => ORD[(dim === "tier" ? +String(k)[1] : k) - 1]);
     if (dim === "year") return keys.map(k => ["var(--o1)", "var(--o3)", "var(--o4)"][YEARS.indexOf(k)]);
     if (dim === "area") return keys.map(k => k === "Thành thị" ? "var(--c1)" : "var(--c2)");
     if (dim === "scope") return keys.map(k => SCOPES.indexOf(k) < 3 ? "var(--cgray)" : ORD[+String(k)[1] - 1]);

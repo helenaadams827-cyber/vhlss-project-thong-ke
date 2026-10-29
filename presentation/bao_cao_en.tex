@@ -1,0 +1,1035 @@
+% =====================================================================
+%  VHLSS 2010 / 2012 / 2014 ANALYTICAL REPORT (English version)
+%    cd presentation && xelatex bao_cao_en.tex && xelatex bao_cao_en.tex
+%  Toàn bộ số liệu và hình trong báo cáo do notebook ../report_EDA.ipynb tạo ra
+%  Hình: figs_nb/h01 ... h25 (png)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+\setmainfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Regular, BoldFont=*-SemiBold, ItalicFont=*-Italic, BoldItalicFont=*-SemiBold]
+\setsansfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Medium, BoldFont=*-Bold, ItalicFont=*-Italic]
+\newfontfamily\heavy{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Bold]
+\usepackage[a4paper,top=2.3cm,bottom=2.3cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{booktabs,tabularx,array,colortbl,multirow}
+\usepackage{graphicx,float,amsmath}
+\usepackage[most]{tcolorbox}
+\usepackage[labelfont={bf,small},textfont=small,labelsep=period]{caption}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{ink}{HTML}{1E2233}\definecolor{ink2}{HTML}{555B70}\definecolor{muted}{HTML}{8A90A3}
+\definecolor{hair}{HTML}{E6E8F0}
+\definecolor{blue}{HTML}{41559E}\definecolor{coral}{HTML}{9E4E2E}\definecolor{teal}{HTML}{1B6A56}
+\definecolor{amber}{HTML}{85631A}
+\definecolor{tintA}{HTML}{E6EEFA}\definecolor{tintC}{HTML}{DFF2EB}\definecolor{tintD}{HTML}{FBF2DC}
+\definecolor{tintN}{HTML}{EEF0F5}
+
+\color{ink}
+\titleformat{\section}{\Large\heavy\color{blue}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{ink2}}{\thesubsubsection.}{0.5em}{}
+\titlespacing{\section}{0pt}{16pt}{8pt}
+\titlespacing{\subsection}{0pt}{12pt}{5pt}
+\setlength{\parskip}{5pt}\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2.5em}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4.5pt}
+\arrayrulecolor{hair}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} VHLSS 2010 · 2012 · 2014 — analytical report}
+\fancyhead[R]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newtcolorbox{ct}[1][Formula]{enhanced, colback=tintN, colframe=tintN, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{ink2}#1}, coltitle=ink2, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newtcolorbox{kl}[1][Conclusion]{enhanced, colback=tintC, colframe=tintC, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{teal}#1}, coltitle=teal, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newtcolorbox{luuy}[1][Note]{enhanced, colback=tintD, colframe=tintD, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{amber}#1}, coltitle=amber, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newcommand{\ra}{$\rightarrow$}
+\newcommand{\n}[1]{\textbf{#1}}
+\newcommand{\hinh}[3]{\begin{figure}[H]\centering\includegraphics[width=#2\linewidth]{figs_nb_en/#1.png}\caption{#3}\label{fig:#1}\end{figure}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2cm}
+{\footnotesize\color{blue}\MakeUppercase{Data analysis report — descriptive statistics}\par}
+\vspace{10pt}
+{\fontsize{25}{30}\selectfont\heavy\color{ink} Income, expenditure and assets\\of Vietnamese households\par}
+\vspace{10pt}
+{\large\color{ink2} Vietnam Household Living Standards Survey (VHLSS) 2010 · 2012 · 2014\par}
+\vspace{20pt}
+{\color{ink2} 28,196 households \quad·\quad 63 provinces \quad·\quad 3 survey waves\par}
+\vspace{24pt}
+\begin{tcolorbox}[colback=tintN, colframe=tintN, boxrule=0pt, arc=5pt, width=0.88\linewidth, left=14pt, right=14pt, top=10pt, bottom=10pt]
+\small
+\textbf{Research question.} Household income in Vietnam rose over the four years 2010–2014. This report asks: how did the gap between rich and poor households change, where did the additional income go, and what did it finally accumulate into?\par
+\vspace{6pt}
+\textbf{Structure.} Part 1 describes the data, Part 2 explains how the data were processed and which measure was chosen, Part 3 analyses three topics in turn: \emph{income – expenditure – assets}. Every analytical section contains four elements: the \textbf{formula}, the \textbf{chart}, the \textbf{description} and the \textbf{conclusion}.\par
+\vspace{6pt}
+\textbf{Source code.} Every number and chart in this report is produced by the accompanying notebook \texttt{report\_EDA\_en.ipynb}, which runs directly on the raw merged survey file.
+\end{tcolorbox}
+\vspace{20pt}
+{\color{muted} Group members: …………………………………………………\par\vspace{4pt} Class: ……………\qquad Date: ……/……/………\par}
+\end{center}
+\newpage
+
+{\small\tableofcontents}
+\newpage
+
+% =====================================================================
+\section{Data overview}
+
+\subsection{Source and sample structure}
+
+The data come from the Vietnam Household Living Standards Survey (VHLSS) conducted by the General Statistics Office, in three waves: 2010, 2012 and 2014. This is \n{secondary data}: a large, nationally representative sample, but we cannot add questions beyond the variables already collected.
+
+\begin{table}[H]\centering\small
+\caption{Sample size of each survey wave}
+\begin{tabular}{lrrrrrr}
+\toprule
+Year & Households & People & People/hh & Urban hh & Rural hh & \% urban\\
+\midrule
+2010 & 9,399 & 36,999 & 3.94 & 2,649 & 6,750 & 28.2\%\\
+2012 & 9,399 & 36,655 & 3.90 & 2,703 & 6,696 & 28.8\%\\
+2014 & 9,398 & 36,080 & 3.84 & 2,781 & 6,617 & 29.6\%\\
+\midrule
+\textbf{Total} & \textbf{28,196} & \textbf{109,734} & \textbf{3.89} & \textbf{8,133} & \textbf{20,063} & \textbf{28.8\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h01_co_mau}{0.72}{Households surveyed by year and area. The three waves have almost identical sample sizes, so comparisons across years are not distorted by sample volume.}
+
+\textbf{Description.} The three waves are almost equal in size (9,399 – 9,399 – 9,398 households) and all cover 63 provinces. The urban share of the sample rises slightly from 28.2\% to 29.6\%. Household size falls steadily: \n{3.94} people per household in 2010 down to \n{3.84} in 2014. Every per-capita indicator below is affected by this change.
+
+\begin{luuy}
+The three waves are \n{three different samples} with no household identifier linking them. Every comparison of "2010 versus 2014" in this report is therefore a comparison \emph{between groups of households}, not a follow-up of the same household over time.
+\end{luuy}
+
+\subsection{Sample size within each province}
+
+Before analysing by province we must check whether each province has enough households to support a conclusion.
+
+\hinh{h02_mau_theo_tinh}{0.72}{Distribution of sample size across the 63 provinces, three waves pooled.}
+
+\textbf{Description.} Pooling the three waves, each province has between \n{306} and \n{1,260} households, with a median of \n{414}. The five smallest provinces all have exactly 306 households: Cao Bằng, Bắc Kạn, Lào Cai, Kon Tum and Lai Châu. Looking at 2014 alone, the smallest province still has \n{102} households and the median is 138; \n{no province falls below 100}.
+
+\begin{kl}
+The sample is large enough for broad comparisons between provinces. But cutting it further, for example "poor households of one province in one year", leaves only a few dozen households. With $n = 102$, the standard error of a proportion near 50\% is already $\sqrt{0.5 \times 0.5/102} \approx \n{5\%}$, which means a 10 percentage point difference between two provinces may well be pure chance. This report therefore only ranks provinces using all three waves pooled, and always reports the number of households alongside.
+\end{kl}
+
+% =====================================================================
+\section{Data processing}
+
+\subsection{Missing values}
+
+\begin{table}[H]\centering\small
+\caption{Missing cells by variable and year (only variables with missing values)}
+\begin{tabular}{lrrrr}
+\toprule
+Variable & 2010 & 2012 & 2014 & Total\\
+\midrule
+\texttt{fuel} — fuel expenditure & 3 & 1 & \textbf{813} & \textbf{817}\\
+\texttt{nfood} — non-food expenditure & 0 & 1 & 0 & 1\\
+\texttt{fhouse} — house repair & 9 & 7 & 7 & 23\\
+\texttt{house} — house value & 9 & 7 & 7 & 23\\
+9 asset variables (\texttt{oto} … \texttt{hmachine}) & 177 & 63 & 44 & 284\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h03_o_trong}{0.72}{Share of missing cells by variable and year. Only one case is genuinely worrying: fuel expenditure in 2014.}
+
+\textbf{How each case was handled, and why:}
+
+\begin{itemize}[leftmargin=1.3em,itemsep=4pt,topsep=2pt]
+\item \n{Negative values} (36 households, in asset variables): assets cannot be negative, so these are data-entry errors \ra\ set to 0.
+\item \n{Entire asset block missing} (284 households): the values cannot be inferred \ra\ \n{these households are dropped from the asset analysis} (section 3.3) but kept in the income and expenditure analysis, where their variables are complete.
+\item \n{House repair and non-food expenditure} (fewer than 10 households per wave): rare and scattered \ra\ filled with 0.
+\item \n{Fuel expenditure in 2014} (813 households = 8.7\% of that wave): the only case large enough to distort results, discussed separately below.
+\end{itemize}
+
+\subsubsection{The case of fuel expenditure in 2014}\label{sec:fuel}
+
+\begin{table}[H]\centering\small
+\caption{The \texttt{fuel} variable across the three waves}
+\begin{tabular}{lrrr}
+\toprule
+& 2010 & 2012 & 2014\\
+\midrule
+Households with a missing cell & 3 & 1 & \textbf{813}\\
+Households reporting zero & 40 & 199 & \textbf{0}\\
+Median among those who do spend (thousand VND) & 2,904 & 4,080 & 4,320\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The first two rows reveal the key fact: in 2014 \n{not a single household reported zero}, whereas 40 and 199 households did so in the two earlier waves. The 2014 file most likely records "no spending" as a blank cell rather than as the number 0.
+
+The profiles of the two groups also match: the 813 households with missing values in 2014 are \n{89\% rural} with a median income of \n{11.2} million VND per capita; the 199 households reporting zero in 2012 are 86\% rural with a median income of 10.1 million. These are poor rural households that gather firewood and straw, so they incur no cash spending on fuel.
+
+\textbf{Decision:} fill these 813 cells with 0 and \n{drop no household}. Dropping them would remove 8.7\% of the 2014 sample, including one fifth of the poorest group, a far greater distortion than filling with zero.
+
+\begin{luuy}[Robustness check]
+Recomputing under alternative treatments: if the 813 households are \emph{dropped}, the share of Q1 households spending more than they earn in 2014 becomes \n{65.5\%} instead of \n{61.9\%}, and the fuel share becomes 6.8\% instead of 6.6\%. All other conclusions are unchanged. One statement, however, is \n{not robust}: "the share of Q1 households overspending is falling". This report therefore only states the 2014 \emph{level} (roughly 62–66\%) and does not claim a downward trend for that group.
+\end{luuy}
+
+\subsection{Derived variables and grouping}
+
+\begin{ct}
+Income per capita: \quad $\text{Inc\_head}_i = \dfrac{\text{income}_i}{\text{size}_i}$
+\smallskip
+
+Total expenditure: \quad $\text{tot}_i = \sum_{j=1}^{13} x_{ij}$ \quad (13 spending items during the year)
+\smallskip
+
+Essential and non-essential expenditure, split by the hierarchy of needs:
+\[\text{nec}_i = \!\!\sum_{j \,\in\, \text{levels 1–2}}\!\! x_{ij}, \qquad \text{unn}_i = \!\!\sum_{j \,\in\, \text{levels 3–5}}\!\! x_{ij}\]
+\emph{Levels 1–2 (10 items)}: rice, other food, water, electricity, fuel, waste collection, medicine and hospital, health insurance, health care support, house repair. \quad \emph{Levels 3–5 (3 items)}: non-food spending (clothing, transport, leisure), education, tobacco.
+\smallskip
+
+Overspending household: \quad $\text{tot}_i > \text{income}_i$
+\end{ct}
+
+\n{Income groups Q1–Q4:} quartiles of \texttt{Inc\_head} computed \n{separately for each year}, so every group always contains exactly 25\% of that year's households. The cut-offs (million VND per capita per year) are:
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrrr}
+\toprule
+& Q1/Q2 cut-off & Median & Q3/Q4 cut-off\\
+\midrule
+2010 & 7.8 & 13.2 & 22.0\\
+2012 & 11.4 & 19.3 & 30.8\\
+2014 & 13.9 & 23.6 & 37.3\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Because the cut-offs are recomputed every year, "Q1 in 2014" is not the same set of households as "Q1 in 2010", and the threshold for entering each group rises over time.
+
+\subsection{Mean or median?}\label{sec:median}
+
+\begin{ct}
+\[\bar{x}=\frac{1}{n}\sum_{i=1}^{n} x_i \qquad
+S=\sqrt{\frac{\sum (x_i-\bar{x})^2}{n-1}} \qquad
+CV=\frac{S}{\bar{x}} \qquad
+\text{Skew}=\frac{E\big(X-E(X)\big)^3}{\sigma^3}\]
+The median is the middle value once the observations are sorted in ascending order.
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Income per capita in 2014 (million VND per person per year)}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Group & $n$ & Mean & Median & $S$ & CV & Skew & \% below mean\\
+\midrule
+Q1 & 2,350 & 9.04 & 9.18 & 2.90 & 32.1\% & $-0.22$ & 48.1\%\\
+Q2 & 2,349 & 18.70 & 18.66 & 2.80 & 15.0\% & 0.04 & 50.7\%\\
+Q3 & 2,349 & 29.82 & 29.56 & 3.86 & 12.9\% & 0.19 & 52.3\%\\
+Q4 & 2,350 & 62.34 & 51.53 & 41.52 & 66.6\% & \textbf{9.82} & \textbf{68.9\%}\\
+\midrule
+\textbf{Nationwide} & \textbf{9,398} & \textbf{29.97} & \textbf{23.61} & \textbf{29.02} & \textbf{96.8\%} & \textbf{9.13} & \textbf{63.5\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h04_phan_phoi_Q}{1.0}{Histograms of the income distribution of each group in 2014. The green line is the median, the orange line the mean. Each panel's horizontal axis is cut at the 99th percentile so the shape remains visible.}
+
+\hinh{h05_boxplot_Q}{0.72}{Box plots of the four groups on a single axis (the vertical axis is cut at 120 million so the Q1–Q3 boxes stay readable).}
+
+\textbf{Description.} Groups Q1, Q2 and Q3 are close to symmetric: skewness of $-0.22$, $0.04$ and $0.19$ respectively, mean and median almost identical, and roughly 50\% of households below the mean, which is what a symmetric distribution looks like. Q4 is heavily right-skewed: skewness \n{9.82}, a mean of 62.34 that exceeds the median of 51.53 by 21\%, and \n{68.9\%} of Q4 households earning less than their own group's average. The coefficient of variation agrees: 12.9–15.0\% in Q2 and Q3 but \n{66.6\%} in Q4.
+
+The reason lies in how the groups are formed: the lower three are bounded on both sides by quartile cut-offs and therefore have no tail, while the top group is open-ended, so a few dozen very rich households pull the mean away.
+
+\textbf{How much does the wrong measure distort the answer?}
+
+\begin{table}[H]\centering\small
+\caption{The Q4/Q1 gap under the two measures}
+\begin{tabular}{lrr}
+\toprule
+Year & Using the median & Using the mean\\
+\midrule
+2010 & 5.75$\times$ & 7.66$\times$\\
+2012 & 5.73$\times$ & 7.05$\times$\\
+2014 & \textbf{5.61}$\times$ & \textbf{6.90}$\times$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In 2014 the rich-poor gap is \n{5.61 times} using the median but \n{6.90 times} using the mean, a difference of 1.3 times. A further check: dropping just the top 1\% of Q4 households pulls that group's mean down from \n{62.3} to \n{59.7} million, while the median barely moves (51.5 million).
+
+\begin{kl}
+This report uses the \n{median} for every monetary variable, because a measure that 1\% of the observations can move is not describing the "typical" household. The mean is used only where the calculation is inherently additive (shares, group totals) or where the variable has no long tail, such as household size.
+\end{kl}
+
+% =====================================================================
+\section{Main analysis}
+
+\subsection{Income}
+
+\subsubsection{Income of the four groups across the three waves}
+
+\begin{ct}
+$M_{Q,t}$ = median income per capita of group $Q$ in year $t$. \quad
+Growth: \quad $g_Q = \dfrac{M_{Q,2014}-M_{Q,2010}}{M_{Q,2010}} \times 100\%$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Median income per capita (million VND per person per year)}
+\begin{tabular}{lrrrr}
+\toprule
+Group & 2010 & 2012 & 2014 & Growth 2010–2014\\
+\midrule
+Q1 & 5.38 & 7.49 & 9.18 & $+70.5\%$\\
+Q2 & 10.34 & 15.13 & 18.66 & $\mathbf{+80.5\%}$\\
+Q3 & 16.78 & 24.12 & 29.56 & $+76.1\%$\\
+Q4 & 30.93 & 42.90 & 51.53 & $+66.6\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h06_thu_nhap_Q}{0.95}{Left: the income level of the four groups. Right: the same data rebased to an index with 2010 = 100, so the chart shows speed of growth rather than level.}
+
+\textbf{Description.} All four groups rise in every wave; none falls. Even the poorest group gained \n{70.5\%} over four years. But in the left panel the four lines do not converge; they drift further apart vertically.
+
+The two panels answer two different questions, and the two are easily confused:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{The left panel measures level}: the slope of each line is the \emph{amount of money gained}. Q4's line is the steepest because that group gained \n{20.6} million VND per capita, while Q1 gained only \n{3.8} million.
+\item \n{The right panel measures speed}: rebasing every group to the same starting point of 100 turns the slope into percentage growth. The order now reverses: \n{Q2 ends highest} (index 180.5) and \n{Q4 lowest} (166.6).
+\end{itemize}
+
+The richest group gained the most money but grew the most slowly relative to its own base. Section 3.1.4 examines that speed in more detail.
+
+\subsubsection{The rich-poor gap: measured in money or as a ratio?}
+
+\begin{ct}
+Absolute gap (in money): \quad $D_t = M_{Q4,t} - M_{Q1,t}$
+\smallskip
+
+Relative gap (as a ratio): \quad $R_t = \dfrac{M_{Q4,t}}{M_{Q1,t}}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Two ways of measuring the gap between the richest and poorest group}
+\begin{tabular}{lrrrr}
+\toprule
+Year & Median Q1 & Median Q4 & Difference $D_t$ & Ratio $R_t$\\
+\midrule
+2010 & 5.38 & 30.93 & 25.55 million & 5.75$\times$\\
+2012 & 7.49 & 42.90 & 35.41 million & 5.73$\times$\\
+2014 & 9.18 & 51.53 & \textbf{42.35 million} & \textbf{5.61}$\times$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h07_khoang_cach}{0.86}{The same data, two measures, two opposite answers.}
+
+\textbf{Description.} Measured in money, Q4 pulls further and further away from Q1: the difference grows from \n{25.6} to \n{42.4} million VND per capita per year, i.e. 66\% wider in four years. Measured as a ratio, however, Q4/Q1 \n{falls} slightly, from 5.75 to \n{5.61}.
+
+The two results are not contradictory. When all groups grow by roughly the same percentage the ratio stays nearly constant, but that same percentage applies to very different bases: 66.6\% of 30.93 million is 20.6 million, whereas 70.5\% of 5.38 million is only 3.8 million.
+
+\begin{kl}
+The rich-poor gap \n{remains very large}. In relative terms it narrowed only marginally (5.75 to 5.61 times, i.e. 2.4\% over four years), while the actual amount of money separating the two groups grew by \n{16.8 million VND} per person per year.
+\end{kl}
+
+\subsubsection{Splitting 100 dong of national income between the four groups}
+
+Both measures above compare \emph{the two ends} of the distribution. A third view looks at the whole pie: if all the income in the sample were gathered into 100 dong, how much would each group receive?
+
+\begin{ct}
+Income share of group $Q$: \quad
+$s_Q = \dfrac{\sum_{i \in Q} \text{income}_i}{\sum_i \text{income}_i} \times 100\%$
+\smallskip
+
+Population share of group $Q$: \quad
+$p_Q = \dfrac{\sum_{i \in Q} \text{size}_i}{\sum_i \text{size}_i} \times 100\%$
+\smallskip
+
+Note: every group always contains exactly \n{25\% of households}, but \emph{not} 25\% of people, because household size differs across groups.
+\end{ct}
+
+\hinh{h07b_pie_thu_nhap}{1.0}{Each pie is 100 dong of national income in one year, divided between the four groups.}
+
+\begin{table}[H]\centering\small
+\caption{Income share of each group across the three years, with the 2014 population share (\%)}
+\begin{tabular}{lrrrr}
+\toprule
+Group & \% income 2010 & \% income 2012 & \% income 2014 & \% population 2014\\
+\midrule
+Q1 & 8.6 & 8.5 & \textbf{8.4} & \textbf{26.8}\\
+Q2 & 15.6 & 16.4 & 16.8 & 25.5\\
+Q3 & 24.5 & 26.0 & 26.3 & 25.1\\
+Q4 & 51.4 & 49.1 & \textbf{48.4} & \textbf{22.5}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} The three pies look almost identical. After four years the split of income across the four groups has barely changed. Q1 received \n{8.6\%} in 2010 and \n{8.4\%} in 2014, slightly less in fact. Q4 went from \n{51.4\%} to \n{48.4\%}, a fall of 3 percentage points, but that share moved to Q2 (15.6 \ra\ 16.8\%) and Q3 (24.5 \ra\ 26.3\%) rather than down to the bottom group.
+
+The last column makes the gap explicit: each group contains exactly 25\% of households, but poor households are larger (4.11 people against 3.46 in Q4), so Q1 accounts for \n{26.8\%} of the population. More than a quarter of the population therefore receives only \n{8.4\%} of income, while Q4 makes up 22.5\% of the population and receives nearly half. The better-off half (Q3 + Q4) takes \n{74.8\%}.
+
+\begin{kl}
+Out of every 100 dong of national income, the poorest group receives barely \n{8 dong}, although it makes up more than a quarter of the population. That figure did not improve over four years. The split did shift slightly, but the shift went to the \n{middle groups} rather than down to the bottom.
+\end{kl}
+
+\subsubsection{Which group grew fastest?}
+
+\hinh{h08_toc_do_tang}{0.55}{Growth of median income between 2010 and 2014 by group, measured as a percentage of that group's own 2010 level.}
+
+\textbf{Description.} The fastest growing group is \n{not} the poorest but \n{Q2}, at $+80.5\%$, followed by Q3 at $+76.1\%$. The two groups at either end grew more slowly: Q1 $+70.5\%$ and Q4 $+66.6\%$.
+
+This does \emph{not} contradict the left panel of Figure~\ref{fig:h06_thu_nhap_Q}, where Q4's line is the steepest: there the slope is the amount of money gained (Q4 $+20.6$ million against Q1 $+3.8$ million), whereas here it is a percentage of the starting level. Q4 started from 30.93 million, so $+20.6$ million is only $+66.6\%$; Q2 started from 10.34 million, so $+8.3$ million already amounts to $+80.5\%$.
+
+\begin{kl}
+These four years benefited the \n{near-poor and middle} groups most, that is, households that had already escaped the bottom but were not yet well off. The poorest group grew more slowly than even the one just above it, so escaping the bottom remains the hardest step.
+\end{kl}
+
+\subsubsection{Rural and urban}
+
+\begin{ct}
+Area ratio: \quad $\text{Ratio}_t = \dfrac{\text{median urban income per capita}_t}{\text{median rural income per capita}_t}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Median income per capita by area (million VND)}
+\begin{tabular}{lrrrr}
+\toprule
+Area & 2010 & 2012 & 2014 & Growth 2010–2014\\
+\midrule
+Urban & 21.12 & 28.88 & 34.72 & $+64.4\%$\\
+Rural & 11.02 & 16.00 & 19.68 & $\mathbf{+78.6\%}$\\
+\midrule
+Urban / rural ratio & 1.92 & 1.81 & \textbf{1.76} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h09_khu_vuc}{0.72}{Median income by area across the three waves.}
+
+\textbf{Description.} Rural areas grew faster than urban ones (\n{78.6\%} versus 64.4\%), so the urban/rural ratio falls steadily: 1.92 \ra\ 1.81 \ra\ \n{1.76}. Even so, the rural level in 2014 (19.68 million) is still \n{below} what urban areas had already reached in 2010 (21.12 million).
+
+Why is the gap so persistent? The answer becomes clear once we look at how the income groups are distributed \emph{within} each area.
+
+\hinh{h09b_phan_bo_Q_khu_vuc}{0.62}{Composition of the four income groups within each area, 2014. Each bar sums to 100\% of that area's households.}
+
+\textbf{Description.} In urban areas, \n{45\%} of households belong to the richest group Q4 and \n{76\%} to the upper half (Q3 + Q4). In rural areas the opposite holds: \n{61\%} fall in the lower half (Q1 + Q2) and only 17\% in Q4. For the poorest group alone, rural areas hold \n{32\%} against just \n{7.5\%} in urban areas, a gap of more than four times.
+
+This structure is \n{almost unchanged} over the four years: in 2010 urban areas also had 76\% of households in Q3 + Q4 and rural areas 60\% in Q1 + Q2. It is a structural feature, not a short-term fluctuation.
+
+\begin{kl}
+Rural areas are growing faster but \n{have not caught up}: after four years they still have not reached the urban starting point of four years earlier. At a closing speed of roughly 0.08 of a ratio point every two years, equalising the two areas would take many more years. And because the distribution of income groups within each area barely moved over the period, the gap is \emph{structural}: it does not disappear simply because overall income rises.
+\end{kl}
+
+\subsubsection{Across provinces}
+
+\hinh{h10_top10_tinh_tang}{0.72}{The ten provinces with the fastest growth in median income, 2010–2014.}
+
+\textbf{Description.} The leaders are \n{Điện Biên} ($+122.5\%$: 4.9 \ra\ 10.9 million), \n{Hòa Bình} ($+118.4\%$) and \n{Thái Nguyên} ($+117.1\%$). Most are mountainous provinces in the north or the north-central coast that started from a very low base. Điện Biên and Hà Giang were at only about 5 million VND per capita in 2010, so even a small absolute gain produces a large percentage.
+
+\textbf{Did any province fall behind?} \n{No province} had a lower median income in 2014 than in 2010. The slowest growing province is \n{Bắc Kạn} ($+14.8\%$: 9.1 \ra\ 10.4 million), followed by Vĩnh Long ($+31.9\%$) and Sơn La ($+32.6\%$).
+
+\begin{kl}
+Income growth reached \n{all 63 provinces}; none went backwards. But the pace varies enormously, from $+14.8\%$ (Bắc Kạn) to $+122.5\%$ (Điện Biên). Both ends of the table are northern mountainous provinces, so "mountainous" does not automatically mean fast or slow growth.
+\end{kl}
+
+
+\subsubsection{Robustness check: household income or income per person?}
+
+Section 3.1 above uses \n{income per capita} (\texttt{Inc\_head}) throughout. The raw variable \texttt{income} is the income of the whole household, and the two measures do not give the same answer, because poor households contain more people than rich ones.
+
+\begin{ct}
+$\text{Inc\_head}_i = \dfrac{\text{income}_i}{\text{size}_i}$ \qquad where $\text{size}_i$ is the number of people in household $i$.
+\end{ct}
+
+\hinh{h31_ho_vs_dau_nguoi}{1.0}{Left: the Q4/Q1 ratio under the two measures. Right: 2010--2014 growth of each group under the two measures.}
+
+\begin{table}[H]\centering\small
+\caption{Median income under the two measures (million VND/year)}
+\begin{tabular}{lrrrcrr}
+\toprule
+& 2010 & 2012 & 2014 & & Growth 2010--2014 & Q4/Q1 in 2014\\
+\midrule
+\multicolumn{7}{l}{\textit{Per person}}\\
+\quad Q1 & 5.38 & 7.49 & 9.18 & & $+70.5\%$ & \\
+\quad Q4 & 30.93 & 42.90 & 51.53 & & $+66.6\%$ & \textbf{5.61}\\
+\multicolumn{7}{l}{\textit{Whole household}}\\
+\quad Q1 & 21.78 & 29.26 & 34.71 & & $+59.4\%$ & \\
+\quad Q4 & 110.03 & 151.22 & 177.10 & & $+61.0\%$ & \textbf{5.10}\\
+\midrule
+\multicolumn{7}{l}{\textit{Mean number of people per household}}\\
+\quad Q1 & 4.41 & 4.20 & 4.11 & & $-6.8\%$ & \\
+\quad Q4 & 3.49 & 3.51 & 3.46 & & $-0.9\%$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} The two measures agree on most conclusions but part company on two points.
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{The gap is smaller per household}: 5.10 times rather than 5.61 in 2014. A Q1 household holds 4.11 people against 3.46 in Q4, so the poor group's household income is not as far behind as its per-person income.
+\item \n{The direction of the ratio reverses}: measured per person, the Q4/Q1 ratio falls from 5.75 to 5.61; measured per household it rises from 5.05 to \n{5.10}. Q1 household size shrank 6.8\% over the four years while Q4 barely moved ($-0.9\%$), so dividing by household size flatters the poorest group.
+\item \n{Growth is lower in every group} when measured per household (Q1: $+59.4\%$ instead of $+70.5\%$), again because households keep getting smaller.
+\end{itemize}
+
+Conclusions that do \emph{not} depend on the measure: the ordering of the four groups, the fact that all four rose, the fact that the middle groups grew fastest while Q1 and Q4 grew slowest, and the fact that the gap in money terms widened steadily (88.3 \ra\ 142.4 million VND per household per year, equivalently 25.5 \ra\ 42.4 million per person per year).
+
+\begin{luuy}
+The statement in section~3.1.2 that "the rich-poor gap narrowed slightly by 2.4\%" \n{holds only per person}. Measured by household income the ratio moves the other way. This report keeps the per-capita measure because it is the basis for the Q1--Q4 grouping and because it reflects the living standard of each member, but it does not claim the gap is closing: under either measure, whatever narrowing exists is tiny next to the widening measured in money.
+\end{luuy}
+
+\subsection{Expenditure}
+
+\subsubsection{When income rises, which spending categories grow and which shrink?}
+
+\begin{ct}
+Share of spending item $j$ in year $t$: \quad
+$s_{j,t} = \dfrac{\sum_i x_{ij,t}}{\sum_i \text{tot}_{i,t}} \times 100\%$
+\smallskip
+
+Change over four years: \quad $\Delta_j = s_{j,2014} - s_{j,2010}$ \quad (unit: \n{percentage points})
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Share of the 13 spending items in national total expenditure (\%)}
+\begin{tabular}{lrrrr}
+\toprule
+Spending item & 2010 & 2012 & 2014 & $\Delta$ (pp)\\
+\midrule
+Other food & 41.58 & 44.96 & 43.42 & $\mathbf{+1.84}$\\
+Non-food spending & 23.01 & 21.98 & 24.42 & $\mathbf{+1.41}$\\
+Electricity & 2.37 & 2.54 & 3.02 & $+0.65$\\
+Health insurance & 0.32 & 0.36 & 0.47 & $+0.16$\\
+Water & 0.37 & 0.35 & 0.45 & $+0.08$\\
+Medicine, hospital & 5.40 & 4.82 & 5.47 & $+0.06$\\
+Waste collection & 0.07 & 0.08 & 0.10 & $+0.02$\\
+Tobacco & 1.26 & 1.06 & 1.07 & $-0.18$\\
+Health care support & 1.20 & 1.14 & 0.95 & $-0.26$\\
+House repair & 2.67 & 1.80 & 2.28 & $-0.39$\\
+Education & 5.68 & 5.71 & 5.21 & $-0.47$\\
+Fuel & 7.58 & 7.49 & 6.57 & $-1.02$\\
+Rice & 8.49 & 7.74 & 6.57 & $\mathbf{-1.92}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h11_thay_doi_ty_trong}{0.72}{Which items took up more room in the basket and which were squeezed out over four years.}
+
+\textbf{Description.} Measured in money every item grew, because total spending per capita rose about 60\% over four years. Amounts alone reveal nothing here; only shares show which items took up more room.
+
+The largest gains go to \n{other food} ($+1.84$ pp) and \n{non-food spending} on clothing, transport and leisure ($+1.41$ pp). The largest losses are \n{rice} ($-1.92$) and \n{fuel} ($-1.02$).
+
+\begin{kl}
+As income rises, households shift money away from \n{basic staples} (rice) towards \n{more varied food} and higher-order needs (clothing, transport, leisure). This is the familiar pattern: the better off a household is, the smaller the share it spends on food staples. The \n{0.47 pp fall in education} is the one result that deserves a closer look, in section~3.2.5.
+\end{kl}
+
+\subsubsection{Which items does the spending basket concentrate on?}
+
+\hinh{h12_pareto}{0.86}{Pareto chart: bars are the share of each item, the line is the cumulative share. Bars and line share one axis because both are in \%.}
+
+\textbf{Description.} The basket is highly concentrated. The top four items account for \n{81.0\%} of total spending: other food (43.4\%), non-food spending (24.4\%), rice (6.6\%) and fuel (6.6\%). The top six reach 91.7\%; the remaining seven items together are under 9\%.
+
+The ranking of the four largest items \n{does not change across the three waves} (other food \ra\ non-food \ra\ rice \ra\ fuel), so a single chart for 2014 describes the whole period.
+
+\begin{kl}
+Of every 100 VND spent, \n{68 go to food} (other food plus rice) and everyday living costs. Education, health and insurance matter a great deal but occupy a small share, so every result about them below describes only a small corner of the basket.
+\end{kl}
+
+\subsubsection{Tobacco}
+
+\hinh{h13_thuoc_la}{0.86}{Left: tobacco as a share of the basket. Right: share of households that spend on it at all.}
+
+\textbf{Description.} The tobacco share \n{falls as income rises}: in 2014 it is 1.29\% in Q1 but only \n{0.83\%} in Q4. The trend over time is also downward in every group (Q4: 1.09\% in 2010 down to 0.83\% in 2014).
+
+The share of households spending on tobacco is falling too: in Q1 from \n{71.1\%} (2010) to \n{64.6\%} (2014), and in Q4 from 64.8\% to 60.7\%. Note that in every year, \n{poor households smoke at a higher rate than rich ones}.
+
+\begin{kl}
+Tobacco is an item on which poor households spend more, both as a \emph{share} of the basket and in terms of \emph{participation}. Q1 households already spend beyond their income, so the 1.3\% of the basket going to tobacco is a reducible cost. On the positive side, participation is falling in all groups.
+\end{kl}
+
+\subsubsection{Rice and other food}
+
+\hinh{h14_gao_nrice}{0.86}{Heat maps of the share spent on rice (left) and other food (right), by income group and year.}
+
+\textbf{Description.} The two heat maps point in opposite directions:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{Rice} declines in both directions. Across groups: from \n{13.0\%} (Q1) to \n{4.0\%} (Q4) in 2014. Over time: Q1 drops sharply from 17.4\% (2010) to 13.0\% (2014), while Q4 barely moves (4.5\% to 4.0\%).
+\item \n{Other food} is almost \n{flat} across groups: between 42.6\% and 44.7\% in all four groups in 2014.
+\end{itemize}
+
+\begin{kl}
+The amount spent on rice is nearly fixed regardless of whether a household is rich or poor, so as the basket grows the rice share automatically shrinks. The rice share is therefore a very sensitive indicator of living standards; from this number alone one can guess which group a household belongs to. The overall food share does the opposite and fails to separate rich from poor, because the difference lies in the quality of the food rather than in the proportion spent on it.
+\end{kl}
+
+\subsubsection{Education}
+
+\hinh{h15_giao_duc}{0.86}{Left: education as a share of the basket. Right: share of households with any education spending.}
+
+\textbf{Description.} The education share rises with income but the spread is modest: \n{4.10\%} in Q1 versus \n{5.39\%} in Q4 in 2014. More striking is participation: \n{Q4 is the lowest} at 54.2\%, while Q1 is at 60.0\% and Q3 at 63.1\%.
+
+Over time, the Q1 education share \n{falls} from 4.65\% (2010) to 4.10\% (2014), and the share of Q1 households with any education spending falls from 67.7\% to 60.0\%.
+
+\begin{luuy}
+The low participation rate in Q4 does \n{not} mean rich households invest less in their children. The variable only records whether a household incurred the expense, and richer households are smaller (3.46 people versus 4.11 in Q1), so they are less likely to have a school-age child. The data contain no count of school-age children, so the two effects cannot be separated.
+\end{luuy}
+
+\begin{kl}
+Education spending in the poorest group \n{fell both as a share and in participation} over 2010–2014. Section 3.2.7 shows that Q1 households spend beyond their income and are cutting back. Read together, the two results say that education is what gets postponed when the household budget is under strain.
+\end{kl}
+
+\subsubsection{The expenditure burden}
+
+\begin{ct}
+Essential burden of household $i$: \quad $b_i = \dfrac{\text{nec}_i}{\text{income}_i}$
+\smallskip
+
+Total spending relative to income: \quad $c_i = \dfrac{\text{tot}_i}{\text{income}_i}$
+\smallskip
+
+The report takes the \emph{median} of $b_i$ and $c_i$ within each group rather than the mean (see section~\ref{sec:median}).
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Spending relative to income (median across households, \%)}
+\begin{tabular}{lrrrcrrr}
+\toprule
+& \multicolumn{3}{c}{Essential / income} & & \multicolumn{3}{c}{Total spending / income}\\
+\cmidrule{2-4}\cmidrule{6-8}
+Group & 2010 & 2012 & 2014 & & 2010 & 2012 & 2014\\
+\midrule
+Q1 & 88.6 & 87.1 & \textbf{81.7} & & 116.0 & 113.2 & \textbf{111.5}\\
+Q2 & 66.0 & 65.5 & 61.8 & & 92.0 & 89.3 & 87.2\\
+Q3 & 54.6 & 54.6 & 51.7 & & 78.0 & 77.1 & 74.4\\
+Q4 & 42.8 & 42.6 & 38.6 & & 64.2 & 61.9 & 57.4\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h16_ganh_nang}{0.9}{Left: the essential burden falls in every group. Right: the whole basket in 2014 against the 100\%-of-income line.}
+
+\textbf{Description.} The essential burden falls in every group: Q1 from 88.6\% down to \n{81.7\%} of income, Q4 from 42.8\% to 38.6\%. Income grew faster than spending on basic needs.
+
+But that relief does not turn into savings. Adding up the whole basket, total spending by Q1 households still equals \n{111.5\%} of income in 2014, only 4.5 pp lower than four years earlier and still \n{far above 100\%}. The 100\% line falls right between Q1 and Q2.
+
+\begin{kl}
+Income rose and the essential burden eased, yet poor households still spend more than they earn. Most Q1 households \n{cannot live on their own income}, and four years of growth only made the shortfall less severe rather than eliminating it.
+\end{kl}
+
+\subsubsection{How far from making ends meet?}
+
+\begin{ct}
+Overspending household: \quad $\text{tot}_i > \text{income}_i$
+\smallskip
+
+Shortfall (overspending households): \quad $\dfrac{\text{tot}_i - \text{income}_i}{\text{income}_i}$ \qquad
+Surplus (balanced households): \quad $\dfrac{\text{income}_i - \text{tot}_i}{\text{income}_i}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Overspending households: incidence, shortfall, and the surplus of the rest (\%)}
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{3}{c}{\% overspending} & \multicolumn{3}{c}{Year 2014}\\
+\cmidrule(r){2-4}\cmidrule(l){5-7}
+Group & 2010 & 2012 & 2014 & \% overspending & Shortfall & Surplus\\
+\midrule
+Q1 & 65.7 & 63.2 & \textbf{61.9} & 61.9 & \textbf{41.6} & 16.9\\
+Q2 & 36.1 & 34.2 & 33.3 & 33.3 & 21.9 & 23.8\\
+Q3 & 18.9 & 18.6 & 17.4 & 17.4 & 15.0 & 30.8\\
+Q4 & 10.3 & 9.0 & \textbf{7.0} & 7.0 & 11.5 & \textbf{44.9}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h17_vuot_thu}{0.9}{Left: share of households spending more than they earn. Right: how much they fall short, and how much the others save, in 2014.}
+
+\textbf{Description.} In 2014, \n{61.9\% of Q1 households} spent more than they earned, against only \n{7.0\%} in Q4. The gap is also deeper: an overspending Q1 household falls short by \n{41.6\%} of its annual income, while an overspending Q4 household falls short by 11.5\%.
+
+The other side matters even more for accumulation: a balanced Q1 household saves only \n{16.9\%} of its income, whereas a Q4 household saves \n{44.9\%}, close to half of what it earns.
+
+\begin{luuy}
+"Spending more than income" only means that reported spending exceeds reported income. The data do not say how the gap is covered: borrowing, selling assets, remittances from relatives, or simply under-reported income (farm and small-trade income is typically under-reported). The figure should therefore be read as a sign of budget stress, not as "62\% of poor households are in debt".
+\end{luuy}
+
+\hinh{h28_bubble_thu_chi}{0.78}{Bubble chart for 2014: each bubble is one income group, and bubble size is the share of that group's households that overspend.}
+
+\textbf{Description.} The horizontal axis is income, the vertical axis is spending, and bubble size is the overspending rate:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{Q1 is the only group whose spending exceeds its income} (10.1 against 9.2 million per capita). The other three spend less than they earn, and the gap widens to the right: Q4 spends \n{31.1} million out of an income of \n{51.5} million.
+\item \n{Bubbles shrink from left to right}: 62\% of Q1 households overspend, then 33\%, 17\% and only 7\% in Q4.
+\item Measured as spending over income: \n{1.11} in Q1 and \n{0.57} in Q4, so the richest group uses up little more than half of what it earns.
+\end{itemize}
+
+\begin{kl}
+What separates the two ends is not income but the \n{capacity to save}: one side is 41.6\% short, the other has 44.9\% left over. This gap is what determines who accumulates assets; its consequences appear in section 3.3.
+\end{kl}
+
+\subsubsection{Why do some households not make ends meet? Three factors}
+
+This section compares \n{overspending households} with \n{balanced households}. One rule applies throughout: always compare \n{within the same income group}, because overspending households are mostly poor (61.9\% of Q1 but only 7.0\% of Q4). Pooling all four groups would produce differences that merely reflect "poor households spend differently" rather than "unbalanced households spend differently".
+
+\paragraph{Factor 1: living environment.}
+
+\hinh{h18_top10_tinh_vuot_thu}{0.72}{The ten provinces with the highest share of overspending households in 2014.}
+
+\textbf{Description.} The list is led by \n{Cao Bằng (56.9\%)}, Bắc Kạn (52.0\%), Yên Bái (49.1\%) and Sơn La (48.4\%), all far above the national average of 29.9\%. These ten provinces share a few features:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item A median income of only \n{15.2} million VND per capita, below the provincial norm of 21.7 million.
+\item A rural share of \n{80\%}, above the national 72\%.
+\item Most are in the \n{northern mountains} (Cao Bằng, Bắc Kạn, Yên Bái, Sơn La, Lạng Sơn, Điện Biên) or the \n{central coast and highlands} (Quảng Ngãi, Quảng Nam, Đắk Nông).
+\end{itemize}
+
+One caution, though: poor provinces contain more Q1 households by construction, so a province's overall rate largely reflects \emph{how many poor households it has}, not \emph{how expensive it is to live there}. To separate the two, we hold income fixed and compare only Q1 households.
+
+\begin{table}[H]\centering\small
+\caption{Q1 households only, 2014: the 63 provinces split into two halves by province income}
+\begin{tabular}{lrr}
+\toprule
+& Richer half & Poorer half\\
+\midrule
+\% of Q1 households overspending & \textbf{64.5} & \textbf{61.5}\\
+Spending per capita of Q1 households (million VND) & \textbf{11.1} & \textbf{9.4}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} Once income is held fixed, the relationship reverses slightly: the richer half of provinces has \n{64.5\%} of Q1 households overspending, above the poorer half's \n{61.5\%}. The reason lies in the local cost level: a Q1 household in the richer provinces spends \n{11.1} million VND per capita against \n{9.4} million in the poorer ones, about 18\% more. The difference in overspending rates is only 3 percentage points, so this is a weak signal rather than a firm conclusion.
+
+\begin{kl}
+The living environment works in two opposite directions. Across the whole population, households that cannot make ends meet are concentrated in poor, mountainous, rural provinces. But at a fixed level of poverty, living in a richer province is harder, because the local cost level is about 18\% higher. The two findings answer different questions, so they are not contradictory, and the second only emerges once income is held constant.
+\end{kl}
+
+\paragraph{Factor 2: large families.}
+
+\hinh{h20_dong_con}{0.62}{Average household size in 2014, compared within the same income group.}
+
+\textbf{Description.} The hypothesis "they cannot make ends meet because they have many children" does not hold in this data: overspending households are \n{smaller} than balanced ones in all four groups.
+
+\begin{kl}
+The data does not support the "large family" factor. Households with unbalanced budgets have on average about \n{half a person fewer} than balanced households in the same income group. That is consistent with income being measured per capita: a larger household does not automatically spend more per person.
+\end{kl}
+
+\paragraph{Factor 3: spending patterns.}
+
+Neither of the first two factors explains the pattern, which leaves the most direct question: how differently do the two groups actually spend? This section compares overspending and balanced households \n{within the poorest group Q1 in 2014}. Holding income fixed this way means any difference found is not simply a rich-poor difference.
+
+\hinh{h21_xu_huong_2nhom}{1.0}{Left: money spent per capita on each item. Right: share of households that incur the item at all.}
+
+\begin{table}[H]\centering\small
+\caption{Spending per capita of Q1 households in 2014 (million VND per person per year)}
+\begin{tabular}{lrrr}
+\toprule
+Spending item & Overspending & Balanced & Ratio\\
+\midrule
+Other food & 5.51 & 3.25 & 1.70\\
+Non-food spending & 2.94 & 1.76 & 1.67\\
+Rice & 1.46 & 1.30 & \textbf{1.12}\\
+Medicine, hospital & 0.83 & 0.33 & 2.48\\
+Fuel & 0.71 & 0.35 & 2.03\\
+Education & 0.57 & 0.25 & 2.30\\
+Electricity & 0.28 & 0.18 & 1.57\\
+House repair & 0.19 & 0.02 & \textbf{10.30}\\
+\midrule
+\textbf{Total spending} & \textbf{12.85} & \textbf{7.61} & \textbf{1.69}\\
+\textit{Income} & \textit{6.5} & \textit{7.5} & \textit{0.87}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} Overspending households spend more on \n{almost every item}, \n{1.69 times} more in total, while their income is in fact lower (6.5 against 7.5 million per capita). But the size of the gap varies sharply by item:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{In money terms}, the largest gaps are in \n{other food} ($+2.26$ million per capita) and \n{non-food spending} ($+1.18$ million). These two items make up more than two thirds of the basket, so being 70\% higher is enough to create a large absolute gap.
+\item \n{As a ratio}, the striking items are \n{house repair} (10.3 times) and \n{health care} (2.5 times), but the amounts are small: house repair differs by only \n{0.17} million per capita, one thirteenth of the food gap.
+\item \n{Rice is almost identical} (1.12 times): the hardest item in the basket does not separate the two groups.
+\item In the right-hand panel, the clearest differences in \emph{participation} are house repair (8.4\% against 4.2\%) and health care support (28.3\% against 22.6\%). These items do not affect every household but land heavily on some.
+\end{itemize}
+
+\begin{luuy}
+The two measures lead to different conclusions. Looking only at ratios, house repair and health care stand out and invite the conclusion "overspending is caused by shocks". Measured in money, other food and non-food spending account for most of the gap. A further test: bringing \emph{other food} spending down to the balanced households' level would return \n{27.5\%} of overspending households to balance, whereas doing the same for \emph{house repair} would rescue only \n{4.7\%}, because house repair is 2.3\% of the basket while food is 43\%.
+\end{luuy}
+
+\begin{kl}
+Households that cannot make ends meet are \n{not spending extravagantly}: they spend almost the same on rice as balanced households, and their extra spending goes mainly to everyday living costs. Their cost of living is higher or their real needs are greater, not that they buy luxuries. Health care and house repair show the sharpest relative gaps but affect only some households, so they are the shock that pushes part of the group over the line; across the group as a whole, most of the gap lies in \n{everyday living costs}.
+\end{kl}
+
+\subsection{Assets}
+
+This section excludes the \n{284 households} missing the entire asset block (section 2.1), leaving 27,877 households.
+
+\subsubsection{House values across provinces}
+
+\hinh{h23_top10_gia_nha}{1.0}{The ten provinces with the highest median house value, one chart per year.}
+
+\textbf{Description.} The ranking is fairly stable across waves: \n{Hà Nội} is always first (1,363 \ra\ 1,775 \ra\ \n{1,560} million VND), followed by \n{Hồ Chí Minh City} and \n{Đà Nẵng}. Close behind are the industrial provinces around Hà Nội: Bắc Ninh, Vĩnh Phúc, Hưng Yên, Hải Dương, Hải Phòng and Quảng Ninh.
+
+Two points stand out:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item House values in Hà Nội in 2014 (\n{1,560} million) are \n{lower} than in 2012 (1,775 million), consistent with the real-estate slowdown of 2013–2014. Đà Nẵng fell even more sharply, from 1,200 to 970 million.
+\item The gap between the most and least expensive province is enormous: in 2014 the median house value in Hà Nội is about \n{19.5 times} that of the lowest province (Lai Châu, 80 million).
+\end{itemize}
+
+The gap is not only a matter of which province is richer. Even \emph{within the same income group}, urban houses are far more expensive:
+
+\hinh{h23b_gia_nha_kv_Q}{0.72}{Median house value by area and income group, 2014.}
+
+\textbf{Description.} The urban / rural ratio is \n{2.5} in Q1, 2.0 in Q2, 2.3 in Q3 and \n{3.0} in Q4, so the gap widens among the rich rather than narrowing. Put another way, the house of the \n{richest rural household} (400 million) is worth the same as that of an \n{urban Q2 household} (400 million), so reaching the top group in the countryside only matches the near-poor group of the city in terms of housing wealth.
+
+\begin{luuy}
+House value is \n{self-assessed by the household head}, not a transaction price. In rural areas a house usually comes with a large but illiquid plot of land, so owners tend to value it conservatively. The gap above is therefore an upper bound on the true difference in housing quality.
+\end{luuy}
+
+\subsubsection{Are house values growing faster than income?}
+
+\begin{ct}
+Index relative to the 2010 base: \quad
+$I^{\text{house}}_t = \dfrac{H_t}{H_{2010}} \times 100$, \qquad
+$I^{\text{income}}_t = \dfrac{M_t}{M_{2010}} \times 100$
+\smallskip
+
+House value in years of household income: \quad
+$\text{Years}_t = \text{median}\left(\dfrac{\text{house}_i}{\text{income}_i}\right)$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{House values and income, 2010 = 100}
+\begin{tabular}{lrrrr}
+\toprule
+Year & Median house value & Income per capita & House index & Income index\\
+\midrule
+2010 & 150 million & 13.17 million & 100 & 100\\
+2012 & 250 million & 19.28 million & 167 & 146\\
+2014 & 300 million & 23.61 million & \textbf{200} & \textbf{179}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h24_gia_nha_vs_thu_nhap}{0.9}{Left: the two indices relative to 2010. Right: house value expressed in years of household income.}
+
+\textbf{Description.} Over four years the median house value \n{doubled} (index 200) while income per capita grew \n{79\%} (index 179). Expressed in years of total household income, a median house cost \n{3.21} years of income in 2010 and \n{3.69} years in 2014, further out of reach, although the increase slowed between 2012 and 2014 (3.79 down to 3.69).
+
+\begin{kl}
+Housing creates a channel of inequality that is independent of income. A household that already owned a house in 2010 saw its asset value double without doing anything, while a household without one must now save for more years than before. Q1 households save only 16.9\% of income when balanced and mostly overspend, so for them this gap is practically impossible to close through saving.
+\end{kl}
+
+\subsubsection{How widely are appliances, vehicles and utilities owned?}
+
+\hinh{h25_pho_cap_tai_san}{1.0}{Left: ownership rates across the three waves. Right: ownership in 2014 by income group.}
+
+\begin{table}[H]\centering\small
+\caption{Ownership rate (\%)}
+\begin{tabular}{lrrrcrrrr}
+\toprule
+& \multicolumn{3}{c}{Nationwide} & & \multicolumn{4}{c}{2014, by group}\\
+\cmidrule{2-4}\cmidrule{6-9}
+Asset & 2010 & 2012 & 2014 & & Q1 & Q2 & Q3 & Q4\\
+\midrule
+Household appliance & 94.7 & 96.1 & 94.8 & & 82 & 98 & 99 & 100\\
+TV & 82.7 & 90.8 & 92.3 & & 80 & 94 & 98 & 97\\
+Phone & 76.8 & 83.9 & \textbf{89.8} & & 75 & 91 & 96 & 97\\
+Motorbike & 73.1 & 80.2 & 83.2 & & 69 & 82 & 89 & 93\\
+Entertainment device & 58.1 & 57.9 & 57.5 & & 41 & 56 & 64 & 68\\
+Bicycle & 45.4 & 52.4 & 50.8 & & 42 & 60 & 58 & 43\\
+Car & 0.9 & 1.3 & 1.7 & & 0 & 1 & 1 & \textbf{5}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} The assets fall into three groups:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Already universal}: household appliances (94.8\%), TV (92.3\%) and phones (89.8\%). Phones grew fastest, from 76.8\% to 89.8\%. Even Q1 households reach 75–82\%, so these assets \n{no longer distinguish rich from poor}.
+\item \n{Spreading}: motorbikes rose from 73.1\% to 83.2\%, and the gap between Q1 (69\%) and Q4 (93\%) is still 24 pp.
+\item \n{Still rare}: cars reach only 1.7\% nationwide, and even in Q4 only 5\%, far too rare to serve as a measure.
+\end{itemize}
+
+Two special cases: \n{entertainment devices} barely moved (58.1\% to 57.5\%) yet vary strongly with income (41\% in Q1 versus 68\% in Q4); and \n{bicycles} follow an inverted U, 42\% in Q1, rising to 60\% in Q2, then falling back to 43\% in Q4, because better-off households replace bicycles with motorbikes.
+
+\begin{kl}
+Basic assets have reached even the poorest group. But precisely because they are saturated, ownership rates are no longer a good measure of living standards; distinguishing rich from poor now requires looking at asset \n{values} (house values differ 19.5-fold across provinces) or at assets that are still rare, such as cars.
+\end{kl}
+
+
+\subsubsection{Ownership rate of each income group over three years}
+
+The section above covers only the country as a whole and only 2014. This section splits by income group and follows all three waves, and adds two assets not yet covered: beds/mattresses (\texttt{bed}) and tables/chairs (\texttt{tab}).
+
+\begin{ct}
+$\text{Ownership}_{Q,t,A} = \dfrac{\text{households in } Q \text{ in year } t \text{ with } A_i > 0}{\text{households in } Q \text{ in year } t}\times 100\%$
+\end{ct}
+
+\hinh{h26_pho_cap_Q_nam}{1.0}{Share of households owning each asset, split by the four income groups, 2010--2014. All nine panels share a 0--100\% scale.}
+
+\begin{table}[H]\centering\small
+\caption{Ownership gap between Q4 and Q1 (percentage points)}
+\begin{tabular}{lrrrr}
+\toprule
+Asset & 2010 & 2012 & 2014 & Change 2012\ra2014\\
+\midrule
+Phone & 37.1 & 34.6 & \textbf{22.1} & $-12.5$\\
+Motorbike & 30.0 & 27.9 & \textbf{24.6} & $-3.3$\\
+TV & 14.2 & 19.2 & 16.5 & $-2.7$\\
+Entertainment device & 22.9 & 29.9 & 26.6 & $-3.3$\\
+Bed/mattress & 6.1 & 6.8 & 7.5 & $+0.7$\\
+Table/chair & 25.8 & 31.9 & \textbf{32.7} & $+0.8$\\
+Household appliance & 13.1 & 12.5 & 17.2 & $+4.7$\\
+Car & 3.2 & 4.1 & 4.4 & $+0.3$\\
+Bicycle & $-6.1$ & $-0.3$ & 0.3 & $+0.6$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} The nine panels of Figure~\ref{fig:h26_pho_cap_Q_nam} show three different shapes.
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Four lines converging}: phones are the clearest case, with the Q4$-$Q1 gap falling from 37.1 pp to \n{22.1}. Motorbikes converge too, but more slowly (30.0 down to 24.6). These are the only two assets whose rich-poor gap genuinely narrows.
+\item \n{Four parallel lines}: tables/chairs, entertainment devices and household appliances hold steady or \emph{widen}. Tables and chairs have the largest gap in the table for 2014 ($32.7$ pp: 47.5\% in Q1 against 81.0\% in Q4).
+\item \n{The Q4 line at the bottom}: bicycles are the only asset the richest group owns less often than the poorest, by $-6.1$ pp in 2010. They are examined below.
+\end{itemize}
+
+\begin{luuy}
+The variables \texttt{bed} and \texttt{tab} jump implausibly between 2010 and 2012: bed/mattress ownership is 51.7\% in 2010, then \n{86.5\%} in 2012 and 86.3\% in 2014; tables and chairs go 43.0\% \ra\ 67.0\% \ra\ 68.7\%. A jump of more than 30 pp in two years followed by complete flatness is not buying behaviour, and the median value of both assets barely changes between the waves, so households were not buying dearer items either. The 2010 wave most likely under-recorded them. This report therefore \n{does not read the 2010\ra2012 rise of these two variables as real growth} and compares them only over 2012--2014.
+\end{luuy}
+
+\begin{kl}
+Only \n{phones and motorbikes} are genuinely spreading in the sense that the Q1--Q4 gap narrows. Every other asset holds its gap or widens it, tables and chairs being the most divided asset in 2014. Ownership rose for almost every asset, but it \n{rose in all four groups at once}, so it did not erase the difference between them.
+\end{kl}
+
+\subsubsection{Among households that own one, how much do values differ?}
+
+Ownership rates answer only "yes or no". The next question is how far values differ among households that do own the item. The calculation uses only households with $A_i>0$, so that non-ownership does not leak into the value.
+
+\begin{ct}
+$\text{Mean value}_{Q,A} = \text{mean}\big(A_i \mid i \in Q,\ A_i > 0\big)$ \qquad
+$\text{Ratio} = \dfrac{\text{Mean value}_{Q4,A}}{\text{Mean value}_{Q1,A}}$
+\end{ct}
+
+\hinh{h27_gia_tri_tai_san_Q}{1.0}{Left: how many times more valuable a Q4 household's asset is than a Q1 household's, 2014. Right: the same ratio per household and divided by household size.}
+
+\begin{table}[H]\centering\small
+\caption{Mean value among owning households, 2014 (thousand VND)}
+\begin{tabular}{lrrrrr}
+\toprule
+Asset & Q1 & Q2 & Q3 & Q4 & Q4/Q1\\
+\midrule
+Household appliance & 1,553 & 3,197 & 5,246 & 8,816 & \textbf{5.68}\\
+Phone & 598 & 941 & 1,566 & 2,929 & \textbf{4.90}\\
+Table/chair & 1,571 & 2,573 & 3,851 & 6,168 & 3.93\\
+Entertainment device & 496 & 696 & 1,001 & 1,784 & 3.60\\
+TV & 924 & 1,244 & 1,804 & 3,115 & 3.37\\
+Motorbike & 8,780 & 12,423 & 17,746 & 25,781 & 2.94\\
+Bed/mattress & 1,067 & 1,550 & 1,987 & 2,826 & 2.65\\
+Bicycle & 538 & 667 & 778 & 1,023 & \textbf{1.90}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Description.} Value rises steadily from Q1 to Q4 for \n{all eight assets}, without exception. The gap ranges from \n{1.90 times} (bicycles) to \n{5.68 times} (household appliances). Phones are the striking case: ownership is close to universal (73.7\% in Q1, 96.9\% in Q4) yet the value still differs by \n{4.90 times}, so a rich household's phone costs nearly five times as much. The more price tiers a product has, the larger the ratio; bicycles have the fewest and differ least.
+
+\textbf{Is it because rich households are larger and buy more items?} No. A Q4 household has 3.46 people against 4.11 in Q1, so dividing value by household size \n{widens} the gap rather than closing it: household appliances go from 5.68 to 6.70 times, entertainment devices from 3.60 to 4.54. Household size does not explain the difference.
+
+\begin{luuy}
+The data record only the \n{total value} of each asset group, not the number of items. This report reads the figures under the assumption that \n{each household owns one item}, treating the recorded value as the price of that item. If rich households in fact own more items (two TVs rather than one), then the differences above are differences in \emph{total holdings} rather than purely in the \emph{quality of each item}, and the 4.90 ratio for phones is an upper bound on the difference in price per handset.
+\end{luuy}
+
+\begin{kl}
+Universal \n{ownership} does not bring universal \n{value}. Even for assets that almost every household has, rich households use items worth 2.6 to 5.7 times more. Once ownership saturates, the measure that still separates rich from poor is value, not the ownership rate.
+\end{kl}
+
+\subsubsection{Bicycles: two measures, two opposite conclusions}
+
+\hinh{h29_xe_dap}{1.0}{Left: share of households owning a bicycle by income group. Right: 2014 bicycle value computed over all households and over owners only.}
+
+\textbf{Description.} Bicycle ownership follows an inverted U in all three years: in 2014 it is \n{42.3\%} in Q1, rising to \n{59.9\%} in Q2 and 58.2\% in Q3, then falling back to \n{42.7\%} in Q4. The poorest cannot afford one; the richest have moved on to motorbikes.
+
+The interesting part is the value. Averaged over \n{all households}, Q3 reaches 453 thousand VND in 2014, above Q4 at 436 thousand, which invites the conclusion that the middle groups are upgrading their bicycles while the rich are not. But computed over \n{households that actually own one}, the usual order returns: 538 in Q1, 667 in Q2, 778 in Q3 and \n{1,023} in Q4. A Q4 household's bicycle is still the most expensive.
+
+\begin{kl}
+A mean over all households mixes two different things into one number: \emph{how many own one} and \emph{what the item is worth}. Q4's low average bicycle value comes not from cheap bicycles but from only 42.7\% of those households still keeping one. Whenever ownership rates differ sharply between groups, the two measures must be separated, or the conclusion comes out backwards.
+\end{kl}
+
+\subsubsection{Household appliances: is the 2014 fall real or a data artifact?}
+
+\hinh{h30_hmachine}{1.0}{Left: mean household-appliance value among owners, by income group. Right: the mean and upper percentiles across all owning households.}
+
+\textbf{Description.} Appliance values rise from 2010 to 2012 and then fall sharply in 2014 in \n{all four groups}: $-38.3\%$ in Q1, $-38.0\%$ in Q2, $-40.3\%$ in Q3 and $-48.4\%$ in Q4. Looking at Q4 alone, it is tempting to conclude that rich households are pulling out of this asset class and moving into housing and vehicles.
+
+Two signs argue for caution. First, the fall happens \n{simultaneously in all four groups} rather than only among the rich, which is hard to explain by a behavioural change confined to better-off households. Second, the upper tail is cut off: the maximum is \n{1,201,200} thousand VND in 2010 and \n{1,162,100} in 2012 but only \n{88,500} in 2014, thirteen times smaller. The 95th percentile also drops, from 29,100 to 16,000.
+
+\begin{luuy}
+A behavioural change that lowers values has no reason to truncate precisely the upper tail of the distribution, and no reason to affect all four income groups equally. This pattern looks more like the 2014 wave capping reported values or changing which items count than like a wave of asset sales. The report therefore \n{draws no conclusion} about the trend in appliance values over 2012--2014, and the section above uses the 2014 figures only to compare \emph{groups within the same year}, a comparison this change does not affect.
+\end{luuy}
+
+% =====================================================================
+\section{Overall conclusions}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=6pt,topsep=3pt]
+\item \n{Income rose in every group, every area and every province.} The four groups gained 66.6–80.5\%; rural areas grew faster than urban ones (78.6\% versus 64.4\%); all 63 provinces advanced and none fell back. The biggest beneficiary was \n{Q2}, the near-poor group.
+
+\item \n{But the rich-poor gap is still large, and larger when measured in money.} The Q4/Q1 ratio fell only from 5.75 to \n{5.61 times} measured per person, and in fact edged up (5.05 \ra\ 5.10) measured per household, while the difference grew from 25.6 to \n{42.4 million} VND per person per year. Rural areas in 2014 had still not reached the urban level of 2010.
+
+\item \n{Income rose and the essential burden eased, yet poor households are no better off.} Essential spending by Q1 fell from 88.6\% to \n{81.7\%} of income, but total spending still equals \n{111.5\%} of income and \n{61.9\%} of Q1 households spend more than they earn. Most of the poorest group \n{cannot live on their own income}.
+
+\item \n{Most of the gap is everyday living costs; shocks push only part of the group over the line.} Overspending households are \emph{smaller} than balanced ones and spend almost the same on rice (\n{1.12} times), yet their total spending is \n{1.69} times higher. As a ratio, house repair (10.3) and health care (2.5) stand out; in money terms, other food and non-food spending account for about two thirds of the gap. As for environment, such households cluster in poor mountainous provinces; yet at the same level of poverty, living in a richer province is harder because the local cost level is 18\% higher.
+
+\item \n{As income rises, money moves from staples to higher-order needs.} The rice share fell 1.92 pp over four years and drops from 13.0\% (Q1) to 4.0\% (Q4), while non-food spending rises. One exception stands out: \n{education spending in Q1 fell} both as a share and in participation, the item that gets postponed when budgets are tight.
+
+\item \n{Assets are where the gap settles.} House values doubled, faster than income ($+79\%$), so the number of years of income needed to buy a house rose from 3.21 to \n{3.69}. Basic appliances have reached even the poorest group, so ownership rates no longer separate rich from poor, but \n{value} still does: Q4 households own items worth \n{1.9 to 5.7 times} more than Q1 households across all eight assets, and phones alone still differ by 4.9 times although almost every household has one.
+\end{enumerate}
+
+\begin{tcolorbox}[colback=tintC, colframe=tintC, boxrule=0pt, arc=5pt, left=12pt, right=12pt, top=9pt, bottom=9pt]
+\textbf{Answer to the research question.} The four years from 2010 to 2014 made every group better off, but the gains were distributed \emph{proportionally}, so those who started with more ended with a wider gap. In money terms, the distance between rich and poor grew by 16.8 million VND per person per year. For the poorest group, what changed was not comfort but a smaller shortfall: from spending 116\% of income down to 111.5\%. Most of that shortfall sits in everyday living costs, while health care and house repair are the shocks that push a further share of households over the line. Neither cause is one that households are likely to close through their own saving effort.
+\end{tcolorbox}
+
+% =====================================================================
+\section{Limitations}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=4pt,topsep=3pt]
+\item \n{Households cannot be tracked.} The three waves are independent samples with no household identifier, so all comparisons over time are between groups.
+\item \n{No sampling weights.} The results describe the 28,196 households in the sample; generalising to the whole country requires caution.
+\item \n{No price index applied.} Each wave is in that year's prices, so comparisons over time use shares; figures of the form "grew by X\%" include price inflation.
+\item \n{Income and assets are self-reported} and are typically under-reported by farm and small-trade households, which may inflate the "overspending" rate.
+\item \n{One variable has substantial, non-random missingness}: fuel expenditure in 2014 (813 households, concentrated among poor rural households). The treatment and robustness check are in section~\ref{sec:fuel}; as a consequence no trend is claimed for the Q1 overspending rate.
+\item \n{Three asset variables show signs of a change in recording between waves}: beds/mattresses and tables/chairs were under-recorded in the 2010 wave, and household appliances have a truncated upper tail in the 2014 wave. The report does not compare the first two across 2010 and draws no trend conclusion for the third.
+\item \n{Small samples when cutting deep.} At province level, especially when filtering further by income group, only a few dozen households remain and the standard error of a proportion reaches 4–5 percentage points.
+\item \n{Description only, no causal inference.} The report uses no hypothesis testing, so it makes no claim about the statistical significance of any difference; wherever noise is a risk, the sample size is reported alongside.
+\end{enumerate}
+
+% =====================================================================
+\section*{Appendix — Source code}
+\addcontentsline{toc}{section}{Appendix — Source code}
+
+Every number and chart in this report comes from a single file, \texttt{report\_EDA\_en.ipynb}, run on \texttt{processed/vhlss\_merged.csv} (the raw merged survey data). The notebook contains 36 code cells arranged in the same order as the report:
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}p{0.2\linewidth}X@{}}
+\toprule
+\textbf{Cells} & \textbf{Content}\\
+\midrule
+1–4 & Sample overview, sample size by province (section 1)\\
+5–9 & Missing values, treatment, derived variables and grouping (sections 2.1–2.2)\\
+10–13 & Income distribution, mean versus median (section 2.3)\\
+14–20 & Income by group, the gap, the pie chart, growth, area, income groups within each area, provinces (section 3.1)\\
+21–28 & Spending composition, Pareto, tobacco, rice, education, burden, overspending, summary bubble (sections 3.2.1–3.2.7)\\
+29–32 & Three factors: environment, family size, spending patterns (section 3.2.8)\\
+33–36 & House values by province, house values by area, house values versus income, asset ownership (section 3.3)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Libraries used: \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib} and \texttt{seaborn}. Charts are written to the folder \texttt{presentation/figs\_nb\_en/} and included directly in this report. A Vietnamese version of both the report and the notebook (\texttt{bao\_cao.pdf}, \texttt{report\_EDA.ipynb}) is provided alongside; both versions were verified to produce identical numbers.
+
+\end{document}

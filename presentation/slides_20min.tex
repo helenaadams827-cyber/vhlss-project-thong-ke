@@ -1,0 +1,393 @@
+% =====================================================================
+%  Project Thống Kê — bản báo cáo 20 phút (Beamer, biên dịch bằng xelatex)
+%    cd presentation && xelatex slides_20min.tex && xelatex slides_20min.tex
+%  Hình: analysis/figs20.py  ->  figs/g*.pdf     Số liệu: analysis/numbers20.json
+%  Bản đầy đủ 50 slide vẫn nằm ở slides.tex (không đụng tới)
+%  Font: fonts/BeVietnamPro-*.ttf (đi kèm thư mục)
+% =====================================================================
+\documentclass[aspectratio=169,10pt,t]{beamer}
+\usetheme{metropolis}
+\metroset{sectionpage=none, numbering=none, progressbar=none, titleformat frame=regular}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{vietnamese}
+\setsansfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Regular, BoldFont=*-SemiBold,
+  ItalicFont=*-Italic, BoldItalicFont=*-SemiBold]
+\setmainfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Regular, BoldFont=*-SemiBold, ItalicFont=*-Italic]
+\newfontfamily\heavy{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Bold]
+\newfontfamily\medium{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Medium]
+\setmonofont{Latin Modern Mono}
+\usepackage{booktabs,tabularx,array,colortbl}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+
+% ---------------------------------------------------------------- bảng màu pastel
+\definecolor{surf}{HTML}{FBFBFD}
+\definecolor{ink}{HTML}{1E2233}
+\definecolor{ink2}{HTML}{555B70}
+\definecolor{muted}{HTML}{8A90A3}
+\definecolor{hair}{HTML}{E6E8F0}
+\definecolor{goldsoftx}{HTML}{FBF2DC}
+% mỗi bước một màu: tone (nét), tint (nền), dark (chữ)
+\definecolor{toneN}{HTML}{8A90A3}\definecolor{tintN}{HTML}{EEF0F5}\definecolor{darkN}{HTML}{454B61}
+\definecolor{toneA}{HTML}{578ED4}\definecolor{tintA}{HTML}{E6EEFA}\definecolor{darkA}{HTML}{2E5A93}
+\definecolor{toneB}{HTML}{EE9370}\definecolor{tintB}{HTML}{FCEBE3}\definecolor{darkB}{HTML}{9E4E2E}
+\definecolor{toneC}{HTML}{279479}\definecolor{tintC}{HTML}{DFF2EB}\definecolor{darkC}{HTML}{1B6A56}
+\definecolor{toneD}{HTML}{D7AC4A}\definecolor{tintD}{HTML}{FBF2DC}\definecolor{darkD}{HTML}{85631A}
+\definecolor{toneE}{HTML}{8C6EBD}\definecolor{tintE}{HTML}{EFEAF8}\definecolor{darkE}{HTML}{5D4690}
+\definecolor{toneF}{HTML}{D87DA2}\definecolor{tintF}{HTML}{FAE5EE}\definecolor{darkF}{HTML}{944565}
+\definecolor{toneI}{HTML}{279479}\definecolor{tintI}{HTML}{E8F5F0}\definecolor{darkI}{HTML}{1B6A56}
+\definecolor{ord1}{HTML}{BFD2F3}\definecolor{ord2}{HTML}{8DABE4}\definecolor{ord3}{HTML}{6380C8}\definecolor{ord4}{HTML}{41559E}
+\colorlet{steptone}{toneN}\colorlet{steptint}{tintN}\colorlet{stepdark}{darkN}
+\gdef\stepkicker{}
+\newcommand{\setstep}[2]{\colorlet{steptone}{tone#1}\colorlet{steptint}{tint#1}\colorlet{stepdark}{dark#1}\gdef\stepkicker{#2}}
+
+\setbeamercolor{normal text}{fg=ink,bg=surf}
+\setbeamercolor{background canvas}{bg=surf}
+\setbeamercolor{alerted text}{fg=stepdark}
+\setbeamercolor{itemize item}{fg=steptone}
+\setbeamercolor{enumerate item}{fg=stepdark}
+\setbeamercolor{palette primary}{fg=darkE,bg=tintE}
+\setbeamercolor{standout}{fg=darkE,bg=tintE}
+\setbeamertemplate{itemize item}{\color{steptone}\small$\bullet$}
+\setbeamersize{text margin left=0.6cm, text margin right=0.6cm}
+\setlength{\leftmargini}{1.0em}
+\arrayrulecolor{hair}
+\renewcommand{\arraystretch}{1.3}
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% ---------------------------------------------------------------- pill, kicker
+\newcommand{\ra}{$\rightarrow$}
+\newcommand{\pill}[3]{\tikz[baseline=(p.base)]\node[fill=#1,text=#2,rounded corners=3pt,inner xsep=4.5pt,inner ysep=1.6pt,font=\scriptsize\bfseries](p){\vphantom{Ếg}#3};}
+\newcommand{\vU}{\pill{tintC}{darkC}{Ủng hộ}}
+\newcommand{\vM}{\pill{tintD}{darkD}{Một phần}}
+\newcommand{\vB}{\pill{tintF}{darkF}{Bác bỏ}}
+\newcommand{\hyp}[2]{{\color{ink2}Giả thuyết: #1}\hspace{0.5em}\csname v#2\endcsname}
+\newcommand{\ask}[1]{{\color{ink2}Câu hỏi: #1}}
+
+% ---------------------------------------------------------------- tiêu đề frame
+% dòng 1: kicker (bước · mã) · dòng 2: headline · dòng 3: giả thuyết + kết quả
+\makeatletter
+\newlength\barw \setlength\barw{\dimexpr\paperwidth-1.2cm\relax}
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \hbox{{\color{steptone}\rule{\dimexpr\paperwidth*\insertframenumber/\inserttotalframenumber\relax}{2.2pt}}%
+        {\color{hair}\rule{\dimexpr\paperwidth-\paperwidth*\insertframenumber/\inserttotalframenumber\relax}{2.2pt}}}%
+  \nointerlineskip
+  \hbox to \paperwidth{\hspace{0.6cm}\vbox to 38pt{\hsize=\barw\vskip 5pt
+      \hbox to \barw{\fontsize{13.5}{15}\selectfont\bfseries\color{ink}%
+        \ifx\framecode\@empty\else\raisebox{1pt}{\pill{steptone!28!white}{stepdark}{\framecode}}\hspace{0.4em}\fi
+        \strut\insertframetitle\hfil}%
+      \vskip 1pt
+      \hbox to \barw{\fontsize{7.8}{9}\selectfont\strut\insertframesubtitle\hfil}%
+      \vfil}\hss}%
+  \vskip 4pt}
+\gdef\framemeta{}\gdef\framecode{}
+\newcommand{\code}[1]{\gdef\framecode{#1}}
+\setbeamertemplate{footline}{%
+  \hbox to \paperwidth{\hspace{0.6cm}\fontsize{6.4}{8}\selectfont\color{muted}\framemeta\hfill\insertframenumber\,/\,\inserttotalframenumber\hspace{0.6cm}}%
+  \vskip 6pt\gdef\framemeta{}\gdef\framecode{}}
+\makeatother
+\newcommand{\meta}[3]{\gdef\framemeta{\textbf{Thước đo}\enspace #1\qquad\textbf{Biểu đồ}\enspace #2\qquad\textbf{Kiến thức}\enspace #3}}
+
+% ---------------------------------------------------------------- thẻ nhận xét
+\tcbset{card/.style={enhanced, colback=steptint, colframe=steptint, boxrule=0pt, arc=5pt,
+  left=5pt, right=5pt, top=3pt, bottom=3pt, fontupper=\footnotesize\color{ink}, before upper={\raggedright\setlength{\parskip}{2pt}}}}
+\newenvironment{cardrow}[1]{\begin{tcbraster}[raster columns=#1, raster equal height, raster column skip=6pt, raster row skip=5pt, raster before skip=0pt, raster after skip=0pt]}{\end{tcbraster}}
+\newcommand{\card}[1]{\begin{tcolorbox}[card]#1\end{tcolorbox}}
+\newcommand{\num}[1]{{\bfseries\color{stepdark}#1}}
+
+% ---------------------------------------------------------------- khung hình rộng + thẻ
+\newsavebox\bodybox
+\newlength\figh \newlength\framereserve \setlength\framereserve{80pt}
+% \figcards{hình}{số cột}{\card{..}\card{..}}
+\newcommand{\figcards}[3]{%
+  \sbox\bodybox{\parbox[t]{\textwidth}{\begin{cardrow}{#2}#3\end{cardrow}}}%
+  \setlength\figh{\dimexpr\textheight-\framereserve-\ht\bodybox-\dp\bodybox-1.5pt\relax}%
+  \typeout{FIGH #1 \the\figh\space BODY \the\ht\bodybox\space + \the\dp\bodybox}%
+  {\centering\includegraphics[width=\textwidth,height=\figh,keepaspectratio]{figs/#1.pdf}\par}%
+  \vspace{4pt}\usebox\bodybox\par\vfill}
+\newcommand{\sidefig}[1]{\includegraphics[width=\linewidth,height=\dimexpr\textheight-\framereserve+6pt\relax,keepaspectratio]{figs/#1.pdf}}
+% hình trái, cột thẻ phải
+\newcommand{\sidecards}[3]{%
+  \begin{columns}[T]
+  \begin{column}{#2\textwidth}\centering\sidefig{#1}\end{column}
+  \begin{column}{\dimexpr0.97\textwidth-#2\textwidth\relax}\begin{cardrow}{1}#3\end{cardrow}\end{column}
+  \end{columns}}
+
+\begin{document}
+\typeout{TH \the\textheight}
+
+% ================================================================= Tiêu đề
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[tintA] ($(current page.north east)+(-6.1,0)$) rectangle (current page.south east);
+  % motif: 100 đồng thu nhập của cả nước năm 2014 chia cho 4 nhóm
+  \begin{scope}[shift={($(current page.south east)+(-5.35,1.55)$)}]
+    \foreach \i/\v/\c/\l in {0/8.4/ord1/{8,4\%}, 1/16.8/ord2/{16,8\%}, 2/26.3/ord3/{26,3\%}, 3/48.4/ord4/{48,4\%}}{
+      \fill[\c, rounded corners=3pt] (\i*1.12,0) rectangle ++(0.82,{\v*0.062});
+      \node[font=\scriptsize\bfseries, text=darkA, anchor=south] at ({\i*1.12+0.41},{\v*0.062+0.05}) {\l};
+      \node[font=\scriptsize, text=ink2, anchor=north] at ({\i*1.12+0.41},-0.08) {Q\the\numexpr\i+1\relax};
+    }
+    \node[font=\fontsize{6.5}{8}\selectfont, text=ink2, anchor=north west, align=left] at (-0.05,-0.55) {100 đồng thu nhập của cả nước năm 2014\\chia cho 4 nhóm hộ, mỗi nhóm 25\% số hộ};
+  \end{scope}
+\end{tikzpicture}
+\vspace*{0.7cm}
+\begin{minipage}{0.56\textwidth}
+{\fontsize{8}{10}\selectfont\medium\color{darkA} VHLSS 2010 · 2012 · 2014 — báo cáo 20 phút\par}
+\vspace{6pt}
+{\fontsize{28}{32}\selectfont\heavy\color{ink} Thu nhập,\\chi tiêu\\và tài sản\par}
+\vspace{8pt}
+{\large\color{ink} Khoảng cách giàu nghèo của hộ gia đình\\Việt Nam thay đổi thế nào, 2010–2014?\par}
+\vspace{9pt}
+{\small\color{ink2} Khảo sát Mức sống Hộ gia đình Việt Nam\par\vspace{2pt}28.196 hộ\quad·\quad 63 tỉnh\quad·\quad 3 đợt khảo sát\par}
+\vspace{0.5cm}
+{\small\color{muted} Thành viên nhóm: ……………………………………\par}
+\end{minipage}
+\end{frame}
+
+% ================================================================= Mở đầu
+\setstep{N}{Mở đầu}
+\begin{frame}\frametitle{Ba câu hỏi nối thành một mạch}
+\framesubtitle{\ask{chênh lệch thu nhập bao nhiêu \ra\ nó làm chi tiêu khác nhau thế nào \ra\ cuối cùng để lại tài sản gì?}}
+\vspace{2pt}
+\centering
+\begin{tikzpicture}[
+  st/.style={rounded corners=6pt, minimum height=3.05cm, text width=3.5cm, align=left, inner sep=8pt, font=\footnotesize, anchor=north west},
+  arr/.style={-{Stealth[length=5pt]}, color=muted, line width=0.9pt}]
+  \node[st, fill=tintA] (s0) at (0,0) {{\scriptsize\medium\color{darkA} PHẦN 1 · KHOẢNG CÁCH}\\[3pt]{\bfseries\color{ink} Hộ giàu và hộ nghèo cách nhau bao xa, và 4 năm qua xa thêm hay gần lại?}\\[5pt]{\scriptsize\color{darkA} Toàn quốc · thành thị–nông thôn · 4 nhóm tỉnh}};
+  \node[st, fill=tintB] (s1) at (4.05,0) {{\scriptsize\medium\color{darkB} PHẦN 2 · CHI TIÊU}\\[3pt]{\bfseries\color{ink} Khoảng cách đó biến thành khác biệt gì trong cách tiêu tiền hằng ngày?}\\[5pt]{\scriptsize\color{darkB} Gánh nặng thiết yếu · chi vượt thu · cơ cấu chi}};
+  \node[st, fill=tintD] (s2) at (8.1,0) {{\scriptsize\medium\color{darkD} PHẦN 3 · TÀI SẢN}\\[3pt]{\bfseries\color{ink} Sau 4 năm, mỗi nhóm tích lũy được gì và tài sản nào nói lên sự giàu nghèo?}\\[5pt]{\scriptsize\color{darkD} Nhà ở · đồ công nghệ · phương tiện}};
+  \draw[arr] ($(s0.east)+(0.02,-0.6)$) -- ++(0.3,0);
+  \draw[arr] ($(s1.east)+(0.02,-0.6)$) -- ++(0.3,0);
+\end{tikzpicture}
+\par\vspace{8pt}
+\raggedright
+\begin{cardrow}{2}
+\card{Mỗi slide phân tích có: \num{câu hỏi} ở dòng dưới tiêu đề, \num{tiêu đề chính là câu trả lời}, và chân trang ghi thước đo – loại biểu đồ – kiến thức môn học đã dùng.}
+\card{Toàn bộ là \num{thống kê mô tả} (chương 1–4): không kiểm định giả thuyết, không mô hình dự báo. Mọi số đều tính lại trực tiếp từ 28.196 hộ.}
+\end{cardrow}
+\end{frame}
+
+\begin{frame}\frametitle{Dữ liệu, cách chia nhóm và một quy ước đọc số}
+\framesubtitle{\ask{so sánh trên cái gì, và số trên slide hiểu thế nào cho đúng?}}
+\meta{tần số, tứ phân vị}{bảng}{C1 – mẫu, loại biến; C2 – tứ phân vị}
+\vspace{2pt}
+\begin{cardrow}{3}
+\card{{\medium\color{darkN} DỮ LIỆU}\par\vspace{3pt}
+VHLSS của Tổng cục Thống kê, \num{28.196 hộ}, 3 đợt 2010 · 2012 · 2014, 63 tỉnh.\par\vspace{3pt}
+Dữ liệu \num{thứ cấp}: mỗi đợt là một mẫu khác nhau, \num{không có mã hộ} nên không theo dõi được từng hộ qua các năm — chỉ so sánh theo nhóm.}
+\card{{\medium\color{darkN} BA CÁCH CHIA NHÓM}\par\vspace{3pt}
+\num{Q1–Q4}: tứ phân vị thu nhập/người của từng năm — mỗi nhóm đúng 25\% số hộ.\par\vspace{3pt}
+\num{Thành thị / nông thôn}.\par\vspace{3pt}
+\num{T1–T4}: 63 tỉnh xếp theo thu nhập trung vị, chia 4 nhóm — T1 nghèo nhất, T4 giàu nhất.}
+\card{{\medium\color{darkN} QUY ƯỚC ĐỌC SỐ}\par\vspace{3pt}
+Tiền: nghìn đồng/năm trong dữ liệu gốc, trên slide đổi ra \num{triệu đồng}.\par\vspace{3pt}
+Giá \num{từng năm}, không quy về một mốc giá. Vì vậy khi so sánh qua các năm, bài dùng \num{tỷ trọng \%} thay cho số tiền — lý do ở slide 12.}
+\end{cardrow}
+\end{frame}
+
+% ================================================================= Phương pháp
+\setstep{N}{Chọn thước đo}
+\begin{frame}\frametitle{Dùng median, vì chỉ riêng nhóm Q4 bị kéo lệch}
+\framesubtitle{\ask{đo “thu nhập điển hình” của một nhóm bằng mean hay median?}}
+\meta{mean, median, skewness}{histogram, boxplot, grouped bar}{C2 – xu hướng trung tâm}
+\code{0}
+\figcards{g01_shape}{3}{%
+\card{Toàn mẫu lệch phải mạnh: mean \num{30,0} triệu nhưng median \num{23,6} triệu, \num{63\%} hộ nằm dưới mean — “trung bình” không phải hộ điển hình.}
+\card{Tách từng nhóm thì \num{Q1–Q3 gần như cân đối} (độ lệch −0,21 · 0,04 · 0,19; mean ≈ median). Riêng \num{Q4 lệch 9,8}: mean 62,4 so với median 51,6, và \num{69\%} hộ Q4 ở dưới mean của chính nhóm mình.}
+\card{Chọn sai là đổi kết luận: khoảng cách Q4/Q1 là \num{5,6 lần} theo median nhưng \num{6,9 lần} theo mean. Cả bài dùng \num{median} — không bị vài hộ siêu giàu kéo đi.}}
+\end{frame}
+
+% ================================================================= PHẦN 1
+\setstep{A}{Phần 1 · Khoảng cách thu nhập}
+\section{Phần 1 — Khoảng cách thu nhập}
+\begin{frame}\frametitle{Cả 4 nhóm cùng tăng, khoảng cách rộng thêm 17 triệu}
+\framesubtitle{\hyp{2010–2014 kinh tế đi lên nên khoảng cách giàu nghèo thu hẹp lại}{M}}
+\meta{median, tỷ số, hiệu số}{line chart, bar + line}{C2 – median; C3 – so sánh tương đối và tuyệt đối}
+\code{1.1}
+\figcards{g02_inc_line}{3}{%
+\card{Thu nhập/người/năm tăng ở mọi nhóm: Q1 \num{5,4 \ra\ 9,2} triệu (+71\%), Q4 \num{30,9 \ra\ 51,6} triệu (+67\%). Tốc độ \% gần như nhau.}
+\card{Tính \num{tương đối}: tỷ số Q4/Q1 giảm nhẹ \num{5,75 \ra\ 5,61} lần — đúng là có hẹp lại, nhưng rất ít.}
+\card{Tính \num{tuyệt đối}: hiệu Q4 − Q1 tăng \num{25,5 \ra\ 42,4} triệu (+66\%). Cùng một \% tăng, 67\% của 31 triệu vẫn lớn hơn nhiều 71\% của 5,4 triệu.}}
+\end{frame}
+
+\begin{frame}\frametitle{Q1 là 27\% dân số nhưng chỉ giữ 8\% tổng thu nhập}
+\framesubtitle{\ask{chia 100 đồng thu nhập của cả nước, mỗi nhóm nhận được bao nhiêu?}}
+\meta{tỷ trọng, tần suất}{pie chart, stacked bar}{C1 – tần suất tương đối; C2 – cơ cấu}
+\code{1.2}
+\figcards{g03_pie}{3}{%
+\card{Mỗi nhóm đúng \num{25\% số hộ}, nhưng hộ nghèo đông người hơn (4,1 so với 3,5 người), nên Q1 chiếm \num{26,8\%} dân số còn Q4 chỉ \num{22,5\%}.}
+\card{Thu nhập thì ngược hẳn: Q1 giữ \num{8,4\%}, Q4 giữ \num{48,4\%} — gần một nửa tổng thu nhập cả nước. Nửa khá giả (Q3+Q4) giữ \num{74,7\%}.}
+\card{Ba năm: phần của Q4 giảm \num{51,4 \ra\ 48,4\%}, phần tăng rơi vào Q2 và Q3, còn Q1 gần như đứng yên (8,6 \ra\ 8,4\%) — nhóm giữa khá lên, nhóm đáy thì không.}}
+\end{frame}
+
+\begin{frame}\frametitle{Nơi nghèo tăng nhanh hơn, nhưng 4 năm chưa đủ để đuổi kịp}
+\framesubtitle{\hyp{nông thôn và các tỉnh nghèo đang rút ngắn khoảng cách với thành thị và tỉnh giàu}{M}}
+\meta{median, tốc độ tăng \%}{dumbbell chart}{C2 – median; C3 – so sánh nhóm}
+\code{1.3}
+\figcards{g04_dumbbell}{3}{%
+\card{Nông thôn \num{11,0 \ra\ 19,7} triệu (+79\%) tăng nhanh hơn thành thị \num{21,1 \ra\ 34,7} (+64\%); tỷ số thành thị/nông thôn hạ từ \num{1,92} xuống \num{1,76} lần.}
+\card{Theo nhóm tỉnh, T1–T3 tăng 79–87\%, nhanh hơn T4 (+69\%). Nhóm tỉnh nghèo đúng là đang đuổi theo.}
+\card{Nhưng mốc xuất phát quá xa: T4 năm 2010 đã là \num{19,0} triệu, cao hơn T1 năm 2014 (\num{14,8} triệu). Tỉnh nghèo sau 4 năm vẫn chưa bằng tỉnh giàu của 4 năm trước.}}
+\end{frame}
+
+% ================================================================= PHẦN 2
+\setstep{B}{Phần 2 · Chi tiêu và gánh nặng}
+\section{Phần 2 — Chi tiêu}
+\begin{frame}\frametitle{Gánh nặng nhẹ dần, Q1 vẫn chi vượt 100\% thu nhập}
+\framesubtitle{\hyp{hộ nghèo phải dồn gần hết thu nhập cho nhu cầu thiết yếu nên không còn gì để dành}{U}}
+\meta{tỷ lệ chi/thu nhập (median)}{line chart, stacked bar}{C2 – median, tỷ lệ; C1 – phân loại biến}
+\code{2.1}
+\figcards{g05_burden}{3}{%
+\card{Chi thiết yếu (ăn uống, điện nước, nhiên liệu, chữa bệnh, sửa nhà) trên thu nhập giảm đều: Q1 \num{89 \ra\ 82\%}, Q4 \num{43 \ra\ 39\%}. Mọi nhóm đều nhẹ gánh hơn.}
+\card{Phần tiết kiệm được lại chảy sang khoản chưa thiết yếu: ở Q1 khoản này tăng \num{26 \ra\ 29\%} thu nhập.}
+\card{Cộng hai phần lại, năm 2014 hộ Q1 điển hình chi \num{110\%} thu nhập, Q2 85\%, Q3 72\%, Q4 chỉ \num{55\%} (tính thẳng trên tổng chi thì Q1 là \num{111\%} — tổng của hai median không đúng bằng median của tổng). Vạch 100\% chia đôi bức tranh ngay giữa Q1 và Q2.}}
+\end{frame}
+
+\begin{frame}\frametitle{62\% hộ Q1 chi nhiều hơn thu, thiếu hụt 42\% thu nhập cả năm}
+\framesubtitle{\ask{bao nhiêu hộ chi vượt thu, và mỗi hộ vượt bao nhiêu?}}
+\meta{tỷ lệ mẫu, median}{grouped bar, bar hai chiều}{C4 – tỷ lệ mẫu; C2 – median}
+\code{2.2}
+\figcards{g06_overspend}{3}{%
+\card{Tỷ lệ hộ chi vượt thu giảm chậm: Q1 \num{66 \ra\ 62\%}, Q4 \num{10 \ra\ 7\%}. Với n hơn 7.000 hộ mỗi năm, sai số chuẩn của các tỷ lệ này chỉ khoảng \num{1\%} nên chênh lệch giữa các nhóm là thật.}
+\card{Mức độ cũng khác nhau: hộ Q1 vượt thu thiếu \num{42\%} thu nhập, trong khi hộ Q4 vượt thu chỉ thiếu 12\%.}
+\card{Phía còn lại: hộ Q1 cân đối được chỉ dư \num{17\%} thu nhập, còn hộ Q4 dư \num{45\%} — chênh lệch tích lũy bắt đầu từ đây.}}
+\end{frame}
+
+\begin{frame}\frametitle{Cùng nghèo như nhau, ở tỉnh giàu lại khó trang trải hơn}
+\framesubtitle{\hyp{chi vượt thu chủ yếu xảy ra ở các tỉnh nghèo}{B}}
+\meta{tỷ lệ mẫu theo nhóm}{grouped bar, hbar}{C4 – tỷ lệ mẫu, cỡ mẫu; C3 – so sánh nhóm}
+\code{2.3}
+\figcards{g07_where}{3}{%
+\card{Tính trên mọi hộ thì đúng là tỉnh nghèo vượt nhiều hơn: T1 \num{39\%} so với T4 \num{23\%} (2014). Nhưng đó là vì T1 có nhiều hộ nghèo hơn.}
+\card{Giữ cố định mức nghèo — chỉ xét hộ Q1 — thì đảo chiều: T4 \num{69\%} và T3 \num{68\%} vượt thu, cao hơn T1 \num{60\%}. Mặt bằng chi ở T4 là \num{23,5} triệu/người, gấp 1,7 lần T1 (13,5 triệu).}
+\card{Xuống tới từng tỉnh, mỗi tỉnh chỉ còn 60–200 hộ Q1 nên tỷ lệ nhảy mạnh (Vĩnh Long 84\% so với Gia Lai 29\%) — nên đọc theo \num{nhóm tỉnh}, đừng đọc từng tỉnh.}}
+\end{frame}
+
+\setstep{C}{Phần 2 · Tiền đi đâu}
+\begin{frame}\frametitle{Hộ vượt thu ít người hơn, khác biệt lớn nhất là y tế}
+\framesubtitle{\ask{hộ chi vượt thu khác hộ cân đối ở chỗ nào: đông con, tiêu hoang, hay gặp biến cố?}}
+\meta{mean, median, tỷ trọng}{grouped bar, diverging hbar}{C2 – mean/median; C3 – so sánh cơ cấu}
+\code{2.4}
+\figcards{g08_behavior}{3}{%
+\card{Không phải do đông người: hộ vượt thu \num{ít hơn 0,4–0,6 người} ở mọi nhóm Q. Nhưng chi/người của họ gấp \num{1,6–1,8 lần} hộ cân đối cùng nhóm.}
+\card{Khác biệt cơ cấu lớn nhất là \num{thuốc và viện phí} (+3,1 điểm \%) và \num{sửa chữa nhà} (+2,9 điểm \%); ngược lại họ chi \num{ít hơn} cho quần áo, đi lại, giải trí (−3,5 điểm \%).}
+\card{Tính trên thu nhập, hộ Q1 vượt thu chi \num{3,2\%} thu nhập cho y tế so với \num{1,2\%} của hộ cân đối. Vượt thu phần lớn là \num{cú sốc} (ốm đau, sửa nhà), không phải tiêu xài.}}
+\end{frame}
+
+\begin{frame}\frametitle{Cùng khoản gạo, ba đơn vị cho ba câu chuyện}
+\framesubtitle{\ask{so sánh qua 3 năm thì lấy đơn vị nào — đồng, tỷ trọng chi, hay \% thu nhập?}}
+\meta{median, tỷ trọng}{bar chart (ba cách tính cùng một khoản)}{C1 – thang đo; C2 – số tương đối}
+\code{2.5}
+\figcards{g09_unit}{3}{%
+\card{Bằng \num{đồng}: chi gạo/người tăng 1,09 \ra\ 1,35 triệu (+24\%). Nhưng giá cả 3 năm cũng tăng và bài không quy về giá gốc, nên không kết luận được “ăn nhiều gạo hơn”.}
+\card{Bằng \num{tỷ trọng} trong tổng chi: 8,5 \ra\ \num{6,6\%}. Gạo mất dần chỗ trong rổ chi — kết luận này không bị giá làm sai lệch.}
+\card{\num{Quy tắc dùng trong bài:} so hai nhóm \num{trong cùng một năm} thì dùng đồng/người; so \num{qua các năm} hoặc so giàu–nghèo thì dùng tỷ trọng hoặc \% thu nhập.}}
+\end{frame}
+
+\begin{frame}\frametitle{Hộ nghèo dành 13\% chi tiêu cho riêng gạo, hộ giàu chỉ 4\%}
+\framesubtitle{\ask{một đồng chi tiêu của hộ nghèo và của hộ giàu đi về đâu?}}
+\meta{tỷ trọng}{pie chart, line chart}{C1 – tần suất tương đối; C2 – cơ cấu}
+\code{2.6}
+\sidecards{g10_structure}{0.60}{%
+\card{Gạo: \num{13,0\%} rổ chi của Q1, chỉ \num{4,0\%} của Q4. Ngoài ăn uống (quần áo, đi lại, giải trí): 22,9 lên \num{26,7\%}.}
+\card{Nhóm còn lại (điện, nước, nhiên liệu, sửa nhà, thuốc lá): \num{10,1 \ra\ 14,9\%}.}
+\card{Bất ngờ: \num{giáo dục + y tế} gần như nhau ở hai đầu (11,1 so với 11,8\%). Hộ giàu chi nhiều hơn bằng \num{số tiền}, không bằng tỷ lệ.}}
+\end{frame}
+
+\begin{frame}\frametitle{Gạo gần như không tăng theo thu nhập: r = 0,01}
+\framesubtitle{\hyp{giàu lên thì mọi khoản chi đều tăng theo}{B}}
+\meta{hệ số tương quan r (thang log)}{hbar, line chart}{C3 – hiệp phương sai, hệ số tương quan}
+\code{2.7}
+\figcards{g11_goods}{3}{%
+\card{Nhóm tăng mạnh theo thu nhập: ngoài ăn uống (quần áo, đi lại, giải trí) \num{r = 0,71}, thực phẩm khác 0,70, điện 0,67 — thu nhập gấp đôi thì các khoản này cũng phình theo.}
+\card{Nhóm gần như đứng yên: \num{gạo r = 0,01}, bảo hiểm y tế 0,11, thuốc lá 0,15. Thu nhập chênh 5 lần nhưng lượng gạo ăn thì không.}
+\card{Hệ quả là tỷ trọng: cùng một số tiền gạo gần như cố định, chia cho rổ chi ngày càng lớn, nên gạo tụt từ 13\% (Q1) xuống 4\% (Q4). Tỷ trọng chi cho lương thực vì vậy là một thước đo mức sống.}}
+\end{frame}
+
+% ================================================================= PHẦN 3
+\setstep{D}{Phần 3 · Tài sản}
+\section{Phần 3 — Tài sản}
+\begin{frame}\frametitle{Nhà ở Hà Nội đắt gấp 19,5 lần nhà ở Lai Châu}
+\framesubtitle{\ask{tài sản nhà ở chênh lệch giữa các tỉnh tới mức nào?}}
+\meta{median theo tỉnh}{hbar (top 10 – bottom 10)}{C2 – median; C1 – dữ liệu tự khai}
+\code{3.1}
+\figcards{g12_house_prov}{3}{%
+\card{Đắt nhất: Hà Nội \num{1.560}, TP.HCM \num{1.400}, Đà Nẵng \num{970} triệu. Rẻ nhất: Lai Châu \num{80}, Cà Mau 82, Điện Biên 82 triệu.}
+\card{Cả 10 tỉnh rẻ nhất đều dưới \num{145} triệu — tức một căn nhà ở Hà Nội đổi được hơn mười căn ở vùng cao.}
+\card{Đọc thận trọng: đây là giá trị \num{chủ hộ tự ước lượng}, và nhà nông thôn thường gắn với đất rộng nhưng giá thấp, nên con số phản ánh cả vị trí lẫn ngôi nhà.}}
+\end{frame}
+
+\begin{frame}\frametitle{Giá trị nhà tăng gấp đôi trong 4 năm, nhanh hơn thu nhập}
+\framesubtitle{\hyp{tài sản nhà ở tăng chậm hơn thu nhập nên hộ trẻ dễ mua nhà hơn}{B}}
+\meta{median, tốc độ tăng \%}{line chart, histogram}{C2 – median; C3 – độ phân tán giữa các tỉnh}
+\code{3.2}
+\figcards{g13_house_growth}{3}{%
+\card{Median cả nước \num{150 \ra\ 300} triệu (+100\%), nhanh hơn mức tăng thu nhập/người (+79\%). Nông thôn +100\%, thành thị \num{480 \ra\ 700} triệu (+46\%).}
+\card{63 tỉnh tăng rất khác nhau: median \num{+96\%}, cao nhất Đắk Lắk \num{+200\%}, thấp nhất Hải Phòng gần \num{0\%}.}
+\card{Tính theo số năm thu nhập cả hộ, cả nước \num{3,2 \ra\ 3,7} năm — nhà xa tầm với hơn. Riêng Hà Nội hạ từ 13,5 xuống \num{11,1} năm vì thu nhập ở đó tăng nhanh hơn giá nhà.}}
+\end{frame}
+
+\begin{frame}\frametitle{Nhà ở phản ánh thu nhập (r = 0,57), tiền sửa nhà thì không}
+\framesubtitle{\ask{nhìn vào nhà cửa có đoán được hộ đó giàu hay nghèo không?}}
+\meta{hệ số tương quan r}{scatterplot (thang log)}{C3 – hiệp phương sai, hệ số tương quan}
+\code{3.3}
+\figcards{g14_scatter}{3}{%
+\card{Quan hệ nhà – thu nhập là \num{cùng chiều và khá mạnh} (r = 0,57), thấy rõ qua 4 chấm median Q1 \ra\ Q4 đi lên. Nhưng mây điểm rất rộng: cùng mức thu nhập, có hộ nhà 50 triệu, có hộ nhà vài tỷ.}
+\card{Chỉ \num{9,6\%} hộ có chi sửa hoặc xây nhà trong năm, và tỷ lệ này gần như nhau ở mọi mức giá nhà (8–11\%).}
+\card{Vì vậy r(nhà, tiền sửa nhà) chỉ \num{0,31}: sửa nhà là \num{sự kiện bất thường} của từng hộ, không phải dấu hiệu giàu — đúng với việc nó là khoản đẩy nhiều hộ vào cảnh chi vượt thu (slide 11).}}
+\end{frame}
+
+\begin{frame}\frametitle{Đồ công nghệ đã phổ cập; nhà ở mới là thước đo giàu nghèo}
+\framesubtitle{\hyp{hộ nghèo hầu như không có tài sản công nghệ}{B}}
+\meta{tỷ lệ sở hữu, median, r}{grouped bar, hbar, line chart}{C4 – tỷ lệ mẫu; C3 – tương quan}
+\code{3.4}
+\figcards{g15_assets}{3}{%
+\card{Hộ Q1 vẫn có TV \num{79\%}, điện thoại \num{74\%}, máy gia dụng 81\% — chênh với Q4 chỉ 18–23 điểm \%. Ô tô phân biệt mạnh nhưng quá hiếm để dùng (Q4 chỉ \num{5\%}).}
+\card{So theo giá trị, nhà ở gắn với thu nhập chặt nhất: \num{r = 0,57}, trên đồ công nghệ 0,49, nội thất 0,41, phương tiện 0,39.}
+\card{Và khoảng cách vẫn nới ra: giá trị đồ công nghệ của Q1 đứng yên ở \num{1,0} triệu suốt 3 đợt, trong khi Q4 tăng \num{3,2 \ra\ 4,3} triệu.}}
+\end{frame}
+
+% ================================================================= Kết luận
+\setstep{I}{Kết luận}
+\section{Kết luận}
+\begin{frame}\frametitle{Ba kết luận và một câu trả lời chung}
+\framesubtitle{\ask{sau 4 năm khá lên, khoảng cách giàu nghèo của hộ gia đình Việt Nam đi về đâu?}}
+\vspace{3pt}
+\begin{cardrow}{3}
+\card{{\medium\color{darkA} 1 · KHOẢNG CÁCH}\par\vspace{3pt}
+Mọi nhóm tăng \num{67–81\%}; tỷ số Q4/Q1 hạ nhẹ 5,75 \ra\ 5,61 lần nhưng khoảng cách tính bằng tiền \num{rộng thêm 17 triệu}/người/năm.\par\vspace{3pt}
+Q1 là \num{27\% dân số} mà chỉ giữ \num{8\%} thu nhập; Q4 giữ \num{48\%}.}
+\card{{\medium\color{darkB} 2 · CHI TIÊU}\par\vspace{3pt}
+Gánh nặng thiết yếu nhẹ đi ở mọi nhóm (Q1 89 \ra\ 82\%), nhưng \num{62\%} hộ Q1 vẫn chi vượt thu, thiếu \num{42\%} thu nhập.\par\vspace{3pt}
+Vượt thu gắn với \num{y tế và sửa nhà}, không phải tiêu xài — và hộ Q1 ở nhóm tỉnh giàu còn vượt nhiều hơn (\num{69\%} so với 60\%).}
+\card{{\medium\color{darkD} 3 · TÀI SẢN}\par\vspace{3pt}
+Giá trị nhà tăng \num{gấp đôi}, nhanh hơn thu nhập (+79\%) — ai đã có nhà thì giàu thêm mà không cần thu nhập tăng.\par\vspace{3pt}
+Đồ công nghệ đã \num{phổ cập}, không còn phân biệt giàu nghèo; \num{nhà ở} phản ánh rõ nhất (r = 0,57).}
+\end{cardrow}
+\vspace{6pt}
+\begin{tcolorbox}[card, colback=tintI, left=8pt, right=8pt, top=4pt, bottom=4pt]
+{\small\color{ink}\medium Bốn năm 2010–2014 làm mọi nhóm khá lên, nhưng phần khá lên ấy được chia \emph{theo tỷ lệ} — nên ai xuất phát với nhiều hơn thì kết thúc với khoảng cách lớn hơn, ở cả thu nhập lẫn tài sản. Với hộ nghèo, cái thay đổi không phải là dư dả, mà là \emph{thiếu ít hơn}.\par}
+\end{tcolorbox}
+\end{frame}
+
+\begin{frame}\frametitle{Hạn chế của số liệu và kiến thức môn học đã dùng}
+\framesubtitle{\ask{những kết luận trên chỉ đúng trong phạm vi nào?}}
+\vspace{2pt}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}L{0.47\textwidth}X@{}}
+\rowcolor{tintN}\textbf{Hạn chế — đọc kết quả có điều kiện} & \textbf{Kiến thức chương 1–4 đã vận dụng}\\
+Không có mã hộ: ba đợt là ba mẫu khác nhau, mọi so sánh “thay đổi” là so \emph{nhóm} chứ không theo dõi từng hộ. & \textbf{C1} loại biến (định danh, thứ bậc, định lượng), dữ liệu thứ cấp, mẫu và tổng thể, tần số – tần suất.\\
+Không có trọng số mẫu: kết quả mô tả 28.196 hộ trong mẫu, suy rộng ra cả nước cần thận trọng. & \textbf{C2} mean, median, mode, tứ phân vị, tỷ trọng, số tương đối.\\
+Giá từng năm, không quy về một mốc giá — nên so sánh qua các năm dùng tỷ trọng, không dùng số tiền. & \textbf{C3} độ lệch (skewness), phương sai và độ lệch chuẩn, hiệp phương sai, hệ số tương quan r trên thang log.\\
+Thu nhập tự khai thường thấp hơn thực tế; “chi vượt thu” không đo được hộ đó vay nợ hay bán tài sản. & \textbf{C4} tỷ lệ mẫu và sai số chuẩn của tỷ lệ, yêu cầu cỡ mẫu n ≥ 30 khi tách nhóm nhỏ.\\
+Giá trị nhà và tài sản do chủ hộ tự ước lượng; theo từng tỉnh cỡ mẫu nhỏ nên nhiễu lớn. & Không dùng kiểm định giả thuyết hay mô hình dự báo: toàn bộ là \textbf{thống kê mô tả}.\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{frame}
+
+\end{document}

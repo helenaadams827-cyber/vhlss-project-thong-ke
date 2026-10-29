@@ -3,7 +3,7 @@
 Phân tích mô tả dữ liệu Khảo sát Mức sống Hộ gia đình Việt Nam (VHLSS) 2010, 2012 và 2014. Câu hỏi chính: hộ giàu và hộ nghèo chi tiêu, tích lũy khác nhau thế nào, và túi tiền hay nơi ở quyết định điều đó.
 
 - Trang web tương tác: https://claude.ai/artifact/GbFPSQhTG4zJVDVfpjJU4h
-- Bài thuyết trình: [`presentation/slides.pdf`](presentation/slides.pdf) (50 slide)
+- Bài thuyết trình: [`presentation/slides.pdf`](presentation/slides.pdf) (49 slide)
 
 ## Nội dung repo
 

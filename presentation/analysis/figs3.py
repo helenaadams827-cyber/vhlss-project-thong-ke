@@ -416,3 +416,46 @@ N["trends"] = dict(
     q4q1=yr(lambda g: g[g.Quart == 4].Inc_head.median() / g[g.Quart == 1].Inc_head.median(), df),
 )
 json.dump(N, open(ROOT + "/presentation/analysis/numbers3.json", "w"), ensure_ascii=False, indent=1)
+
+# =====================================================================
+#  F4: hai ảo ảnh thống kê (hồi quy về trung bình, nhiễu do mẫu nhỏ)
+# =====================================================================
+rng = np.random.default_rng(7)
+pmed = df.groupby(["province", "Year"]).Inc_head.median().unstack()
+g1 = (pmed[2012] / pmed[2010] - 1) * 100; g2 = (pmed[2014] / pmed[2012] - 1) * 100
+r_g = np.corrcoef(g1, g2)[0, 1]
+def growth(sub):
+    m = sub.groupby(["province", "Year"]).Inc_head.median().unstack(); return (m[2014] / m[2010] - 1) * 100
+split_r = []
+for _ in range(300):
+    half = rng.random(len(df)) < 0.5
+    split_r.append(np.corrcoef(growth(df[half]), growth(df[~half]))[0, 1])
+dd["spend_pc"] = dd.tot / dd["size"]
+dd["squart"] = dd.groupby("Year").spend_pc.transform(lambda s: pd.qcut(s.rank(method="first"), 4, labels=[1, 2, 3, 4]).astype(int))
+by_inc = [(dd[dd.Quart == q].tot > dd[dd.Quart == q].income).mean() * 100 for q in Q]
+by_sp = [(dd[dd.squart == q].tot > dd[dd.squart == q].income).mean() * 100 for q in Q]
+overlap = ((dd.Quart == 1) & (dd.squart == 1)).sum() / (dd.Quart == 1).sum() * 100
+
+fig, (a, b) = plt.subplots(1, 2, figsize=(5.9, 2.1), gridspec_kw={"width_ratios": [1, 1.1]})
+a.scatter(g1, g2, s=16, color=[ORD4[TIERS.index(t)] for t in df.groupby("province").tier.first().reindex(g1.index)], edgecolor=SURF, linewidth=0.8, zorder=3)
+a.axhline(g2.mean(), color=BASE, lw=0.8); a.axvline(g1.mean(), color=BASE, lw=0.8)
+a.set_xlabel("% tăng median 2010 → 2012"); a.set_ylabel("% tăng 2012 → 2014", fontsize=6.6)
+a.xaxis.set_major_formatter(pct_fmt()); a.yaxis.set_major_formatter(pct_fmt()); a.grid(True, axis="both")
+a.set_title(f"63 tỉnh: r = {vn(r_g, 2)} (chỉ do nhiễu mẫu: −0,50)", fontsize=7.2)
+x = np.arange(4)
+r1 = bars(b, x - 0.19, by_inc, BLUE, width=0.36, label="Xếp hộ theo thu nhập/người")
+r2 = bars(b, x + 0.19, by_sp, CORAL, width=0.36, label="Xếp hộ theo chi tiêu/người")
+label_bars(b, r1, lambda z: vn(z) + "%", dy=1, size=6); label_bars(b, r2, lambda z: vn(z) + "%", dy=1, size=6)
+b.set_xticks(x, ["nhóm 1\n(thấp nhất)", "nhóm 2", "nhóm 3", "nhóm 4\n(cao nhất)"], fontsize=6.2); b.set_ylim(0, 80)
+b.yaxis.set_major_formatter(pct_fmt()); b.set_title("% hộ tổng chi > thu nhập", fontsize=7.2); b.legend(loc="upper right", fontsize=6)
+plt.subplots_adjust(wspace=0.32); save(fig, "f40_F4")
+
+h = df.house.dropna(); h = h[h > 0]
+N["F4"] = dict(r_growth=round(r_g, 2), split_r=round(float(np.mean(split_r)), 2), split_r_90=[round(float(v), 2) for v in np.percentile(split_r, [5, 95])],
+               by_income=[round(v, 1) for v in by_inc], by_spend=[round(v, 1) for v in by_sp], overlap_q1=round(overlap, 1),
+               growth_scatter={df[df.province == p].province_name.iloc[0]: [round(g1[p], 1), round(g2[p], 1)] for p in g1.index},
+               heaping=dict(mult10=round((h % 10000 == 0).mean() * 100, 1), mult50=round((h % 50000 == 0).mean() * 100, 1),
+                            mult100=round((h % 100000 == 0).mean() * 100, 1), top5=[int(v / 1000) for v in h.value_counts().head(5).index],
+                            top5_share=round(h.value_counts().head(5).sum() / len(h) * 100, 1),
+                            top10={int(k / 1000): round(v / len(h) * 100, 1) for k, v in h.value_counts().head(10).items()}))
+json.dump(N, open(ROOT + "/presentation/analysis/numbers3.json", "w"), ensure_ascii=False, indent=1)

@@ -168,15 +168,110 @@ ${Eng.toText(r)}`;
   return res.text;
 }
 
+/* ---------- lịch sử câu hỏi: lưu trong trình duyệt của từng người */
+const Hist = (() => {
+  const KEY = "pt_hist_v1", NAME = "pt_name", MAX = 300;
+  const load = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
+  const save = list => { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, MAX))); return true; } catch (e) { return false; } };
+  const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const clean = x => ({                                   // dữ liệu nhập từ file là dữ liệu, không phải lệnh: chỉ giữ trường cần, ép kiểu
+    id: String(x.id || newId()).slice(0, 40), t: String(x.t || new Date().toISOString()).slice(0, 40), who: String(x.who || "").slice(0, 40),
+    q: String(x.q || "").slice(0, 600), title: String(x.title || "").slice(0, 200), explain: String(x.explain || "").slice(0, 400),
+    query: x.query && typeof x.query === "object" ? x.query : null, chart: x.chart && typeof x.chart === "object" ? x.chart : {},
+    insight: String(x.insight || "").slice(0, 6000), cannot: String(x.cannot || "").slice(0, 600),
+  });
+  return {
+    list: load, newId, clean,
+    add(e) { const l = load(); l.unshift(clean(e)); return save(l); },
+    update(id, patch) { const l = load(), i = l.findIndex(x => x.id === id); if (i < 0) return false; l[i] = clean({ ...l[i], ...patch }); return save(l); },
+    remove(id) { return save(load().filter(x => x.id !== id)); },
+    clear() { return save([]); },
+    merge(items) { const l = load(), ids = new Set(l.map(x => x.id)); let n = 0; items.map(clean).filter(x => x.q && (x.query || x.cannot)).forEach(x => { if (!ids.has(x.id)) { l.push(x); ids.add(x.id); n++; } }); l.sort((p, q) => q.t.localeCompare(p.t)); save(l); return n; },
+    name: { get() { try { return localStorage.getItem(NAME) || ""; } catch (e) { return ""; } }, set(v) { try { localStorage.setItem(NAME, v); } catch (e) { } } },
+  };
+})();
+
 (function ask() {
-  const input = $("#askInput"), btn = $("#askBtn"), stop = $("#stopBtn"), status = $("#askStatus"), ans = $("#answer"), hist = $("#history");
+  const input = $("#askInput"), btn = $("#askBtn"), stop = $("#stopBtn"), status = $("#askStatus"), ans = $("#answer");
+  const listEl = $("#histList"), msg = $("#histMsg"), nameEl = $("#histName");
   $("#sugs").append(...SUGGESTIONS.map(s => { const b = h(`<button type="button" class="sug">${esc(s)}</button>`); b.onclick = () => { input.value = s; input.focus(); }; return b; }));
-  let ctl = null;
+  nameEl.value = Hist.name.get();
+  nameEl.addEventListener("change", () => Hist.name.set(nameEl.value.trim()));
+  let ctl = null, currentId = null;
+
+  function renderAnswer(e, r, fromHistory) {
+    ans.hidden = false;
+    const c = e.chart || {};
+    ans.innerHTML = `<h3>${esc(e.title || e.q)}</h3><p class="small">${fromHistory ? "Xem lại · hỏi lúc " + esc(fmtTime(e.t)) + (e.who ? " · " + esc(e.who) : "") + " · " : ""}${esc(e.explain || "")}</p><div class="chart" id="ansChart"></div>
+      <div class="insight" id="ansText">${fromHistory ? esc(e.insight || "(chưa có nhận xét)") : "Claude đang viết nhận xét…"}</div>
+      <details class="how"><summary>Bảng số và cách tính</summary><div class="tbl-wrap" style="margin-top:8px">${Eng.toTable(r)}</div><pre>${esc(JSON.stringify(e.query, null, 1))}</pre></details>`;
+    if (c.type === "table") $("#ansChart").remove(); else Charts.render($("#ansChart"), Eng.toChart(r, c));
+  }
+  function fmtTime(t) { const d = new Date(t); return isNaN(d) ? "" : d.toLocaleString("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); }
+  function renderList() {
+    const l = Hist.list();
+    $("#histCount").textContent = l.length ? `(${l.length})` : "";
+    listEl.innerHTML = l.length ? "" : `<li class="small">Chưa có câu hỏi nào. Hỏi một câu ở trên, hoặc nhập file lịch sử của bạn khác.</li>`;
+    l.forEach(e => {
+      const li = h(`<li class="hist-item${e.id === currentId ? " on" : ""}"><button type="button" class="hq">${esc(e.q)}</button>
+        <div class="ha"><button type="button" class="linkbtn again">Hỏi lại</button><button type="button" class="linkbtn del" aria-label="Xóa câu hỏi này">Xóa</button></div>
+        <div class="hm">${esc(fmtTime(e.t))}${e.who ? " · " + esc(e.who) : ""}${e.title ? " · " + esc(e.title) : ""}</div></li>`);
+      $(".hq", li).onclick = () => {
+        currentId = e.id; renderList();
+        if (e.cannot || !e.query) { ans.hidden = false; ans.innerHTML = `<div class="insight">${esc(e.cannot || "Câu này chưa tính được.")}</div>`; return; }
+        try { renderAnswer(e, Eng.run(e.query), true); status.textContent = ""; } catch (err) { ans.hidden = false; ans.innerHTML = `<div class="insight">Không tính lại được: ${esc(err.message)}</div>`; }
+        ans.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      $(".again", li).onclick = () => { input.value = e.q; input.focus(); input.scrollIntoView({ behavior: "smooth", block: "center" }); };
+      $(".del", li).onclick = () => { Hist.remove(e.id); if (currentId === e.id) currentId = null; renderList(); };
+      listEl.append(li);
+    });
+  }
+  renderList();
+
+  /* tải file lịch sử (capability downloads) */
+  let DL = null;
+  (window.claude && window.claude.use ? window.claude.use("downloads") : Promise.resolve(null)).then(d => {
+    DL = d; $("#histJson").hidden = $("#histCsv").hidden = !d;
+    if (!d) $("#histNote").textContent += " Nút tải file chỉ có khi mở trang trên claude.ai.";
+  }).catch(() => { });
+  const stamp = () => new Date().toISOString().slice(0, 10);
+  const slug = v => (v || "nhom").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "nhom";
+  async function download(filename, data) {
+    if (!DL) return;
+    try { await DL.save({ filename, data }); msg.textContent = "Đã lưu " + filename + "."; }
+    catch (e) { msg.textContent = e && e.code === "declined" ? "Đã hủy tải file." : e && e.code === "rate_limited" ? "Đang có một hộp thoại tải file khác, thử lại sau." : "Không tải được file ở đây."; }
+  }
+  $("#histJson").onclick = () => {
+    const l = Hist.list(); if (!l.length) { msg.textContent = "Chưa có câu hỏi nào để tải."; return; }
+    download(`cau-hoi-${slug(nameEl.value.trim())}-${stamp()}.json`, JSON.stringify({ app: "Project Thống Kê", exported: new Date().toISOString(), who: nameEl.value.trim(), items: l }, null, 1));
+  };
+  $("#histCsv").onclick = () => {
+    const l = Hist.list(); if (!l.length) { msg.textContent = "Chưa có câu hỏi nào để tải."; return; }
+    const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+    const rows = [["thoi_gian", "nguoi_hoi", "cau_hoi", "tieu_de", "cach_tinh", "nhan_xet"].join(",")]
+      .concat(l.map(e => [e.t, e.who, e.q, e.title || e.cannot, e.explain, e.insight].map(q).join(",")));
+    download(`cau-hoi-${slug(nameEl.value.trim())}-${stamp()}.csv`, "\uFEFF" + rows.join("\r\n"));
+  };
+  $("#histFile").addEventListener("change", ev => {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try { const j = JSON.parse(rd.result); const items = Array.isArray(j) ? j : Array.isArray(j.items) ? j.items : null; if (!items) throw new Error();
+        const n = Hist.merge(items); msg.textContent = `Đã nhập ${n} câu hỏi mới từ ${f.name}` + (n < items.length ? ` (bỏ qua ${items.length - n} câu đã có hoặc không hợp lệ).` : "."); renderList();
+      } catch (e) { msg.textContent = "File này không phải file lịch sử câu hỏi của trang (cần file .json tải từ nút “Tải lịch sử”)."; }
+      ev.target.value = "";
+    };
+    rd.readAsText(f);
+  });
+  $("#histClear").onclick = () => { if (!Hist.list().length) return; if (confirm("Xóa toàn bộ lịch sử câu hỏi trên máy này?")) { Hist.clear(); currentId = null; renderList(); msg.textContent = "Đã xóa lịch sử."; } };
+
+  /* hỏi Claude */
   status.textContent = "Đang kết nối Claude…";
   const cap = window.claude && window.claude.use ? window.claude.use("sample") : Promise.resolve(null);
   cap.then(s => {
     SAMPLE = s;
-    if (!s) { status.textContent = "Hỏi đáp chạy khi mở trang trên claude.ai (dùng Claude của người xem). Ở đây bạn vẫn dùng được mục Tự khám phá và mọi biểu đồ."; btn.disabled = true; return; }
+    if (!s) { status.textContent = "Hỏi đáp chạy khi mở trang trên claude.ai (dùng Claude của người xem). Ở đây bạn vẫn xem lại được lịch sử, dùng mục Tự khám phá và mọi biểu đồ."; btn.disabled = true; return; }
     status.textContent = "Sẵn sàng. Lần hỏi đầu sẽ xin phép dùng Claude trên tài khoản của bạn.";
     document.querySelectorAll(".ask-card").forEach(b => b.hidden = false);
   }).catch(() => { status.textContent = "Không kết nối được Claude."; btn.disabled = true; });
@@ -184,8 +279,10 @@ ${Eng.toText(r)}`;
   stop.onclick = () => ctl && ctl.abort();
   btn.onclick = async () => {
     const q = input.value.trim(); if (!q || !SAMPLE) return;
+    Hist.name.set(nameEl.value.trim());
     ctl = new AbortController(); btn.disabled = true; stop.hidden = false; ans.hidden = false;
     ans.innerHTML = ""; status.textContent = "Claude đang chuyển câu hỏi thành phép tính…";
+    let entry = null;
     try {
       let spec = await SAMPLE.json(SCHEMA() + "\n\nHỏi: " + q, { signal: ctl.signal, modelTier: "default" });
       let r = null, err = null;
@@ -196,21 +293,21 @@ ${Eng.toText(r)}`;
         spec = await SAMPLE.json(SCHEMA() + "\n\nHỏi: " + q + "\n\nJSON trước đó của bạn:\n" + JSON.stringify(spec) + "\n\nLỗi khi chạy: " + err + "\nHãy sửa và trả lại JSON đầy đủ.", { signal: ctl.signal, modelTier: "default" });
         tryRun(spec);
       }
-      if (spec.cannot) { status.textContent = ""; ans.innerHTML = `<div class="insight">${esc(spec.cannot)}</div>`; return; }
+      const base = { id: Hist.newId(), t: new Date().toISOString(), who: nameEl.value.trim(), q };
+      if (spec.cannot) { status.textContent = ""; ans.innerHTML = `<div class="insight">${esc(spec.cannot)}</div>`; Hist.add({ ...base, cannot: spec.cannot }); renderList(); return; }
       if (!r) { status.textContent = ""; ans.innerHTML = `<div class="insight">Chưa tính được câu này (${esc(err || "lỗi")}). Thử hỏi cụ thể hơn: nêu thước đo, nhóm, năm.</div>`; return; }
-      const c = spec.chart || {};
-      ans.innerHTML = `<h3>${esc(spec.title || q)}</h3><p class="small">${esc(spec.explain || "")}</p><div class="chart" id="ansChart"></div>
-        <div class="insight" id="ansText">Claude đang viết nhận xét…</div>
-        <details class="how"><summary>Bảng số và cách tính</summary><div class="tbl-wrap" style="margin-top:8px">${Eng.toTable(r)}</div><pre>${esc(JSON.stringify(spec.query, null, 1))}</pre></details>`;
-      if (c.type === "table") $("#ansChart").remove(); else Charts.render($("#ansChart"), Eng.toChart(r, c));
+      entry = { ...base, title: spec.title || q, explain: spec.explain || "", query: spec.query, chart: spec.chart || {}, insight: "" };
+      renderAnswer(entry, r, false);
       if (r.small && r.small.length) status.textContent = "Có nhóm dưới 30 hộ: " + r.small.slice(0, 6).join(", ") + (r.small.length > 6 ? "…" : "");
       else status.textContent = "";
-      await insight(SAMPLE, q, r, t => { const el = $("#ansText"); if (el) el.textContent = t; });
-      const chip = h(`<button type="button" class="sug">↺ ${esc(q.length > 48 ? q.slice(0, 46) + "…" : q)}</button>`);
-      chip.onclick = () => { input.value = q; btn.click(); }; hist.prepend(chip);
+      const saved = Hist.add(entry); currentId = entry.id; renderList();
+      if (!saved) msg.textContent = "Không lưu được vào trình duyệt này (bộ nhớ bị chặn hoặc đầy).";
+      const text = await insight(SAMPLE, q, r, t => { const el = $("#ansText"); if (el) el.textContent = t; });
+      Hist.update(entry.id, { insight: text });
     } catch (e) {
       status.textContent = sampleErr(e);
       const el = $("#ansText"); if (el && e.text) el.textContent = e.text;
+      if (entry && e.text) Hist.update(entry.id, { insight: e.text });
     } finally { btn.disabled = false; stop.hidden = true; }
   };
 })();

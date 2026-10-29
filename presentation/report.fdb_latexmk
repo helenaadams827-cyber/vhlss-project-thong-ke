@@ -1,0 +1,22 @@
+# Fdb version 4
+["pdflatex"] 1790313395.4219 "/home/trang/STATS/presentation/report.tex" "report.pdf" "report" 1790313395.58764 2
+  "/etc/texmf/web2c/texmf.cnf" 1762353430.31923 475 c0e671620eb5563b2130f56340a5fde8 ""
+  "/home/trang/STATS/presentation/report.tex" 1790313394.71224 60944 f9f10bfa1c37baea9c99fa4de0d47247 ""
+  "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1136768653 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/article.cls" 1705352648 20144 147463a6a579f4597269ef9565205cfe ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo" 1705352648 8464 59874a3b0776c73e2a138b025d8473dd ""
+  "/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty" 1642282977 1656 7e824878bad4df5a3e8bba4e463d9126 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def" 1704491087 30006 57b07afb710ee2f649c65cfbafda39c1 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty" 1705955748 6565 cfd9fd0a1d5f5ad985151778771ff7a9 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty" 1696969620 9327 c30c00c0072edba199ede5889311aaa9 ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1762353524 8212926 04bd3c9013276fbee90134aa24eb9cd3 ""
+  "report.aux" 1790313395.42157 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "report.tex" 1790313394.71224 60944 f9f10bfa1c37baea9c99fa4de0d47247 ""
+  (generated)
+  "report.aux"
+  "report.log"
+  "report.pdf"
+  (rewritten before read)

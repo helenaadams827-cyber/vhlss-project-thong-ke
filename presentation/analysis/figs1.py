@@ -68,6 +68,54 @@ N["fuel"] = dict(na14_rural=round(d14[d14.area == 2].fuel_na.mean() * 100, 1), n
                  na14_q1=round(d14[d14.Quart == 1].fuel_na.mean() * 100, 1), na14_q4=round(d14[d14.Quart == 4].fuel_na.mean() * 100, 1),
                  zeros={int(y): int(((df.Year == y) & (df.fuel == 0) & ~df.fuel_na).sum()) for y in [2010, 2012, 2014]})
 
+# ---------------- Mục 2: vì sao điền 0 — không xóa dòng, không thay median/mean
+A9 = ["oto", "moto", "bicycle", "bed", "tab", "tele", "tv", "emachine", "hmachine"]
+obs14 = d14.loc[~d14.fuel_na, "fuel"]                     # nhiên liệu 2014 của các hộ có khai
+q1f = d14[d14.Quart == 1]
+way = {"Điền 0": q1f.fuel.mean(),                          # cách đang dùng
+       "Xóa dòng thiếu": q1f.loc[~q1f.fuel_na, "fuel"].mean(),
+       "Điền median": q1f.fuel.where(~q1f.fuel_na, obs14.median()).mean(),
+       "Điền mean": q1f.fuel.where(~q1f.fuel_na, obs14.mean()).mean()}
+ana = df.asset_na.astype(bool)
+rec = df[~ana & df[A9].notna().all(axis=1)]                # hộ có đủ 9 cột tài sản
+kq1 = (rec.loc[rec.Quart == 1, A9] > 0).sum(axis=1)        # số món hộ Q1 có
+OWN = {"TV": "tv", "Điện thoại": "tele", "Xe máy": "moto"}
+def gap(c, keep): return ((df[keep & (df.Quart == 4)][c] > 0).mean() - (df[keep & (df.Quart == 1)][c] > 0).mean()) * 100
+allrows = df.Quart > 0
+gaps = {l: (gap(c, allrows), gap(c, ~ana)) for l, c in OWN.items()}
+
+fig, (a, b) = plt.subplots(2, 1, figsize=(3.3, 3.25), gridspec_kw={"height_ratios": [1.15, 1], "hspace": 0.75})
+names = list(way)[::-1]; vals = [way[n] / 1000 for n in names]
+r = a.barh(np.arange(4), vals, height=0.6, color=[CORAL, CORAL, CORAL, AQUA], edgecolor=SURF, linewidth=1, zorder=3)
+for i, (n, v) in enumerate(zip(names, vals)):
+    extra = "" if n == "Điền 0" else f"  (+{vn((way[n] / way['Điền 0'] - 1) * 100)}%)"
+    a.text(v + 0.05, i, vn(v, 2) + extra, va="center", fontsize=6.3, color=INK2)
+a.set_yticks(np.arange(4), names); a.set_xlim(0, 4.6); a.xaxis.set_major_formatter(num_fmt(1))
+a.set_title("Nhiên liệu TB của hộ Q1 năm 2014 (triệu đồng)")
+y = np.arange(len(OWN)); h = 0.36
+r0 = b.barh(y - h / 2, [gaps[l][0] for l in OWN], height=h, color=AQUA, edgecolor=SURF, linewidth=1, zorder=3, label="Điền 0")
+r1 = b.barh(y + h / 2, [gaps[l][1] for l in OWN], height=h, color=CORAL, edgecolor=SURF, linewidth=1, zorder=3, label="Xóa 284 hộ")
+for rr in (r0, r1):
+    for rect in rr: b.text(rect.get_width() + 0.4, rect.get_y() + rect.get_height() / 2, vn(rect.get_width(), 1), va="center", fontsize=6.1, color=INK2)
+b.set_yticks(y, list(OWN)); b.invert_yaxis(); b.set_xlim(0, 44)
+b.set_title("Khoảng cách sở hữu Q4 – Q1 (điểm %)")
+b.legend(loc="upper right", ncols=2, fontsize=6, handlelength=1, columnspacing=0.8, borderaxespad=0.2)
+save(fig, "f03b_missing")
+N["missing"] = dict(
+    fuel_q1_2014={k: round(v) for k, v in way.items()},
+    fuel_q1_2014_vs0={k: round((v / way["Điền 0"] - 1) * 100) for k, v in way.items()},
+    fuel14_mean=round(obs14.mean()), fuel14_median=round(obs14.median()),
+    fuel14_q1_reporter_median=round(q1f.loc[~q1f.fuel_na, "fuel"].median()),
+    sd14_obs=round(obs14.std()), sd14_meanfill=round(d14.fuel.where(~d14.fuel_na, obs14.mean()).std()),
+    sd14_change=round((d14.fuel.where(~d14.fuel_na, obs14.mean()).std() / obs14.std() - 1) * 100, 1),
+    asset_allzero=int(((rec[A9] > 0).sum(axis=1) == 0).sum()), asset_blank=int(ana.sum()),
+    q1_items={int(i): round((kq1 == i).mean() * 100, 1) for i in range(4)},
+    asset_blank_q1=round(ana[df.Quart == 1].mean() * 100, 1), asset_blank_q4=round(ana[df.Quart == 4].mean() * 100, 1),
+    asset_blank_noelec=round((df.loc[ana, "elec"] == 0).mean() * 100),
+    q1_noelec=round((df.loc[~ana & (df.Quart == 1), "elec"] == 0).mean() * 100),
+    gap={l: [round(g0, 1), round(g1, 1)] for l, (g0, g1) in gaps.items()},
+    fhouse_zero=round((df.fhouse == 0).mean() * 100), house_na=int(df.house.isna().sum()))
+
 # ---------------- Mục 3: nhóm tỉnh
 pm = df[df.Year == 2014].groupby("province").agg(med=("Inc_head", "median"), tier=("tier", "first"), name=("province_name", "first")).sort_values("med")
 fig, a = plt.subplots(figsize=(5.9, 2.25))

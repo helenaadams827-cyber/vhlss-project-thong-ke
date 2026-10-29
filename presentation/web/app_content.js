@@ -47,6 +47,12 @@ const CARDS = [
     notes: ["Số hộ ghi 0: 40 (2010), 199 (2012), <b>0</b> (2014). Ô trống 2014: nông thôn <b>10,9%</b>, hộ Q1 <b>21,5%</b>.",
             "Hộ bị trống ít người, dùng rất ít điện: nhiều khả năng đun củi, rơm tự kiếm. Nên điền 0, gắn cờ <code>fuel_na</code> và kiểm tra lại các kết quả liên quan."],
     meta: ["tỷ lệ, tần số", "grouped bar", "C1 – dữ liệu thứ cấp"] },
+  { sec: "data", code: "D", title: "Giá nhà được khai theo số tròn", hyp: "số liệu tự khai có đáng tin tuyệt đối không?",
+    views: [{ label: "10 giá trị hay gặp nhất", static: { type: "bar", cats: ["200 tr", "300 tr", "150 tr", "100 tr", "500 tr", "50 tr", "400 tr", "250 tr", "80 tr", "120 tr"], series: [{ name: "% số hộ", values: [5.1, 4.6, 4.2, 4.0, 3.5, 3.2, 3.1, 3.0, 3.0, 2.9], color: "var(--c5)" }], fmt: "pct1" } },
+            { label: "Bội số tròn", static: { type: "bar", cats: ["bội số 10 triệu", "bội số 50 triệu", "bội số 100 triệu"], series: [{ name: "% giá nhà", values: [89.7, 56.0, 39.5], color: "var(--c5)" }], fmt: "pct1", ymax: 100 } }],
+    notes: ["<b>89.7%</b> giá nhà là bội số của 10 triệu, 56.0% là bội số của 50 triệu; mode là <b>200 triệu</b>, 5 giá trị hay gặp nhất chiếm 21.4% số hộ. Người dân ước giá theo số tròn.",
+            "Vì vậy median giá nhà thường rơi đúng vào số tròn (200, 400, 700 triệu…), và so sánh chênh vài chục triệu giữa các nhóm là không có ý nghĩa. Đây là sai số đo lường của dữ liệu thứ cấp tự khai."],
+    meta: ["mode, tỷ lệ", "bar chart", "C1 – dữ liệu thứ cấp, sai số đo lường"] },
   { sec: "data", code: "D", title: "Làm sạch: không xóa hộ nào, điền 0 có gắn cờ", hyp: "xử lý dữ liệu thiếu thế nào cho đúng?", wide: true,
     html: `<div class="tbl-wrap"><table class="t"><tr><th>Biến</th><th>Số ô thiếu</th><th>Phát hiện</th><th>Xử lý</th></tr>
 <tr><td><code>fuel</code></td><td>817 (813 ở 2014)</td><td>2014 không hộ nào ghi 0; ô trống tập trung ở hộ nghèo nông thôn</td><td>điền 0 + cờ <code>fuel_na</code></td></tr>
@@ -54,9 +60,17 @@ const CARDS = [
 <tr><td><code>house</code>, <code>fhouse</code></td><td>23 hộ</td><td>rải rác</td><td>bỏ khi phân tích nhà; <code>fhouse</code> = 0</td></tr>
 <tr><td><code>nfood</code></td><td>1 hộ</td><td>—</td><td>bỏ khỏi phân tích chi tiêu</td></tr>
 <tr><td>Giá trị âm</td><td>61 ô / 36 hộ</td><td>−1, −2…: tài sản không thể âm</td><td>coi là ô thiếu</td></tr></table></div>`,
-    notes: ["Không điền mean: phương sai sau khi điền = (n<sub>có</sub> − 1)/(n − 1) × phương sai gốc, luôn nhỏ hơn, tức là <b>ước lượng chệch</b> xuống.",
-            "Không xóa dòng: hộ thiếu dữ liệu chủ yếu là hộ nghèo (<b>3,3%</b> hộ Q1 thiếu tài sản, so với 0,1% hộ Q4)."],
+    notes: ["<b>Vì sao điền 0?</b> Số hộ ghi nhiên liệu = 0: 40 (2010), 199 (2012), <b>0</b> (2014), nhưng 2014 có 813 ô trống: năm 2014 để trống thay cho 0.",
+            "Tài sản: chỉ 2 hộ khai cả 9 cột bằng 0, trong khi hộ Q1 có 1, 2, 3 món là 5,8%, 8,9%, 11,3%, nên phải có khoảng 3% không có món nào: khớp <b>3,3%</b> hộ Q1 bị trống (33% trong số đó không trả tiền điện, cả nhóm Q1 chỉ 8%)."],
     meta: ["tần số, tỷ lệ", "bảng", "C3 – phương sai mẫu; C4 – ước lượng chệch"] },
+  { sec: "data", code: "D", title: "Xóa dòng hay điền median/mean đều làm hộ nghèo “khá” lên", hyp: "sao không xóa dòng thiếu, hoặc điền median/mean cho đỡ lệch?",
+    views: [{ label: "Nhiên liệu hộ Q1 năm 2014", static: { type: "hbar", cats: ["Điền 0 (đang dùng)", "Xóa dòng thiếu", "Điền median", "Điền mean"], series: [{ name: "Nhiên liệu TB (triệu đồng)", values: [2.32, 2.95, 3.24, 3.54], color: "var(--c4)" }], fmt: "num2", valueLabel: v => fmtNum(v, 2) + (v > 2.4 ? " (+" + fmtNum((v / 2.315 - 1) * 100, 0) + "%)" : "") } },
+            { label: "Khoảng cách sở hữu Q4 − Q1", static: { type: "hbar", cats: ["TV", "Điện thoại", "Xe máy"], series: [{ name: "Điền 0", values: [19.0, 33.1, 29.3], color: "var(--c4)" }, { name: "Xóa 284 hộ", values: [16.6, 31.1, 27.4], color: "var(--c2)" }], fmt: "num1", valueLabel: v => fmtNum(v, 1) + " điểm" } }],
+    notes: ["<b>Xóa dòng?</b> Ô trống dồn vào hộ nghèo (2014: Q1 <b>21,5%</b>, Q4 1,4%). Xóa thì nhiên liệu TB của Q1 tăng <b>27%</b>, khoảng cách TV Q4–Q1 hẹp lại (19,0 → 16,6 điểm).",
+            "<b>Điền median/mean?</b> Hộ Q1 có khai chỉ chi 2,4 triệu, còn median cả nước 4,32, mean 5,69 (lệch phải): Q1 tăng <b>40%</b> và <b>53%</b>. Điền mean còn làm phương sai nhỏ đi: S²<sub>sau</sub> = (n<sub>có</sub> − 1)/(n − 1) × S²<sub>có</sub>, tức là <b>ước lượng chệch</b> xuống (SD 2014 giảm 4,4%).",
+            "<b>Khi nào được xóa?</b> Khi ô thiếu ít và rải rác (23 hộ thiếu giá nhà, 1 hộ thiếu <code>nfood</code>). Bỏ các hộ <code>fuel_na</code>: hộ Q1 thiếu tiền thiết yếu năm 2014 là 33,7% thay vì 32,5%, kết luận giữ nguyên."],
+    meta: ["mean, median, phương sai", "horizontal bar", "C2 – mean và median; C4 – ước lượng chệch"] },
+
 
   /* ---------------- Chia nhóm */
   { sec: "group", code: "N", title: "Nhóm tỉnh T1–T4 theo hạng thu nhập", hyp: "so tỉnh giữa các năm mà không cần quy đổi giá: xếp hạng median thu nhập của tỉnh mỗi năm, lấy hạng trung bình, chia 4 nhóm.", wide: true, ask: true,
@@ -274,16 +288,9 @@ const CARDS = [
             { label: "Theo năm", q: { filter: "Q==1", groupBy: ["year", "tier"], measures: [pc("% không đủ", "short")] }, c: { type: "line", endLabels: true, fmt: "pct" } },
             { label: "Mọi nhóm Q", q: { groupBy: ["Q"], measures: [pc("Chi thiết yếu > thu nhập", "short"), pc("Tổng chi > thu nhập", "overspend")] }, c: { type: "bar", fmt: "pct", colors: ["var(--c2)", "var(--c3)"] } }],
     notes: ["“Không đủ sống” = chi thiết yếu > thu nhập: <b>36,1%</b> hộ Q1 (Q4: 2,3%). <b>T4: 41%</b>, cao nhất; T2: 32,5%; thành thị ≈ nông thôn.",
-            "2010 → 2014: T1 41,5 → <b>30,3%</b> (cải thiện), T4 38,4 → 40,5% (không đổi). Bỏ các hộ trống nhiên liệu vẫn vậy."],
-    meta: ["tỷ lệ hộ, median", "bar chart, line chart", "C2; C3 – tỷ lệ mẫu"] },
-  { st: "F", code: "F3", title: "Tỉnh nào đủ sống cho hộ nghèo?", hyp: "tỉnh càng giàu, hộ nghèo ở đó càng khó đủ sống", v: "B",
-    views: [{ label: "61 tỉnh (≥ 30 hộ Q1)", q: { groupBy: ["province"], minNOn: 1, measures: [{ name: "Median thu nhập/người của tỉnh 2014 (triệu)", agg: "median", expr: "inc_head/1000", where: "year==2014" }, { name: "% hộ Q1 không đủ tiền cho thiết yếu", agg: "pct", expr: "short", where: "Q==1" }] }, c: { type: "scatter", bubble: 0.45, labels: ["Hà Nội", "Đà Nẵng", "Cần Thơ", "BR–Vũng Tàu", "Gia Lai"], note: "kích thước = số hộ Q1", fmty: v => fmtNum(v, 0) + "%" } },
-            { label: "Khó nhất / dễ nhất", q: { filter: "Q==1", groupBy: ["province"], measures: [pc("% hộ Q1 không đủ tiền cho thiết yếu", "short")], sort: { by: 0, desc: true }, limit: 8, limitBoth: true }, c: { type: "hbar", fmt: "pct" } }],
-    notes: ["61 tỉnh có ≥ 30 hộ Q1: mean 36,9%, SD 13,9 điểm; r với thu nhập tỉnh chỉ <b>0,08</b>. Đà Nẵng <b>60%</b>, Hà Nội 39%, Hải Phòng 33%, Cần Thơ 16%. TP.HCM chỉ 5 hộ Q1: không kết luận.",
-            "Sai số chuẩn √(p(1−p)/n): Đà Nẵng (n = 30) <b>8,9 điểm</b>, Hà Nội (n = 98) 4,9 điểm: tỷ lệ tính trên ít hộ dao động nhiều."],
-    meta: ["tỷ lệ, sai số chuẩn, correlation", "bubble chart, horizontal bar", "C2; C3 – tỷ lệ mẫu, n ≥ 30"] },
-
-  { st: "F", code: "F4", title: "Ai để dành được? Hộ giàu nông thôn nhiều nhất", hyp: "hộ giàu để dành tỷ lệ lớn hơn; hộ thành thị để dành nhiều hơn hộ nông thôn", v: "M",
+            "T4 hơn T2 8,5 điểm, lớn hơn nhiều sai số chuẩn √(p(1−p)/n) (T4: 1,7; T2: 1,1 điểm), nên không phải do nhiễu mẫu. 2010 → 2014: T1 41,5 → <b>30,3%</b> (cải thiện), T4 38,4 → 40,5% (không đổi)."],
+    meta: ["tỷ lệ hộ, sai số chuẩn", "bar chart, line chart", "C2; C3 – tỷ lệ mẫu"] },
+  { st: "F", code: "F3", title: "Ai để dành được? Hộ giàu nông thôn nhiều nhất", hyp: "hộ giàu để dành tỷ lệ lớn hơn; hộ thành thị để dành nhiều hơn hộ nông thôn", v: "M",
     views: [{ label: "Theo Q và khu vực", q: { groupBy: ["Q", "area"], measures: [{ name: "Median % thu nhập để dành", agg: "median", expr: "save" }] }, c: { type: "bar", fmt: "num0" } },
             { label: "Theo năm", q: { groupBy: ["year", "Q"], measures: [{ name: "Median % để dành", agg: "median", expr: "save" }] }, c: { type: "line", endLabels: true, fmt: "num0" } },
             { label: "Theo nhóm tỉnh", q: { groupBy: ["Q", "tier"], measures: [{ name: "Median % để dành", agg: "median", expr: "save" }] }, c: { type: "bar", fmt: "num0" } }],
@@ -334,21 +341,20 @@ const LIMITS = [
   "Không có trọng số mẫu: kết quả là của mẫu VHLSS, không phải số chính thức của cả nước.",
   "Mỗi năm là một mẫu khác nhau: chỉ so sánh theo nhóm, không theo dõi được từng hộ.",
   "Tiền theo giá từng năm: % tăng chỉ để so giữa các nhóm; ưu tiên tỷ trọng, tỷ lệ và thứ hạng.",
-  "Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2, F3) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F4) là mức tối đa.",
-  "Giá trị tài sản do hộ tự ước tính; hins là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.",
-  "Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm.",
+  "Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F3) là mức tối đa.",
+  "Giá trị tài sản do hộ tự ước tính, theo số tròn (90% giá nhà là bội số của 10 triệu); hins là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.",
+  "Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm nên số liệu từng tỉnh dao động mạnh.",
   "Không làm kiểm định giả thuyết (ngoài phạm vi môn); mọi kết luận dựa trên thống kê mô tả.",
 ];
 const KNOWLEDGE = [
-  ["C1 Giới thiệu", "dữ liệu thứ cấp; mẫu và tổng thể; thang đo, loại biến", "Dữ liệu, D3"],
+  ["C1 Giới thiệu", "dữ liệu thứ cấp (sai số đo lường, số tròn); mẫu và tổng thể; thang đo, loại biến", "Dữ liệu, D3"],
   ["C2 Thống kê mô tả", "bảng tần số, bảng chéo; pie, bar, stacked, line, histogram, boxplot, scatter, bubble, heatmap tương quan", "mọi phân tích"],
-  ["", "mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness", "A1–A4, B1–B4, C1, E3, E4, F4, I7"],
-  ["", "covariance, hệ số tương quan (kể cả heatmap)", "A3, C5, D3, D5, E4, F3, I2, I3, I5, I8"],
-  ["C3 Phân phối mẫu", "tỷ lệ mẫu; sai số chuẩn √(p(1−p)/n); quy tắc n ≥ 30", "C2, D4, D5, F2, F3"],
+  ["", "mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness", "A1–A4, B1–B4, C1, E3, E4, F3, I7"],
+  ["", "covariance, hệ số tương quan (kể cả heatmap)", "A3, C5, D3, D5, E4, I2, I3, I5, I8"],
+  ["C3 Phân phối mẫu", "tỷ lệ mẫu; sai số chuẩn √(p(1−p)/n); quy tắc n ≥ 30", "C2, D4, D5, F2"],
   ["C4 Ước lượng", "ước lượng chệch; median bền hơn mean khi có outlier", "làm sạch, thu nhập"],
 ];
 const SUGGESTIONS = [
-  "Tỉnh nào hộ nghèo khó đủ sống nhất?",
   "10% hộ giàu nhất nhận bao nhiêu phần trăm tổng thu nhập mỗi năm?",
   "Hộ nào để dành được nhiều nhất, theo Q và nhóm tỉnh?",
   "So sánh tiền điện mỗi người giữa T1 và T4 theo từng nhóm Q",

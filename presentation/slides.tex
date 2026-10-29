@@ -28,6 +28,7 @@
 \definecolor{ink2}{HTML}{555B70}
 \definecolor{muted}{HTML}{8A90A3}
 \definecolor{hair}{HTML}{E6E8F0}
+\definecolor{goldsoftx}{HTML}{FBF2DC}
 % mỗi bước một màu: tone (nét), tint (nền), dark (chữ)
 \definecolor{toneN}{HTML}{8A90A3}\definecolor{tintN}{HTML}{EEF0F5}\definecolor{darkN}{HTML}{454B61}
 \definecolor{toneA}{HTML}{578ED4}\definecolor{tintA}{HTML}{E6EEFA}\definecolor{darkA}{HTML}{2E5A93}
@@ -230,7 +231,7 @@ Tài sản đang có & \texttt{house oto moto bicycle tele tv emachine hmachine 
 \rowcolor{tintN}\textbf{Biến} & \textbf{Số ô thiếu} & \textbf{Phát hiện} & \textbf{Xử lý}\\
 \texttt{fuel} & 817 (813 ở 2014) & 2014 không hộ nào ghi 0; ô trống tập trung ở hộ nghèo nông thôn & điền 0 + cờ \texttt{fuel\_na}\\
 9 cột tài sản & 284 hộ thiếu cả 9 & 89\% ở nông thôn, phần lớn hộ Q1; chỉ 2 hộ khai cả 9 cột bằng 0 & điền 0 + cờ \texttt{asset\_na}\\
-\texttt{house}, \texttt{fhouse} & 23 hộ & rải rác, không rõ nguyên nhân & bỏ khi phân tích nhà\\
+\texttt{house}, \texttt{fhouse} & 23 hộ & rải rác, không rõ nguyên nhân & \texttt{house}: bỏ khi phân tích nhà; \texttt{fhouse} = 0\\
 \texttt{nfood} & 1 hộ & — & bỏ khỏi phân tích chi tiêu\\
 Giá trị âm & 61 ô / 36 hộ & $-1$, $-2$…: tài sản không thể âm & coi là ô thiếu\\
 \bottomrule
@@ -238,18 +239,18 @@ Giá trị âm & 61 ô / 36 hộ & $-1$, $-2$…: tài sản không thể âm & 
 \normalsize
 \vspace{8pt}
 \begin{cardrow}{2}
-\card{Không điền mean: $S^2_{\text{sau}} = \frac{n_{\text{có}}-1}{n-1}S^2_{\text{có}}$ luôn nhỏ hơn, tức là phương sai bị \num{ước lượng chệch} xuống.}
-\card{Không xóa dòng: hộ thiếu dữ liệu chủ yếu là hộ nghèo (\num{3,3\%} hộ Q1 thiếu tài sản, so với 0,1\% hộ Q4).}
+\card{\textbf{Vì sao điền 0?} Số hộ ghi nhiên liệu = 0: 40 (2010), 199 (2012), \num{0} (2014), nhưng 2014 có 813 ô trống: năm 2014 để trống thay cho 0.}
+\card{Tài sản: chỉ 2 hộ khai cả 9 cột bằng 0, trong khi hộ Q1 có 1, 2, 3 món là 5,8\%, 8,9\%, 11,3\%, nên phải có khoảng 3\% không có món nào: khớp \num{3,3\%} hộ Q1 bị trống.}
 \end{cardrow}
 \end{frame}
 
-\begin{frame}\frametitle{Ô trống cũng mang thông tin}
-\framesubtitle{\ask{vì sao năm 2014 không còn hộ nào ghi “0” cho nhiên liệu?}}
-\meta{tỷ lệ, tần số}{bar chart}{C1 – dữ liệu thứ cấp}
-\sidecards{f03_fuel}{0.55}{%
-\card{Số hộ ghi 0: 40 (2010), 199 (2012), \num{0} (2014). Ô trống 2014: nông thôn \num{10,9\%}, thành thị 3,2\%; hộ Q1 \num{21,5\%}, Q4 1,4\%.}
-\card{Hộ bị trống ít người, dùng rất ít điện: nhiều khả năng đun củi, rơm tự kiếm nên không phải mua.}
-\card{Vì vậy điền 0, gắn cờ \texttt{fuel\_na} và kiểm tra lại các kết quả liên quan (E1, F2).}}
+\begin{frame}\frametitle{Xóa dòng hay điền median/mean đều làm hộ nghèo “khá” lên}
+\framesubtitle{\ask{sao không xóa dòng thiếu, hoặc điền median/mean cho đỡ lệch?}}
+\meta{mean, median, phương sai}{bar chart}{C2 – mean và median; C4 – ước lượng chệch}
+\sidecards{f03b_missing}{0.44}{%
+\card{\textbf{Xóa dòng?} Ô trống dồn vào hộ nghèo (2014: Q1 \num{21,5\%}, Q4 1,4\%). Xóa thì nhiên liệu TB Q1 tăng \num{27\%}, khoảng cách TV Q4–Q1 hẹp lại (19,0 \ra\ 16,6 điểm).}
+\card{\textbf{Điền median/mean?} Hộ Q1 có khai chỉ chi 2,4 triệu, còn median cả nước 4,32, mean 5,69 (lệch phải): Q1 tăng \num{40\%} và \num{53\%}. Điền mean còn làm phương sai nhỏ đi: $S^2_{\text{sau}} = \frac{n_{\text{có}}-1}{n-1}S^2_{\text{có}}$.}
+\card{\textbf{Khi nào được xóa?} Khi ô thiếu ít và rải rác (23 hộ thiếu giá nhà). Bỏ hộ \texttt{fuel\_na}: Q1 thiếu tiền thiết yếu 2014 là 33,7\% thay vì 32,5\%, kết luận giữ nguyên.}}
 \end{frame}
 
 % ================================================================= Chia nhóm
@@ -526,7 +527,7 @@ Nội thất & \texttt{bed tab}\\
 \card{63 mức tăng: mean 78\%, median 79,5\%, SD 21 điểm; thấp nhất Bắc Kạn 15\%, cao nhất \num{Điện Biên 123\%}.}
 \card{Top 5: Điện Biên, Hòa Bình, Thái Nguyên, Hà Giang, Thanh Hóa; \num{4/5} thuộc T1.}
 \card{TP.HCM +50\%, Bình Dương +51\% nhưng vẫn hạng 1–2; TP.HCM gấp 5,1 lần Lai Châu.}
-\card{r giữa mức tăng 2010–12 và 2012–14 là \num{$-0{,}42$}: tăng mạnh giai đoạn đầu hay chững lại sau (mỗi tỉnh \textasciitilde 140 hộ/năm).}}
+\card{r giữa mức tăng 2010–12 và 2012–14 là \num{$-0{,}42$}: “tăng mạnh rồi chững lại” phần lớn là nhiễu do mẫu nhỏ (xem F4).}}
 \end{frame}
 
 \begin{frame}\code{E4}\frametitle{Thái Nguyên leo 15 bậc, Vĩnh Long tụt 27 bậc}
@@ -559,26 +560,26 @@ Nội thất & \texttt{bed tab}\\
 
 \begin{frame}\code{F2}\frametitle{Hơn 1/3 hộ Q1 không đủ tiền cho thiết yếu}
 \framesubtitle{\hyp{cùng là hộ Q1, sống ở nơi giàu hơn (thành thị, T4) khó trang trải thiết yếu hơn}{M}}
-\meta{tỷ lệ hộ, median}{bar chart, line chart}{C2; C3 – tỷ lệ mẫu}
+\meta{tỷ lệ hộ, sai số chuẩn}{bar chart, line chart}{C2; C3 – tỷ lệ mẫu}
 \figcards{f33_F2}{2}{%
 \card{“Không đủ sống” = chi thiết yếu > thu nhập: \num{36,1\%} hộ Q1 (Q4: 2,3\%). \num{T4: 41\%}, cao nhất; T2: 32,5\%; thành thị ≈ nông thôn (34,7\% và 36,2\%).}
-\card{2010 \ra\ 2014: T1 41,5 \ra\ \num{30,3\%}, T4 38,4 \ra\ 40,5\%: tỉnh nghèo cải thiện, tỉnh giàu thì không. Bỏ các hộ trống nhiên liệu vẫn vậy.}}
+\card{T4 hơn T2 8,5 điểm, lớn hơn nhiều sai số chuẩn $\sqrt{p(1-p)/n}$ (T4: 1,7; T2: 1,1 điểm). 2010 \ra\ 2014: T1 41,5 \ra\ \num{30,3\%}, T4 38,4 \ra\ 40,5\%.}}
 \end{frame}
 
-\begin{frame}\code{F3}\frametitle{Tỉnh giàu hay nghèo không quyết định hộ nghèo đủ sống}
-\framesubtitle{\hyp{tỉnh càng giàu, hộ nghèo ở đó càng khó đủ sống}{B}}
-\meta{tỷ lệ, sai số chuẩn, correlation}{bubble chart, horizontal bar}{C2; C3 – tỷ lệ mẫu}
-\figcards{f34_F3}{2}{%
-\card{61 tỉnh có $\geq$ 30 hộ Q1: mean 36,9\%, SD 13,9 điểm; r với thu nhập tỉnh chỉ \num{0,08}. Đà Nẵng \num{60\%}, Hà Nội 39\%, Hải Phòng 33\%, Cần Thơ 16\%.}
-\card{Sai số chuẩn $\sqrt{p(1-p)/n}$: Đà Nẵng (n = 30) \num{8,9 điểm}, Hà Nội (n = 98) 4,9 điểm. TP.HCM chỉ 5 hộ Q1: không kết luận.}}
-\end{frame}
-
-\begin{frame}\code{F4}\frametitle{Ai để dành được? Hộ giàu nông thôn nhiều nhất}
+\begin{frame}\code{F3}\frametitle{Ai để dành được? Hộ giàu nông thôn nhiều nhất}
 \framesubtitle{\hyp{hộ giàu để dành tỷ lệ lớn hơn; hộ thành thị để dành nhiều hơn hộ nông thôn}{M}}
 \meta{median, sum, tỷ lệ}{grouped bar, line chart}{C2}
 \figcards{f37_F4}{2}{%
 \card{Để dành = (thu nhập − tổng chi)/thu nhập. Median Q1 \num{$-14\%$} … Q4 \num{39\%}. Cùng Q4: nông thôn \num{46\%}, thành thị 33\%.}
 \card{2010 \ra\ 2014 mọi nhóm để dành nhiều hơn (Q4: 36 \ra\ 43\%). Tổng chi chỉ gồm 13 khoản: đây là mức tối đa.}}
+\end{frame}
+
+\begin{frame}\code{F4}\frametitle{Hai kết quả gây ấn tượng nhất phần lớn là ảo ảnh}
+\framesubtitle{\hyp{tỉnh tăng mạnh thì sau đó chững lại; hộ nghèo chi vượt thu nhiều hơn hẳn hộ giàu}{B}}
+\meta{covariance, correlation, tỷ lệ}{scatter plot, grouped bar}{C2 – covariance; C3 – phân phối mẫu}
+\figcards{f40_F4}{2}{%
+\card{\num{Tỉnh:} nếu chỉ có nhiễu do mẫu (\textasciitilde 140 hộ/tỉnh), r giữa hai giai đoạn phải là \num{$-0{,}50$}; thực tế $-0{,}42$. Chia đôi ngẫu nhiên hộ mỗi tỉnh: hai nửa gần như không khớp (r = 0,14).}
+\card{\num{Hộ:} xếp theo thu nhập, \% chi vượt thu giảm 64 \ra\ 9\%; xếp theo chi tiêu thì phẳng (28–34\%). Đó là \num{hồi quy về trung bình}.}}
 \end{frame}
 
 % ================================================================= Chuyện bên lề
@@ -620,7 +621,7 @@ Nội thất & \texttt{bed tab}\\
 \framesubtitle{\ask{những con số nào đi ngược trực giác?}}
 \meta{tỷ lệ, sum}{line chart, horizontal bar, bar chart}{C2}
 \figcards{f32t_I9}{2}{%
-\card{\num{64\%} hộ Q1 chi nhiều hơn thu (Q4: 9\%), giảm dần ở mọi Q (Q1: 66 \ra\ 62\%). Sum 2014: Q1 có 8,4\% tổng thu nhập nhưng 13,9\% tổng chi.}
+\card{\num{64\%} hộ Q1 chi nhiều hơn thu (Q4: 9\%), một phần do cách chia nhóm (F4). Sum 2014: Q1 có 8,4\% tổng thu nhập nhưng 13,9\% tổng chi.}
 \card{\num{77\%} hộ Q1 có TV, nhiều hơn điện thoại (67\%) và xe máy (65\%). Hộ Q4 ở \num{T1} có ô tô nhiều nhất (7,1\%).}}
 \end{frame}
 
@@ -638,8 +639,10 @@ Nội thất & \texttt{bed tab}\\
 \begin{tcolorbox}[card, colback=tintA]{\scriptsize\medium\color{darkA} A3 · A4}\par{\bfseries 10\% hộ giàu nhất nhận 26\% tổng thu nhập;} tỉnh càng nghèo, chênh lệch nội bộ càng lớn (r = $-0{,}74$).\end{tcolorbox}
 \begin{tcolorbox}[card, colback=tintE]{\scriptsize\medium\color{darkE} E2 · E3}\par{\bfseries Nông thôn và T1–T3 tăng nhanh hơn:} cách biệt tương đối thu hẹp, cách biệt tuyệt đối vẫn nới rộng.\end{tcolorbox}
 \end{tcbraster}
-\vspace{8pt}
-{\small\color{ink2} Bất ngờ: hộ tự đóng BHYT lại chi y tế nhiều hơn; 64\% hộ Q1 chi nhiều hơn thu; hộ Q1 chi thuốc lá bằng 31\% chi giáo dục; nhà xa dần tầm với hộ nghèo thành thị.\par}
+\vspace{5pt}
+\begin{tcolorbox}[card, colback=goldsoftx, fontupper=\small\color{ink}]
+{\bfseries\color{darkD} Kết luận đắt giá:} khác biệt giữa các \textbf{nhóm lớn} (Q, khu vực, nhóm tỉnh) là thật; \textbf{thứ hạng từng tỉnh} và “\textbf{hộ nghèo chi vượt thu}” phần lớn là ảo ảnh của mẫu nhỏ và cách chia nhóm (F4).
+\end{tcolorbox}
 \end{frame}
 
 \begin{frame}\frametitle{Hạn chế}
@@ -650,9 +653,9 @@ Nội thất & \texttt{bed tab}\\
 \item Không có trọng số mẫu: kết quả là của mẫu VHLSS, không phải số chính thức của cả nước.
 \item Mỗi năm là một mẫu khác nhau: chỉ so sánh theo nhóm, không theo dõi được từng hộ.
 \item Tiền theo giá từng năm: \% tăng chỉ để so giữa các nhóm; ưu tiên tỷ trọng, tỷ lệ và thứ hạng.
-\item Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2, F3) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F4) là mức tối đa.
-\item Giá trị tài sản do hộ tự ước tính; \texttt{hins} là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.
-\item Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm.
+\item Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F3) là mức tối đa.
+\item Giá trị tài sản do hộ tự ước tính, theo số tròn: 90\% giá nhà là bội số của 10 triệu, mode 200 triệu. \texttt{hins} là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.
+\item Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm nên số liệu từng tỉnh dao động mạnh (F4).
 \item Không làm kiểm định giả thuyết (ngoài phạm vi môn); mọi kết luận dựa trên thống kê mô tả.
 \end{itemize}
 \end{frame}
@@ -664,9 +667,9 @@ Nội thất & \texttt{bed tab}\\
 \rowcolor{tintN}\textbf{Chương} & \textbf{Nội dung} & \textbf{Ở đâu}\\
 C1 Giới thiệu & dữ liệu thứ cấp; mẫu và tổng thể; thang đo, loại biến (không tính r với biến thứ bậc) & Dữ liệu, D3\\
 C2 Thống kê mô tả & bảng tần số, bảng chéo; pie, bar, stacked bar, line, histogram, boxplot, scatter, bubble & mọi slide phân tích\\
- & mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness & A1–A4, B1–B4, C1, E3, E4, F4, I7\\
- & covariance, hệ số tương quan (kể cả heatmap) & A3, C5, D3, D5, E4, F3, I2, I3, I5, I8\\
-C3 Phân phối mẫu & tỷ lệ mẫu; sai số chuẩn $\sqrt{p(1-p)/n}$; quy tắc n $\geq$ 30; phương sai mẫu & C2, D4, F2, F3, chia nhóm, làm sạch\\
+ & mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness & A1–A4, B1–B4, C1, E3, E4, F3, I7\\
+ & covariance, hệ số tương quan (kể cả heatmap) & A3, C5, D3, D5, E4, F4, I2, I3, I5, I8\\
+C3 Phân phối mẫu & tỷ lệ mẫu; sai số chuẩn $\sqrt{p(1-p)/n}$; quy tắc n $\geq$ 30; phương sai mẫu & C2, D4, F2, F4, chia nhóm, làm sạch\\
 C4 Ước lượng & ước lượng chệch (điền mean làm phương sai nhỏ đi); median bền hơn mean khi có outlier & làm sạch, thu nhập\\
 \bottomrule
 \end{tabularx}

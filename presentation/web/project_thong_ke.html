@@ -91,6 +91,9 @@ code,.mono{font-family:var(--mono);font-size:.86em}
 .msg p{margin-top:6px;font-size:14.5px}
 .msg p b{font-weight:700}
 
+.killer{margin-top:12px;border-radius:var(--r);padding:16px 18px;background:var(--D-t);color:var(--ink);font-size:15.5px;border:1px solid color-mix(in srgb,var(--D) 45%,transparent)}
+.killer b{color:var(--D-d)}
+
 /* ---------- section */
 section.blk{padding-block:40px 8px;scroll-margin-top:64px}
 .sec-head{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:end;margin-bottom:18px}
@@ -153,6 +156,21 @@ table.t tr:last-child td{border-bottom:0}
 details.how{font-size:12.5px;color:var(--ink2)}
 details.how pre{white-space:pre-wrap;background:var(--surface2);border-radius:8px;padding:10px;font-family:var(--mono);font-size:12px;overflow-x:auto}
 .history{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+.hist{margin-top:18px;border-top:1px dashed var(--hair);padding-top:14px;display:grid;gap:8px}
+.hist-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.hist-head h4{font-size:16px}
+.hist-name{font-size:12.5px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.hist-name input{font:14px var(--font);padding:7px 10px;border-radius:10px;border:1px solid var(--hair);background:var(--bg);color:var(--ink);width:200px;max-width:100%}
+.hist-tools{display:flex;flex-wrap:wrap;gap:8px}
+.hist-tools .btn{padding:8px 12px;font-size:13px}
+.hist-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.hist-item{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start;border:1px solid var(--hair);border-radius:12px;padding:10px 12px;background:var(--surface)}
+.hist-item .hq{font-weight:600;color:var(--ink);cursor:pointer;background:none;border:0;padding:0;text-align:left;font:600 14px var(--font)}
+.hist-item .hq:hover{text-decoration:underline}
+.hist-item .hm{font-size:12px;color:var(--muted)}
+.hist-item .ha{display:flex;gap:10px;grid-row:span 2}
+.hist-item.on{border-color:var(--E);background:var(--E-t)}
 
 /* ---------- tự khám phá */
 .explore{display:grid;grid-template-columns:280px 1fr;gap:16px}
@@ -243,7 +261,7 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:13px}
       <p class="sec-lead">Gõ câu hỏi bằng tiếng Việt. Claude chuyển câu hỏi thành một phép tính; trang tự tính trên 28.196 hộ, vẽ biểu đồ, rồi Claude viết nhận xét từ đúng bảng số đó. Lần hỏi đầu, trình duyệt sẽ xin phép dùng Claude trên tài khoản của bạn.</p>
       <div class="ask">
         <div class="ask-row">
-          <textarea id="askInput" placeholder="Ví dụ: Tỉnh nào hộ nghèo khó đủ sống nhất? · Chi giáo dục theo Q ở thành thị và nông thôn · Tỷ lệ hộ có ô tô theo nhóm tỉnh qua các năm" aria-label="Câu hỏi về dữ liệu"></textarea>
+          <textarea id="askInput" placeholder="Ví dụ: Hộ Q1 ở nhóm tỉnh nào khó trang trải thiết yếu nhất? · Chi giáo dục theo Q ở thành thị và nông thôn · Tỷ lệ hộ có ô tô theo nhóm tỉnh qua các năm" aria-label="Câu hỏi về dữ liệu"></textarea>
           <div style="display:flex;flex-direction:column;gap:8px">
             <button class="btn pri" id="askBtn" type="button">Hỏi</button>
             <button class="btn sec" id="stopBtn" type="button" hidden>Dừng</button>
@@ -252,7 +270,22 @@ footer{padding-block:40px 60px;color:var(--muted);font-size:13px}
         <div class="sugs" id="sugs"></div>
         <div class="ask-status" id="askStatus" role="status" aria-live="polite"></div>
         <div class="answer" id="answer" hidden></div>
-        <div class="history" id="history"></div>
+        <section class="hist" aria-labelledby="histTitle">
+          <div class="hist-head">
+            <h4 id="histTitle">Lịch sử câu hỏi <span class="small" id="histCount"></span></h4>
+            <label class="hist-name" for="histName">Tên của bạn <input id="histName" type="text" maxlength="40" placeholder="để teammate biết ai hỏi"></label>
+          </div>
+          <p class="small" id="histNote">Mỗi câu hỏi được lưu trong trình duyệt của bạn (không gửi đi đâu). Bấm vào một câu để xem lại biểu đồ và nhận xét, không tốn lượt Claude. Tải file lịch sử để gửi cho nhóm; nhập file của bạn khác để xem chung.</p>
+          <div class="hist-tools">
+            <button class="btn sec" id="histJson" type="button" hidden>Tải lịch sử (.json)</button>
+            <button class="btn sec" id="histCsv" type="button" hidden>Tải bảng (.csv, mở bằng Excel)</button>
+            <label class="btn sec" for="histFile">Nhập file lịch sử (.json)</label>
+            <input id="histFile" type="file" accept=".json,application/json" hidden>
+            <button class="btn sec" id="histClear" type="button">Xóa hết</button>
+          </div>
+          <div class="ask-status" id="histMsg" role="status" aria-live="polite"></div>
+          <ol class="hist-list" id="histList"></ol>
+        </section>
       </div>
     </div>
   </section>
@@ -719,6 +752,12 @@ const Eng = (() => {
     ids.sort((a, b) => V.inc_head[a] - V.inc_head[b] || a - b);
     ids.forEach((i, k) => V.decile[i] = Math.max(1, Math.ceil(k * 10 / (ids.length - 1))));   // giống pd.qcut(rank, 10)
   });
+  V.squart = new Float64Array(N).fill(NaN);                 // tứ phân vị chi tiêu/người trong từng năm (giống pd.qcut(rank, 4))
+  YEARS.forEach(y => {
+    const ids = []; for (let i = 0; i < N; i++) if (V.year[i] === y && V.tot[i] === V.tot[i]) ids.push(i);
+    ids.sort((a, b) => V.tot[a] / V.size[a] - V.tot[b] / V.size[b] || a - b);
+    ids.forEach((i, k) => V.squart[i] = Math.max(1, Math.ceil(k * 4 / (ids.length - 1))));
+  });
   const S = {                                                // biến chuỗi
     province: i => PROV[C.p[i]].name, tier: i => PROV[C.p[i]].tier,
     area: i => C.a[i] === 1 ? "Thành thị" : "Nông thôn",
@@ -741,7 +780,7 @@ const Eng = (() => {
     veh: "oto+moto+bicycle", tech: "tele+tv+emachine", furn: "bed+tab", durables: "tổng giá trị đồ dùng (không kể nhà)",
     burden: "nec/income (gánh nặng thiết yếu, tỷ số)", overspend: "1 nếu tot > income", short: "1 nếu nec > income (không đủ tiền cho thiết yếu)",
     house_to_inc: "house/income (số năm thu nhập để có căn nhà)", save: "% thu nhập để dành = (income − tot)/income × 100",
-    decile: "thập phân vị thu nhập/người trong từng năm, 1–10 (10 = 10% hộ giàu nhất)", fuel_na: "1 nếu ô nhiên liệu bị trống", asset_na: "1 nếu thiếu cả 9 cột tài sản",
+    decile: "thập phân vị thu nhập/người trong từng năm, 1–10 (10 = 10% hộ giàu nhất)", squart: "nhóm chi tiêu/người 1–4 trong từng năm (tứ phân vị của tot/size)", fuel_na: "1 nếu ô nhiên liệu bị trống", asset_na: "1 nếu thiếu cả 9 cột tài sản",
   };
 
   /* ---------- biểu thức: tokenizer + Pratt parser -> closure */
@@ -810,10 +849,11 @@ const Eng = (() => {
     province: { keys: i => [S.province(i)], order: PROV.map(p => p.name), label: v => v },
     size: { keys: i => [Math.min(7, V.size[i])], order: [1, 2, 3, 4, 5, 6, 7], label: v => v === 7 ? "7+" : String(v) },
     decile: { keys: i => [V.decile[i]], order: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], label: v => "D" + v },
+    S: { keys: i => V.squart[i] === V.squart[i] ? [V.squart[i]] : [], order: [1, 2, 3, 4], label: v => "S" + v },
     scope: { keys: i => ["Toàn quốc", S.area(i), S.tier(i)], order: SCOPES, label: v => v },
     all: { keys: () => ["Toàn quốc"], order: ["Toàn quốc"], label: v => v },
   };
-  const DIM_NOTE = "year, Q, area, tier, province, decile (D1–D10), size (7 = 7+ người), scope (mỗi hộ tính vào 'Toàn quốc', khu vực và nhóm tỉnh của nó), all";
+  const DIM_NOTE = "year, Q, area, tier, province, decile (D1–D10), S (nhóm chi tiêu/người S1–S4), size (7 = 7+ người), scope (mỗi hộ tính vào 'Toàn quốc', khu vực và nhóm tỉnh của nó), all";
 
   /* ---------- thống kê */
   const sortNum = a => a.sort((x, y) => x - y);
@@ -922,11 +962,11 @@ const Eng = (() => {
     arr.sort((a, b) => pos(dims[0], a.k[0]) - pos(dims[0], b.k[0]) || pos(dims[1], a.k[1]) - pos(dims[1], b.k[1]));
   }
   function label(g, dims) { return dims.map((d, j) => DIMS[d].label(g.k[j])).join(" · ") || "Toàn quốc"; }
-  const DIM_LABEL = { decile: "Thập phân vị", year: "Năm", Q: "Nhóm Q", area: "Khu vực", tier: "Nhóm tỉnh", province: "Tỉnh", size: "Số người/hộ", scope: "Phạm vi", all: "Nhóm" };
+  const DIM_LABEL = { S: "Nhóm chi tiêu", decile: "Thập phân vị", year: "Năm", Q: "Nhóm Q", area: "Khu vực", tier: "Nhóm tỉnh", province: "Tỉnh", size: "Số người/hộ", scope: "Phạm vi", all: "Nhóm" };
 
   /* ---------- màu theo chiều */
   function colorsFor(dim, keys) {
-    if (dim === "Q" || dim === "tier") return keys.map(k => ORD[(dim === "Q" ? k : +String(k)[1]) - 1]);
+    if (dim === "Q" || dim === "tier" || dim === "S") return keys.map(k => ORD[(dim === "tier" ? +String(k)[1] : k) - 1]);
     if (dim === "year") return keys.map(k => ["var(--o1)", "var(--o3)", "var(--o4)"][YEARS.indexOf(k)]);
     if (dim === "area") return keys.map(k => k === "Thành thị" ? "var(--c1)" : "var(--c2)");
     if (dim === "scope") return keys.map(k => SCOPES.indexOf(k) < 3 ? "var(--cgray)" : ORD[+String(k)[1] - 1]);
@@ -1065,6 +1105,12 @@ const CARDS = [
     notes: ["Số hộ ghi 0: 40 (2010), 199 (2012), <b>0</b> (2014). Ô trống 2014: nông thôn <b>10,9%</b>, hộ Q1 <b>21,5%</b>.",
             "Hộ bị trống ít người, dùng rất ít điện: nhiều khả năng đun củi, rơm tự kiếm. Nên điền 0, gắn cờ <code>fuel_na</code> và kiểm tra lại các kết quả liên quan."],
     meta: ["tỷ lệ, tần số", "grouped bar", "C1 – dữ liệu thứ cấp"] },
+  { sec: "data", code: "D", title: "Giá nhà được khai theo số tròn", hyp: "số liệu tự khai có đáng tin tuyệt đối không?",
+    views: [{ label: "10 giá trị hay gặp nhất", static: { type: "bar", cats: ["200 tr", "300 tr", "150 tr", "100 tr", "500 tr", "50 tr", "400 tr", "250 tr", "80 tr", "120 tr"], series: [{ name: "% số hộ", values: [5.1, 4.6, 4.2, 4.0, 3.5, 3.2, 3.1, 3.0, 3.0, 2.9], color: "var(--c5)" }], fmt: "pct1" } },
+            { label: "Bội số tròn", static: { type: "bar", cats: ["bội số 10 triệu", "bội số 50 triệu", "bội số 100 triệu"], series: [{ name: "% giá nhà", values: [89.7, 56.0, 39.5], color: "var(--c5)" }], fmt: "pct1", ymax: 100 } }],
+    notes: ["<b>89.7%</b> giá nhà là bội số của 10 triệu, 56.0% là bội số của 50 triệu; mode là <b>200 triệu</b>, 5 giá trị hay gặp nhất chiếm 21.4% số hộ. Người dân ước giá theo số tròn.",
+            "Vì vậy median giá nhà thường rơi đúng vào số tròn (200, 400, 700 triệu…), và so sánh chênh vài chục triệu giữa các nhóm là không có ý nghĩa. Đây là sai số đo lường của dữ liệu thứ cấp tự khai."],
+    meta: ["mode, tỷ lệ", "bar chart", "C1 – dữ liệu thứ cấp, sai số đo lường"] },
   { sec: "data", code: "D", title: "Làm sạch: không xóa hộ nào, điền 0 có gắn cờ", hyp: "xử lý dữ liệu thiếu thế nào cho đúng?", wide: true,
     html: `<div class="tbl-wrap"><table class="t"><tr><th>Biến</th><th>Số ô thiếu</th><th>Phát hiện</th><th>Xử lý</th></tr>
 <tr><td><code>fuel</code></td><td>817 (813 ở 2014)</td><td>2014 không hộ nào ghi 0; ô trống tập trung ở hộ nghèo nông thôn</td><td>điền 0 + cờ <code>fuel_na</code></td></tr>
@@ -1072,9 +1118,17 @@ const CARDS = [
 <tr><td><code>house</code>, <code>fhouse</code></td><td>23 hộ</td><td>rải rác</td><td>bỏ khi phân tích nhà; <code>fhouse</code> = 0</td></tr>
 <tr><td><code>nfood</code></td><td>1 hộ</td><td>—</td><td>bỏ khỏi phân tích chi tiêu</td></tr>
 <tr><td>Giá trị âm</td><td>61 ô / 36 hộ</td><td>−1, −2…: tài sản không thể âm</td><td>coi là ô thiếu</td></tr></table></div>`,
-    notes: ["Không điền mean: phương sai sau khi điền = (n<sub>có</sub> − 1)/(n − 1) × phương sai gốc, luôn nhỏ hơn, tức là <b>ước lượng chệch</b> xuống.",
-            "Không xóa dòng: hộ thiếu dữ liệu chủ yếu là hộ nghèo (<b>3,3%</b> hộ Q1 thiếu tài sản, so với 0,1% hộ Q4)."],
+    notes: ["<b>Vì sao điền 0?</b> Số hộ ghi nhiên liệu = 0: 40 (2010), 199 (2012), <b>0</b> (2014), nhưng 2014 có 813 ô trống: năm 2014 để trống thay cho 0.",
+            "Tài sản: chỉ 2 hộ khai cả 9 cột bằng 0, trong khi hộ Q1 có 1, 2, 3 món là 5,8%, 8,9%, 11,3%, nên phải có khoảng 3% không có món nào: khớp <b>3,3%</b> hộ Q1 bị trống (33% trong số đó không trả tiền điện, cả nhóm Q1 chỉ 8%)."],
     meta: ["tần số, tỷ lệ", "bảng", "C3 – phương sai mẫu; C4 – ước lượng chệch"] },
+  { sec: "data", code: "D", title: "Xóa dòng hay điền median/mean đều làm hộ nghèo “khá” lên", hyp: "sao không xóa dòng thiếu, hoặc điền median/mean cho đỡ lệch?",
+    views: [{ label: "Nhiên liệu hộ Q1 năm 2014", static: { type: "hbar", cats: ["Điền 0 (đang dùng)", "Xóa dòng thiếu", "Điền median", "Điền mean"], series: [{ name: "Nhiên liệu TB (triệu đồng)", values: [2.32, 2.95, 3.24, 3.54], color: "var(--c4)" }], fmt: "num2", valueLabel: v => fmtNum(v, 2) + (v > 2.4 ? " (+" + fmtNum((v / 2.315 - 1) * 100, 0) + "%)" : "") } },
+            { label: "Khoảng cách sở hữu Q4 − Q1", static: { type: "hbar", cats: ["TV", "Điện thoại", "Xe máy"], series: [{ name: "Điền 0", values: [19.0, 33.1, 29.3], color: "var(--c4)" }, { name: "Xóa 284 hộ", values: [16.6, 31.1, 27.4], color: "var(--c2)" }], fmt: "num1", valueLabel: v => fmtNum(v, 1) + " điểm" } }],
+    notes: ["<b>Xóa dòng?</b> Ô trống dồn vào hộ nghèo (2014: Q1 <b>21,5%</b>, Q4 1,4%). Xóa thì nhiên liệu TB của Q1 tăng <b>27%</b>, khoảng cách TV Q4–Q1 hẹp lại (19,0 → 16,6 điểm).",
+            "<b>Điền median/mean?</b> Hộ Q1 có khai chỉ chi 2,4 triệu, còn median cả nước 4,32, mean 5,69 (lệch phải): Q1 tăng <b>40%</b> và <b>53%</b>. Điền mean còn làm phương sai nhỏ đi: S²<sub>sau</sub> = (n<sub>có</sub> − 1)/(n − 1) × S²<sub>có</sub>, tức là <b>ước lượng chệch</b> xuống (SD 2014 giảm 4,4%).",
+            "<b>Khi nào được xóa?</b> Khi ô thiếu ít và rải rác (23 hộ thiếu giá nhà, 1 hộ thiếu <code>nfood</code>). Bỏ các hộ <code>fuel_na</code>: hộ Q1 thiếu tiền thiết yếu năm 2014 là 33,7% thay vì 32,5%, kết luận giữ nguyên."],
+    meta: ["mean, median, phương sai", "horizontal bar", "C2 – mean và median; C4 – ước lượng chệch"] },
+
 
   /* ---------------- Chia nhóm */
   { sec: "group", code: "N", title: "Nhóm tỉnh T1–T4 theo hạng thu nhập", hyp: "so tỉnh giữa các năm mà không cần quy đổi giá: xếp hạng median thu nhập của tỉnh mỗi năm, lấy hạng trung bình, chia 4 nhóm.", wide: true, ask: true,
@@ -1292,16 +1346,9 @@ const CARDS = [
             { label: "Theo năm", q: { filter: "Q==1", groupBy: ["year", "tier"], measures: [pc("% không đủ", "short")] }, c: { type: "line", endLabels: true, fmt: "pct" } },
             { label: "Mọi nhóm Q", q: { groupBy: ["Q"], measures: [pc("Chi thiết yếu > thu nhập", "short"), pc("Tổng chi > thu nhập", "overspend")] }, c: { type: "bar", fmt: "pct", colors: ["var(--c2)", "var(--c3)"] } }],
     notes: ["“Không đủ sống” = chi thiết yếu > thu nhập: <b>36,1%</b> hộ Q1 (Q4: 2,3%). <b>T4: 41%</b>, cao nhất; T2: 32,5%; thành thị ≈ nông thôn.",
-            "2010 → 2014: T1 41,5 → <b>30,3%</b> (cải thiện), T4 38,4 → 40,5% (không đổi). Bỏ các hộ trống nhiên liệu vẫn vậy."],
-    meta: ["tỷ lệ hộ, median", "bar chart, line chart", "C2; C3 – tỷ lệ mẫu"] },
-  { st: "F", code: "F3", title: "Tỉnh nào đủ sống cho hộ nghèo?", hyp: "tỉnh càng giàu, hộ nghèo ở đó càng khó đủ sống", v: "B",
-    views: [{ label: "61 tỉnh (≥ 30 hộ Q1)", q: { groupBy: ["province"], minNOn: 1, measures: [{ name: "Median thu nhập/người của tỉnh 2014 (triệu)", agg: "median", expr: "inc_head/1000", where: "year==2014" }, { name: "% hộ Q1 không đủ tiền cho thiết yếu", agg: "pct", expr: "short", where: "Q==1" }] }, c: { type: "scatter", bubble: 0.45, labels: ["Hà Nội", "Đà Nẵng", "Cần Thơ", "BR–Vũng Tàu", "Gia Lai"], note: "kích thước = số hộ Q1", fmty: v => fmtNum(v, 0) + "%" } },
-            { label: "Khó nhất / dễ nhất", q: { filter: "Q==1", groupBy: ["province"], measures: [pc("% hộ Q1 không đủ tiền cho thiết yếu", "short")], sort: { by: 0, desc: true }, limit: 8, limitBoth: true }, c: { type: "hbar", fmt: "pct" } }],
-    notes: ["61 tỉnh có ≥ 30 hộ Q1: mean 36,9%, SD 13,9 điểm; r với thu nhập tỉnh chỉ <b>0,08</b>. Đà Nẵng <b>60%</b>, Hà Nội 39%, Hải Phòng 33%, Cần Thơ 16%. TP.HCM chỉ 5 hộ Q1: không kết luận.",
-            "Sai số chuẩn √(p(1−p)/n): Đà Nẵng (n = 30) <b>8,9 điểm</b>, Hà Nội (n = 98) 4,9 điểm: tỷ lệ tính trên ít hộ dao động nhiều."],
-    meta: ["tỷ lệ, sai số chuẩn, correlation", "bubble chart, horizontal bar", "C2; C3 – tỷ lệ mẫu, n ≥ 30"] },
-
-  { st: "F", code: "F4", title: "Ai để dành được? Hộ giàu nông thôn nhiều nhất", hyp: "hộ giàu để dành tỷ lệ lớn hơn; hộ thành thị để dành nhiều hơn hộ nông thôn", v: "M",
+            "T4 hơn T2 8,5 điểm, lớn hơn nhiều sai số chuẩn √(p(1−p)/n) (T4: 1,7; T2: 1,1 điểm), nên không phải do nhiễu mẫu. 2010 → 2014: T1 41,5 → <b>30,3%</b> (cải thiện), T4 38,4 → 40,5% (không đổi)."],
+    meta: ["tỷ lệ hộ, sai số chuẩn", "bar chart, line chart", "C2; C3 – tỷ lệ mẫu"] },
+  { st: "F", code: "F3", title: "Ai để dành được? Hộ giàu nông thôn nhiều nhất", hyp: "hộ giàu để dành tỷ lệ lớn hơn; hộ thành thị để dành nhiều hơn hộ nông thôn", v: "M",
     views: [{ label: "Theo Q và khu vực", q: { groupBy: ["Q", "area"], measures: [{ name: "Median % thu nhập để dành", agg: "median", expr: "save" }] }, c: { type: "bar", fmt: "num0" } },
             { label: "Theo năm", q: { groupBy: ["year", "Q"], measures: [{ name: "Median % để dành", agg: "median", expr: "save" }] }, c: { type: "line", endLabels: true, fmt: "num0" } },
             { label: "Theo nhóm tỉnh", q: { groupBy: ["Q", "tier"], measures: [{ name: "Median % để dành", agg: "median", expr: "save" }] }, c: { type: "bar", fmt: "num0" } }],
@@ -1352,21 +1399,20 @@ const LIMITS = [
   "Không có trọng số mẫu: kết quả là của mẫu VHLSS, không phải số chính thức của cả nước.",
   "Mỗi năm là một mẫu khác nhau: chỉ so sánh theo nhóm, không theo dõi được từng hộ.",
   "Tiền theo giá từng năm: % tăng chỉ để so giữa các nhóm; ưu tiên tỷ trọng, tỷ lệ và thứ hạng.",
-  "Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2, F3) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F4) là mức tối đa.",
-  "Giá trị tài sản do hộ tự ước tính; hins là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.",
-  "Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm.",
+  "Chi vượt thu trong một năm có thể được bù bằng tiết kiệm, vay mượn, trợ cấp; hộ rơi vào Q1 vì thu nhập năm đó thấp bất thường vẫn chi như thường. Vì vậy tỷ lệ “không đủ sống” (F2) có thể cao hơn thực tế; tổng chi chỉ gồm 13 khoản nên tỷ lệ để dành (F3) là mức tối đa.",
+  "Giá trị tài sản do hộ tự ước tính, theo số tròn (90% giá nhà là bội số của 10 triệu); hins là tiền tự đóng, không cho biết hộ có thẻ BHYT hay không.",
+  "Tương quan không phải nhân quả; tương quan cấp tỉnh khác cấp hộ; mỗi tỉnh chỉ khoảng 140 hộ/năm nên số liệu từng tỉnh dao động mạnh.",
   "Không làm kiểm định giả thuyết (ngoài phạm vi môn); mọi kết luận dựa trên thống kê mô tả.",
 ];
 const KNOWLEDGE = [
-  ["C1 Giới thiệu", "dữ liệu thứ cấp; mẫu và tổng thể; thang đo, loại biến", "Dữ liệu, D3"],
+  ["C1 Giới thiệu", "dữ liệu thứ cấp (sai số đo lường, số tròn); mẫu và tổng thể; thang đo, loại biến", "Dữ liệu, D3"],
   ["C2 Thống kê mô tả", "bảng tần số, bảng chéo; pie, bar, stacked, line, histogram, boxplot, scatter, bubble, heatmap tương quan", "mọi phân tích"],
-  ["", "mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness", "A1–A4, B1–B4, C1, E3, E4, F4, I7"],
-  ["", "covariance, hệ số tương quan (kể cả heatmap)", "A3, C5, D3, D5, E4, F3, I2, I3, I5, I8"],
-  ["C3 Phân phối mẫu", "tỷ lệ mẫu; sai số chuẩn √(p(1−p)/n); quy tắc n ≥ 30", "C2, D4, D5, F2, F3"],
+  ["", "mean, median, mode, sum, quantile (tứ, thập phân vị), range, variance, SD, CV, IQR, skewness", "A1–A4, B1–B4, C1, E3, E4, F3, I7"],
+  ["", "covariance, hệ số tương quan (kể cả heatmap)", "A3, C5, D3, D5, E4, I2, I3, I5, I8"],
+  ["C3 Phân phối mẫu", "tỷ lệ mẫu; sai số chuẩn √(p(1−p)/n); quy tắc n ≥ 30", "C2, D4, D5, F2"],
   ["C4 Ước lượng", "ước lượng chệch; median bền hơn mean khi có outlier", "làm sạch, thu nhập"],
 ];
 const SUGGESTIONS = [
-  "Tỉnh nào hộ nghèo khó đủ sống nhất?",
   "10% hộ giàu nhất nhận bao nhiêu phần trăm tổng thu nhập mỗi năm?",
   "Hộ nào để dành được nhiều nhất, theo Q và nhóm tỉnh?",
   "So sánh tiền điện mỗi người giữa T1 và T4 theo từng nhóm Q",
@@ -1550,15 +1596,110 @@ ${Eng.toText(r)}`;
   return res.text;
 }
 
+/* ---------- lịch sử câu hỏi: lưu trong trình duyệt của từng người */
+const Hist = (() => {
+  const KEY = "pt_hist_v1", NAME = "pt_name", MAX = 300;
+  const load = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(v) ? v : []; } catch (e) { return []; } };
+  const save = list => { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, MAX))); return true; } catch (e) { return false; } };
+  const newId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const clean = x => ({                                   // dữ liệu nhập từ file là dữ liệu, không phải lệnh: chỉ giữ trường cần, ép kiểu
+    id: String(x.id || newId()).slice(0, 40), t: String(x.t || new Date().toISOString()).slice(0, 40), who: String(x.who || "").slice(0, 40),
+    q: String(x.q || "").slice(0, 600), title: String(x.title || "").slice(0, 200), explain: String(x.explain || "").slice(0, 400),
+    query: x.query && typeof x.query === "object" ? x.query : null, chart: x.chart && typeof x.chart === "object" ? x.chart : {},
+    insight: String(x.insight || "").slice(0, 6000), cannot: String(x.cannot || "").slice(0, 600),
+  });
+  return {
+    list: load, newId, clean,
+    add(e) { const l = load(); l.unshift(clean(e)); return save(l); },
+    update(id, patch) { const l = load(), i = l.findIndex(x => x.id === id); if (i < 0) return false; l[i] = clean({ ...l[i], ...patch }); return save(l); },
+    remove(id) { return save(load().filter(x => x.id !== id)); },
+    clear() { return save([]); },
+    merge(items) { const l = load(), ids = new Set(l.map(x => x.id)); let n = 0; items.map(clean).filter(x => x.q && (x.query || x.cannot)).forEach(x => { if (!ids.has(x.id)) { l.push(x); ids.add(x.id); n++; } }); l.sort((p, q) => q.t.localeCompare(p.t)); save(l); return n; },
+    name: { get() { try { return localStorage.getItem(NAME) || ""; } catch (e) { return ""; } }, set(v) { try { localStorage.setItem(NAME, v); } catch (e) { } } },
+  };
+})();
+
 (function ask() {
-  const input = $("#askInput"), btn = $("#askBtn"), stop = $("#stopBtn"), status = $("#askStatus"), ans = $("#answer"), hist = $("#history");
+  const input = $("#askInput"), btn = $("#askBtn"), stop = $("#stopBtn"), status = $("#askStatus"), ans = $("#answer");
+  const listEl = $("#histList"), msg = $("#histMsg"), nameEl = $("#histName");
   $("#sugs").append(...SUGGESTIONS.map(s => { const b = h(`<button type="button" class="sug">${esc(s)}</button>`); b.onclick = () => { input.value = s; input.focus(); }; return b; }));
-  let ctl = null;
+  nameEl.value = Hist.name.get();
+  nameEl.addEventListener("change", () => Hist.name.set(nameEl.value.trim()));
+  let ctl = null, currentId = null;
+
+  function renderAnswer(e, r, fromHistory) {
+    ans.hidden = false;
+    const c = e.chart || {};
+    ans.innerHTML = `<h3>${esc(e.title || e.q)}</h3><p class="small">${fromHistory ? "Xem lại · hỏi lúc " + esc(fmtTime(e.t)) + (e.who ? " · " + esc(e.who) : "") + " · " : ""}${esc(e.explain || "")}</p><div class="chart" id="ansChart"></div>
+      <div class="insight" id="ansText">${fromHistory ? esc(e.insight || "(chưa có nhận xét)") : "Claude đang viết nhận xét…"}</div>
+      <details class="how"><summary>Bảng số và cách tính</summary><div class="tbl-wrap" style="margin-top:8px">${Eng.toTable(r)}</div><pre>${esc(JSON.stringify(e.query, null, 1))}</pre></details>`;
+    if (c.type === "table") $("#ansChart").remove(); else Charts.render($("#ansChart"), Eng.toChart(r, c));
+  }
+  function fmtTime(t) { const d = new Date(t); return isNaN(d) ? "" : d.toLocaleString("vi-VN", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }); }
+  function renderList() {
+    const l = Hist.list();
+    $("#histCount").textContent = l.length ? `(${l.length})` : "";
+    listEl.innerHTML = l.length ? "" : `<li class="small">Chưa có câu hỏi nào. Hỏi một câu ở trên, hoặc nhập file lịch sử của bạn khác.</li>`;
+    l.forEach(e => {
+      const li = h(`<li class="hist-item${e.id === currentId ? " on" : ""}"><button type="button" class="hq">${esc(e.q)}</button>
+        <div class="ha"><button type="button" class="linkbtn again">Hỏi lại</button><button type="button" class="linkbtn del" aria-label="Xóa câu hỏi này">Xóa</button></div>
+        <div class="hm">${esc(fmtTime(e.t))}${e.who ? " · " + esc(e.who) : ""}${e.title ? " · " + esc(e.title) : ""}</div></li>`);
+      $(".hq", li).onclick = () => {
+        currentId = e.id; renderList();
+        if (e.cannot || !e.query) { ans.hidden = false; ans.innerHTML = `<div class="insight">${esc(e.cannot || "Câu này chưa tính được.")}</div>`; return; }
+        try { renderAnswer(e, Eng.run(e.query), true); status.textContent = ""; } catch (err) { ans.hidden = false; ans.innerHTML = `<div class="insight">Không tính lại được: ${esc(err.message)}</div>`; }
+        ans.scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      $(".again", li).onclick = () => { input.value = e.q; input.focus(); input.scrollIntoView({ behavior: "smooth", block: "center" }); };
+      $(".del", li).onclick = () => { Hist.remove(e.id); if (currentId === e.id) currentId = null; renderList(); };
+      listEl.append(li);
+    });
+  }
+  renderList();
+
+  /* tải file lịch sử (capability downloads) */
+  let DL = null;
+  (window.claude && window.claude.use ? window.claude.use("downloads") : Promise.resolve(null)).then(d => {
+    DL = d; $("#histJson").hidden = $("#histCsv").hidden = !d;
+    if (!d) $("#histNote").textContent += " Nút tải file chỉ có khi mở trang trên claude.ai.";
+  }).catch(() => { });
+  const stamp = () => new Date().toISOString().slice(0, 10);
+  const slug = v => (v || "nhom").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "nhom";
+  async function download(filename, data) {
+    if (!DL) return;
+    try { await DL.save({ filename, data }); msg.textContent = "Đã lưu " + filename + "."; }
+    catch (e) { msg.textContent = e && e.code === "declined" ? "Đã hủy tải file." : e && e.code === "rate_limited" ? "Đang có một hộp thoại tải file khác, thử lại sau." : "Không tải được file ở đây."; }
+  }
+  $("#histJson").onclick = () => {
+    const l = Hist.list(); if (!l.length) { msg.textContent = "Chưa có câu hỏi nào để tải."; return; }
+    download(`cau-hoi-${slug(nameEl.value.trim())}-${stamp()}.json`, JSON.stringify({ app: "Project Thống Kê", exported: new Date().toISOString(), who: nameEl.value.trim(), items: l }, null, 1));
+  };
+  $("#histCsv").onclick = () => {
+    const l = Hist.list(); if (!l.length) { msg.textContent = "Chưa có câu hỏi nào để tải."; return; }
+    const q = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+    const rows = [["thoi_gian", "nguoi_hoi", "cau_hoi", "tieu_de", "cach_tinh", "nhan_xet"].join(",")]
+      .concat(l.map(e => [e.t, e.who, e.q, e.title || e.cannot, e.explain, e.insight].map(q).join(",")));
+    download(`cau-hoi-${slug(nameEl.value.trim())}-${stamp()}.csv`, "\uFEFF" + rows.join("\r\n"));
+  };
+  $("#histFile").addEventListener("change", ev => {
+    const f = ev.target.files && ev.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try { const j = JSON.parse(rd.result); const items = Array.isArray(j) ? j : Array.isArray(j.items) ? j.items : null; if (!items) throw new Error();
+        const n = Hist.merge(items); msg.textContent = `Đã nhập ${n} câu hỏi mới từ ${f.name}` + (n < items.length ? ` (bỏ qua ${items.length - n} câu đã có hoặc không hợp lệ).` : "."); renderList();
+      } catch (e) { msg.textContent = "File này không phải file lịch sử câu hỏi của trang (cần file .json tải từ nút “Tải lịch sử”)."; }
+      ev.target.value = "";
+    };
+    rd.readAsText(f);
+  });
+  $("#histClear").onclick = () => { if (!Hist.list().length) return; if (confirm("Xóa toàn bộ lịch sử câu hỏi trên máy này?")) { Hist.clear(); currentId = null; renderList(); msg.textContent = "Đã xóa lịch sử."; } };
+
+  /* hỏi Claude */
   status.textContent = "Đang kết nối Claude…";
   const cap = window.claude && window.claude.use ? window.claude.use("sample") : Promise.resolve(null);
   cap.then(s => {
     SAMPLE = s;
-    if (!s) { status.textContent = "Hỏi đáp chạy khi mở trang trên claude.ai (dùng Claude của người xem). Ở đây bạn vẫn dùng được mục Tự khám phá và mọi biểu đồ."; btn.disabled = true; return; }
+    if (!s) { status.textContent = "Hỏi đáp chạy khi mở trang trên claude.ai (dùng Claude của người xem). Ở đây bạn vẫn xem lại được lịch sử, dùng mục Tự khám phá và mọi biểu đồ."; btn.disabled = true; return; }
     status.textContent = "Sẵn sàng. Lần hỏi đầu sẽ xin phép dùng Claude trên tài khoản của bạn.";
     document.querySelectorAll(".ask-card").forEach(b => b.hidden = false);
   }).catch(() => { status.textContent = "Không kết nối được Claude."; btn.disabled = true; });
@@ -1566,8 +1707,10 @@ ${Eng.toText(r)}`;
   stop.onclick = () => ctl && ctl.abort();
   btn.onclick = async () => {
     const q = input.value.trim(); if (!q || !SAMPLE) return;
+    Hist.name.set(nameEl.value.trim());
     ctl = new AbortController(); btn.disabled = true; stop.hidden = false; ans.hidden = false;
     ans.innerHTML = ""; status.textContent = "Claude đang chuyển câu hỏi thành phép tính…";
+    let entry = null;
     try {
       let spec = await SAMPLE.json(SCHEMA() + "\n\nHỏi: " + q, { signal: ctl.signal, modelTier: "default" });
       let r = null, err = null;
@@ -1578,21 +1721,21 @@ ${Eng.toText(r)}`;
         spec = await SAMPLE.json(SCHEMA() + "\n\nHỏi: " + q + "\n\nJSON trước đó của bạn:\n" + JSON.stringify(spec) + "\n\nLỗi khi chạy: " + err + "\nHãy sửa và trả lại JSON đầy đủ.", { signal: ctl.signal, modelTier: "default" });
         tryRun(spec);
       }
-      if (spec.cannot) { status.textContent = ""; ans.innerHTML = `<div class="insight">${esc(spec.cannot)}</div>`; return; }
+      const base = { id: Hist.newId(), t: new Date().toISOString(), who: nameEl.value.trim(), q };
+      if (spec.cannot) { status.textContent = ""; ans.innerHTML = `<div class="insight">${esc(spec.cannot)}</div>`; Hist.add({ ...base, cannot: spec.cannot }); renderList(); return; }
       if (!r) { status.textContent = ""; ans.innerHTML = `<div class="insight">Chưa tính được câu này (${esc(err || "lỗi")}). Thử hỏi cụ thể hơn: nêu thước đo, nhóm, năm.</div>`; return; }
-      const c = spec.chart || {};
-      ans.innerHTML = `<h3>${esc(spec.title || q)}</h3><p class="small">${esc(spec.explain || "")}</p><div class="chart" id="ansChart"></div>
-        <div class="insight" id="ansText">Claude đang viết nhận xét…</div>
-        <details class="how"><summary>Bảng số và cách tính</summary><div class="tbl-wrap" style="margin-top:8px">${Eng.toTable(r)}</div><pre>${esc(JSON.stringify(spec.query, null, 1))}</pre></details>`;
-      if (c.type === "table") $("#ansChart").remove(); else Charts.render($("#ansChart"), Eng.toChart(r, c));
+      entry = { ...base, title: spec.title || q, explain: spec.explain || "", query: spec.query, chart: spec.chart || {}, insight: "" };
+      renderAnswer(entry, r, false);
       if (r.small && r.small.length) status.textContent = "Có nhóm dưới 30 hộ: " + r.small.slice(0, 6).join(", ") + (r.small.length > 6 ? "…" : "");
       else status.textContent = "";
-      await insight(SAMPLE, q, r, t => { const el = $("#ansText"); if (el) el.textContent = t; });
-      const chip = h(`<button type="button" class="sug">↺ ${esc(q.length > 48 ? q.slice(0, 46) + "…" : q)}</button>`);
-      chip.onclick = () => { input.value = q; btn.click(); }; hist.prepend(chip);
+      const saved = Hist.add(entry); currentId = entry.id; renderList();
+      if (!saved) msg.textContent = "Không lưu được vào trình duyệt này (bộ nhớ bị chặn hoặc đầy).";
+      const text = await insight(SAMPLE, q, r, t => { const el = $("#ansText"); if (el) el.textContent = t; });
+      Hist.update(entry.id, { insight: text });
     } catch (e) {
       status.textContent = sampleErr(e);
       const el = $("#ansText"); if (el && e.text) el.textContent = e.text;
+      if (entry && e.text) Hist.update(entry.id, { insight: e.text });
     } finally { btn.disabled = false; stop.hidden = true; }
   };
 })();

@@ -24,6 +24,54 @@
    "2014": 0
   }
  },
+ "missing": {
+  "fuel_q1_2014": {
+   "Điền 0": 2315,
+   "Xóa dòng thiếu": 2949,
+   "Điền median": 3244,
+   "Điền mean": 3538
+  },
+  "fuel_q1_2014_vs0": {
+   "Điền 0": 0,
+   "Xóa dòng thiếu": 27,
+   "Điền median": 40,
+   "Điền mean": 53
+  },
+  "fuel14_mean": 5686,
+  "fuel14_median": 4320,
+  "fuel14_q1_reporter_median": 2400,
+  "sd14_obs": 5703,
+  "sd14_meanfill": 5451,
+  "sd14_change": -4.4,
+  "asset_allzero": 2,
+  "asset_blank": 284,
+  "q1_items": {
+   "0": 0.0,
+   "1": 5.8,
+   "2": 8.9,
+   "3": 11.3
+  },
+  "asset_blank_q1": 3.3,
+  "asset_blank_q4": 0.1,
+  "asset_blank_noelec": 33,
+  "q1_noelec": 8,
+  "gap": {
+   "TV": [
+    19.0,
+    16.6
+   ],
+   "Điện thoại": [
+    33.1,
+    31.1
+   ],
+   "Xe máy": [
+    29.3,
+    27.4
+   ]
+  },
+  "fhouse_zero": 88,
+  "house_na": 34
+ },
  "A1": {
   "ratio": {
    "Toàn quốc": 5.61,

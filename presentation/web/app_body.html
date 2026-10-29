@@ -57,7 +57,7 @@
       <p class="sec-lead">Gõ câu hỏi bằng tiếng Việt. Claude chuyển câu hỏi thành một phép tính; trang tự tính trên 28.196 hộ, vẽ biểu đồ, rồi Claude viết nhận xét từ đúng bảng số đó. Lần hỏi đầu, trình duyệt sẽ xin phép dùng Claude trên tài khoản của bạn.</p>
       <div class="ask">
         <div class="ask-row">
-          <textarea id="askInput" placeholder="Ví dụ: Tỉnh nào hộ nghèo khó đủ sống nhất? · Chi giáo dục theo Q ở thành thị và nông thôn · Tỷ lệ hộ có ô tô theo nhóm tỉnh qua các năm" aria-label="Câu hỏi về dữ liệu"></textarea>
+          <textarea id="askInput" placeholder="Ví dụ: Hộ Q1 ở nhóm tỉnh nào khó trang trải thiết yếu nhất? · Chi giáo dục theo Q ở thành thị và nông thôn · Tỷ lệ hộ có ô tô theo nhóm tỉnh qua các năm" aria-label="Câu hỏi về dữ liệu"></textarea>
           <div style="display:flex;flex-direction:column;gap:8px">
             <button class="btn pri" id="askBtn" type="button">Hỏi</button>
             <button class="btn sec" id="stopBtn" type="button" hidden>Dừng</button>
@@ -66,7 +66,22 @@
         <div class="sugs" id="sugs"></div>
         <div class="ask-status" id="askStatus" role="status" aria-live="polite"></div>
         <div class="answer" id="answer" hidden></div>
-        <div class="history" id="history"></div>
+        <section class="hist" aria-labelledby="histTitle">
+          <div class="hist-head">
+            <h4 id="histTitle">Lịch sử câu hỏi <span class="small" id="histCount"></span></h4>
+            <label class="hist-name" for="histName">Tên của bạn <input id="histName" type="text" maxlength="40" placeholder="để teammate biết ai hỏi"></label>
+          </div>
+          <p class="small" id="histNote">Mỗi câu hỏi được lưu trong trình duyệt của bạn (không gửi đi đâu). Bấm vào một câu để xem lại biểu đồ và nhận xét, không tốn lượt Claude. Tải file lịch sử để gửi cho nhóm; nhập file của bạn khác để xem chung.</p>
+          <div class="hist-tools">
+            <button class="btn sec" id="histJson" type="button" hidden>Tải lịch sử (.json)</button>
+            <button class="btn sec" id="histCsv" type="button" hidden>Tải bảng (.csv, mở bằng Excel)</button>
+            <label class="btn sec" for="histFile">Nhập file lịch sử (.json)</label>
+            <input id="histFile" type="file" accept=".json,application/json" hidden>
+            <button class="btn sec" id="histClear" type="button">Xóa hết</button>
+          </div>
+          <div class="ask-status" id="histMsg" role="status" aria-live="polite"></div>
+          <ol class="hist-list" id="histList"></ol>
+        </section>
       </div>
     </div>
   </section>

@@ -1,0 +1,1035 @@
+% =====================================================================
+%  BÁO CÁO PHÂN TÍCH VHLSS 2010 · 2012 · 2014
+%    cd presentation && xelatex bao_cao.tex && xelatex bao_cao.tex
+%  Toàn bộ số liệu và hình trong báo cáo do notebook ../report_EDA.ipynb tạo ra
+%  Hình: figs_nb/h01 ... h25 (png)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{vietnamese}
+\setmainfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Regular, BoldFont=*-SemiBold, ItalicFont=*-Italic, BoldItalicFont=*-SemiBold]
+\setsansfont{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Medium, BoldFont=*-Bold, ItalicFont=*-Italic]
+\newfontfamily\heavy{BeVietnamPro}[Path=fonts/, Extension=.ttf, UprightFont=*-Bold]
+\usepackage[a4paper,top=2.3cm,bottom=2.3cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{booktabs,tabularx,array,colortbl,multirow}
+\usepackage{graphicx,float,amsmath}
+\usepackage[most]{tcolorbox}
+\usepackage[labelfont={bf,small},textfont=small,labelsep=period]{caption}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{ink}{HTML}{1E2233}\definecolor{ink2}{HTML}{555B70}\definecolor{muted}{HTML}{8A90A3}
+\definecolor{hair}{HTML}{E6E8F0}
+\definecolor{blue}{HTML}{41559E}\definecolor{coral}{HTML}{9E4E2E}\definecolor{teal}{HTML}{1B6A56}
+\definecolor{amber}{HTML}{85631A}
+\definecolor{tintA}{HTML}{E6EEFA}\definecolor{tintC}{HTML}{DFF2EB}\definecolor{tintD}{HTML}{FBF2DC}
+\definecolor{tintN}{HTML}{EEF0F5}
+
+\color{ink}
+\titleformat{\section}{\Large\heavy\color{blue}}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{ink2}}{\thesubsubsection.}{0.5em}{}
+\titlespacing{\section}{0pt}{16pt}{8pt}
+\titlespacing{\subsection}{0pt}{12pt}{5pt}
+\setlength{\parskip}{5pt}\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2.5em}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4.5pt}
+\arrayrulecolor{hair}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} Báo cáo VHLSS 2010·2012·2014}
+\fancyhead[R]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newtcolorbox{ct}[1][Công thức]{enhanced, colback=tintN, colframe=tintN, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{ink2}#1}, coltitle=ink2, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newtcolorbox{kl}[1][Kết luận]{enhanced, colback=tintC, colframe=tintC, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{teal}#1}, coltitle=teal, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newtcolorbox{luuy}[1][Lưu ý]{enhanced, colback=tintD, colframe=tintD, boxrule=0pt, arc=4pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt, fontupper=\small,
+  title={\bfseries\color{amber}#1}, coltitle=amber, fonttitle=\small\bfseries, attach title to upper=\par\vspace{2pt}}
+\newcommand{\ra}{$\rightarrow$}
+\newcommand{\n}[1]{\textbf{#1}}
+\newcommand{\hinh}[3]{\begin{figure}[H]\centering\includegraphics[width=#2\linewidth]{figs_nb/#1.png}\caption{#3}\label{fig:#1}\end{figure}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2cm}
+{\footnotesize\color{blue}\MakeUppercase{Báo cáo phân tích dữ liệu — thống kê mô tả}\par}
+\vspace{10pt}
+{\fontsize{25}{30}\selectfont\heavy\color{ink} Thu nhập, chi tiêu và tài sản\\của hộ gia đình Việt Nam\par}
+\vspace{10pt}
+{\large\color{ink2} Khảo sát Mức sống Hộ gia đình (VHLSS) 2010 · 2012 · 2014\par}
+\vspace{20pt}
+{\color{ink2} 28.196 hộ \quad·\quad 63 tỉnh/thành \quad·\quad 3 đợt khảo sát\par}
+\vspace{24pt}
+\begin{tcolorbox}[colback=tintN, colframe=tintN, boxrule=0pt, arc=5pt, width=0.88\linewidth, left=14pt, right=14pt, top=10pt, bottom=10pt]
+\small
+\textbf{Câu hỏi nghiên cứu.} Trong bốn năm 2010–2014, thu nhập của hộ gia đình Việt Nam tăng lên. Câu hỏi của báo cáo là: khoảng cách giữa hộ giàu và hộ nghèo thay đổi ra sao, phần thu nhập tăng thêm đó được tiêu vào đâu, và cuối cùng đọng lại thành tài sản gì?\par
+\vspace{6pt}
+\textbf{Bố cục.} Phần 1 mô tả dữ liệu, phần 2 trình bày cách xử lý dữ liệu và chọn thước đo, phần 3 phân tích theo ba chủ đề \emph{thu nhập – chi tiêu – tài sản}. Mỗi mục phân tích đều gồm bốn thành phần: \textbf{công thức tính}, \textbf{biểu đồ}, \textbf{mô tả} và \textbf{kết luận}.\par
+\vspace{6pt}
+\textbf{Mã nguồn.} Toàn bộ số liệu và biểu đồ trong báo cáo được tạo ra từ tệp \texttt{report\_EDA.ipynb} đi kèm, chạy trực tiếp trên dữ liệu gốc đã ghép ba đợt khảo sát.
+\end{tcolorbox}
+\vspace{20pt}
+{\color{muted} Thành viên nhóm: …………………………………………………\par\vspace{4pt} Lớp: ……………\qquad Ngày nộp: ……/……/………\par}
+\end{center}
+\newpage
+
+{\small\tableofcontents}
+\newpage
+
+% =====================================================================
+\section{Tổng quan dữ liệu}
+
+\subsection{Nguồn và cấu trúc mẫu}
+
+Dữ liệu là Khảo sát Mức sống Hộ gia đình Việt Nam (VHLSS) của Tổng cục Thống kê, ba đợt 2010, 2012 và 2014. Đây là dữ liệu \n{thứ cấp}: mẫu lớn, có tính đại diện quốc gia, nhưng nhóm không hỏi thêm được ngoài các biến đã có.
+
+\begin{table}[H]\centering\small
+\caption{Quy mô mẫu theo từng đợt khảo sát}
+\begin{tabular}{lrrrrrr}
+\toprule
+Năm & Số hộ & Số người & Người/hộ & Hộ thành thị & Hộ nông thôn & \% thành thị\\
+\midrule
+2010 & 9.399 & 36.999 & 3,94 & 2.649 & 6.750 & 28,2\%\\
+2012 & 9.399 & 36.655 & 3,90 & 2.703 & 6.696 & 28,8\%\\
+2014 & 9.398 & 36.080 & 3,84 & 2.781 & 6.617 & 29,6\%\\
+\midrule
+\textbf{Cộng} & \textbf{28.196} & \textbf{109.734} & \textbf{3,89} & \textbf{8.133} & \textbf{20.063} & \textbf{28,8\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h01_co_mau}{0.72}{Số hộ được khảo sát theo năm và khu vực. Cỡ mẫu ba đợt gần như bằng nhau nên so sánh giữa các năm không bị lệch do số lượng.}
+
+\textbf{Mô tả.} Ba đợt có cỡ mẫu gần như bằng nhau (9.399 – 9.399 – 9.398 hộ) và cùng phủ 63 tỉnh. Tỷ lệ hộ thành thị trong mẫu tăng nhẹ từ 28,2\% lên 29,6\%. Quy mô hộ giảm dần: trung bình \n{3,94} người/hộ năm 2010 xuống \n{3,84} người năm 2014. Các chỉ tiêu ở phần sau đều tính theo đầu người nên thay đổi này có ảnh hưởng.
+
+\begin{luuy}
+Ba đợt khảo sát là \n{ba mẫu khác nhau}, không có mã hộ để nối. Vì vậy mọi so sánh “2010 so với 2014” trong báo cáo là so sánh \emph{giữa các nhóm hộ}, không phải theo dõi cùng một hộ qua các năm.
+\end{luuy}
+
+\subsection{Cỡ mẫu của từng tỉnh}
+
+Trước khi phân tích theo tỉnh, phải kiểm tra mỗi tỉnh có đủ hộ để kết luận hay không.
+
+\hinh{h02_mau_theo_tinh}{0.72}{Phân bố số hộ khảo sát của 63 tỉnh khi gộp cả ba đợt.}
+
+\textbf{Mô tả.} Gộp ba năm, mỗi tỉnh có từ \n{306} đến \n{1.260} hộ, trung vị \n{414} hộ. Năm tỉnh ít mẫu nhất đều đúng 306 hộ là Cao Bằng, Bắc Kạn, Lào Cai, Kon Tum, Lai Châu. Nếu chỉ xét riêng năm 2014, tỉnh ít nhất vẫn có \n{102} hộ và trung vị là 138 hộ; \n{không tỉnh nào dưới 100 hộ}.
+
+\begin{kl}
+Cỡ mẫu đủ để so sánh giữa các tỉnh ở mức tổng quát. Nhưng chia nhỏ hơn nữa, ví dụ “hộ nghèo của một tỉnh trong một năm”, thì cỡ mẫu chỉ còn vài chục hộ. Với $n = 102$, sai số chuẩn của một tỷ lệ quanh 50\% đã là $\sqrt{0{,}5 \times 0{,}5/102} \approx \n{5\%}$, nghĩa là chênh lệch 10 điểm \% giữa hai tỉnh có thể chỉ do ngẫu nhiên. Báo cáo vì vậy chỉ xếp hạng tỉnh khi gộp cả ba năm, và luôn ghi kèm số hộ.
+\end{kl}
+
+% =====================================================================
+\section{Xử lý dữ liệu}
+
+\subsection{Dữ liệu thiếu}
+
+\begin{table}[H]\centering\small
+\caption{Số ô trống của từng biến theo năm (chỉ liệt kê các biến có ô trống)}
+\begin{tabular}{lrrrr}
+\toprule
+Biến & 2010 & 2012 & 2014 & Tổng\\
+\midrule
+\texttt{fuel} — chi nhiên liệu & 3 & 1 & \textbf{813} & \textbf{817}\\
+\texttt{nfood} — chi ngoài ăn uống & 0 & 1 & 0 & 1\\
+\texttt{fhouse} — chi sửa nhà & 9 & 7 & 7 & 23\\
+\texttt{house} — giá trị nhà & 9 & 7 & 7 & 23\\
+9 biến tài sản (\texttt{oto} … \texttt{hmachine}) & 177 & 63 & 44 & 284\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h03_o_trong}{0.72}{Tỷ lệ ô trống theo biến và theo năm. Chỉ có một ô thực sự đáng lo: chi nhiên liệu năm 2014.}
+
+\textbf{Cách xử lý và lý do:}
+
+\begin{itemize}[leftmargin=1.3em,itemsep=4pt,topsep=2pt]
+\item \n{Giá trị âm} (36 hộ, ở các biến tài sản): là lỗi nhập liệu vì tài sản không thể âm \ra\ đưa về 0.
+\item \n{Thiếu toàn bộ khối tài sản} (284 hộ): không thể suy ra giá trị \ra\ \n{loại các hộ này khi phân tích tài sản} (phần 3.3), nhưng vẫn giữ trong phân tích thu nhập và chi tiêu vì các biến đó không thiếu.
+\item \n{Thiếu chi sửa nhà, chi ngoài ăn uống} (dưới 10 hộ mỗi năm): ít và rải rác \ra\ điền 0.
+\item \n{Thiếu chi nhiên liệu năm 2014} (813 hộ = 8,7\% mẫu năm đó): trường hợp duy nhất đủ lớn để làm lệch kết quả, trình bày riêng ngay dưới đây.
+\end{itemize}
+
+\subsubsection{Trường hợp chi nhiên liệu năm 2014}\label{sec:fuel}
+
+\begin{table}[H]\centering\small
+\caption{Biến \texttt{fuel} qua ba đợt khảo sát}
+\begin{tabular}{lrrr}
+\toprule
+& 2010 & 2012 & 2014\\
+\midrule
+Số hộ bỏ trống & 3 & 1 & \textbf{813}\\
+Số hộ khai 0 đồng & 40 & 199 & \textbf{0}\\
+Chi nhiên liệu trung vị của hộ có chi (nghìn đồng) & 2.904 & 4.080 & 4.320\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Hai dòng đầu của bảng cho thấy điều quan trọng: năm 2014 \n{không một hộ nào khai 0 đồng}, trong khi hai đợt trước có 40 và 199 hộ khai 0. Nhiều khả năng bộ dữ liệu năm 2014 ghi giá trị “không chi” thành ô trống thay vì số 0.
+
+Chân dung hai nhóm hộ cũng trùng khớp: 813 hộ bỏ trống năm 2014 có \n{89\% ở nông thôn} và thu nhập trung vị \n{11,2} triệu đồng/người/năm; 199 hộ khai 0 đồng năm 2012 có 86\% ở nông thôn và thu nhập trung vị 10,1 triệu. Đây là nhóm hộ nghèo nông thôn dùng củi, rơm rạ tự kiếm nên không phát sinh chi tiền mặt cho nhiên liệu.
+
+\textbf{Quyết định:} điền 0 cho 813 ô trống này và \n{không loại hộ nào}. Nếu loại, mẫu năm 2014 mất 8,7\%, trong đó mất tới một phần năm số hộ thuộc nhóm nghèo nhất, lệch nặng hơn nhiều so với việc điền 0.
+
+\begin{luuy}[Kiểm tra độ nhạy]
+Tính lại theo cách xử lý khác để xem kết luận có đổi không: nếu \emph{loại} 813 hộ này thì tỷ lệ hộ nhóm Q1 chi vượt thu năm 2014 là \n{65,5\%} thay vì \n{61,9\%}, và tỷ trọng chi nhiên liệu là 6,8\% thay vì 6,6\%. Các kết luận khác của báo cáo không đổi. Riêng nhận định “tỷ lệ hộ Q1 chi vượt thu đang giảm dần” thì không vững, nên báo cáo chỉ khẳng định mức khoảng 62–66\% của năm 2014, không khẳng định xu hướng giảm.
+\end{luuy}
+
+\subsection{Biến dẫn xuất và cách chia nhóm}
+
+\begin{ct}
+Thu nhập bình quân đầu người: \quad $\text{Inc\_head}_i = \dfrac{\text{income}_i}{\text{size}_i}$
+\smallskip
+
+Tổng chi tiêu của hộ: \quad $\text{tot}_i = \sum_{j=1}^{13} x_{ij}$ \quad (13 khoản chi trong năm)
+\smallskip
+
+Chi thiết yếu / chưa thiết yếu, chia theo thứ bậc nhu cầu:
+\[\text{nec}_i = \!\!\sum_{j \,\in\, \text{tầng 1–2}}\!\! x_{ij}, \qquad \text{unn}_i = \!\!\sum_{j \,\in\, \text{tầng 3–5}}\!\! x_{ij}\]
+\emph{Tầng 1–2 (10 khoản)}: gạo, thực phẩm khác, nước, điện, nhiên liệu, phí rác, thuốc – viện phí, bảo hiểm y tế, chi hỗ trợ khám chữa bệnh, sửa chữa nhà. \quad \emph{Tầng 3–5 (3 khoản)}: chi ngoài ăn uống (quần áo, đi lại, giải trí), giáo dục, thuốc lá.
+\smallskip
+
+Hộ chi vượt thu: \quad $\text{tot}_i > \text{income}_i$
+\end{ct}
+
+\n{Chia nhóm thu nhập Q1–Q4:} tứ phân vị của \texttt{Inc\_head} tính \n{riêng cho từng năm}, nên mỗi nhóm luôn chứa đúng 25\% số hộ của năm đó. Ngưỡng chia (triệu đồng/người/năm):
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lrrr}
+\toprule
+& Ngưỡng Q1/Q2 & Trung vị & Ngưỡng Q3/Q4\\
+\midrule
+2010 & 7,8 & 13,2 & 22,0\\
+2012 & 11,4 & 19,3 & 30,8\\
+2014 & 13,9 & 23,6 & 37,3\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Vì ngưỡng được tính lại mỗi năm, “hộ Q1 năm 2014” không phải cùng tập hộ với “hộ Q1 năm 2010”, và ngưỡng để vào nhóm cũng cao dần theo thời gian.
+
+\subsection{Dùng trung bình hay trung vị làm thước đo?}\label{sec:median}
+
+\begin{ct}
+\[\bar{x}=\frac{1}{n}\sum_{i=1}^{n} x_i \qquad
+S=\sqrt{\frac{\sum (x_i-\bar{x})^2}{n-1}} \qquad
+CV=\frac{S}{\bar{x}} \qquad
+\text{Skew}=\frac{E\big(X-E(X)\big)^3}{\sigma^3}\]
+Trung vị là giá trị đứng giữa khi sắp xếp dãy số theo thứ tự tăng dần.
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Thu nhập bình quân đầu người năm 2014 (triệu đồng/người/năm)}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Nhóm & $n$ & Mean & Median & $S$ & CV & Skew & \% hộ dưới mean\\
+\midrule
+Q1 & 2.350 & 9,04 & 9,18 & 2,90 & 32,1\% & $-0,22$ & 48,1\%\\
+Q2 & 2.349 & 18,70 & 18,66 & 2,80 & 15,0\% & 0,04 & 50,7\%\\
+Q3 & 2.349 & 29,82 & 29,56 & 3,86 & 12,9\% & 0,19 & 52,3\%\\
+Q4 & 2.350 & 62,34 & 51,53 & 41,52 & 66,6\% & \textbf{9,82} & \textbf{68,9\%}\\
+\midrule
+\textbf{Toàn quốc} & \textbf{9.398} & \textbf{29,97} & \textbf{23,61} & \textbf{29,02} & \textbf{96,8\%} & \textbf{9,13} & \textbf{63,5\%}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h04_phan_phoi_Q}{1.0}{Histogram phân phối thu nhập của từng nhóm năm 2014. Đường xanh là trung vị, đường cam là trung bình. Trục hoành mỗi ô cắt ở bách phân vị 99 để nhìn được hình dạng.}
+
+\hinh{h05_boxplot_Q}{0.72}{Biểu đồ hộp (boxplot) của bốn nhóm trên cùng một trục (đã cắt trục tung ở 120 triệu để nhìn rõ hộp của Q1–Q3).}
+
+\textbf{Mô tả.} Ba nhóm Q1, Q2, Q3 có phân phối gần như cân đối: độ lệch lần lượt $-0{,}22$; $0{,}04$; $0{,}19$, mean và median gần trùng nhau, tỷ lệ hộ nằm dưới mean xấp xỉ 50\% đúng như phân phối đối xứng. Riêng Q4 lệch phải rất mạnh: độ lệch \n{9,82}, mean 62,34 cao hơn median 51,53 tới 21\%, và \n{68,9\%} số hộ Q4 có thu nhập thấp hơn chính mức trung bình của nhóm mình. Hệ số biến thiên cũng phản ánh điều đó: 12,9–15,0\% ở Q2, Q3 nhưng \n{66,6\%} ở Q4.
+
+Lý do nằm ở cách chia nhóm: ba nhóm dưới bị chặn hai đầu bởi ngưỡng tứ phân vị nên không có đuôi, còn nhóm trên cùng để mở nên vài chục hộ rất giàu kéo trung bình đi.
+
+\textbf{Chọn sai thước đo thì kết luận lệch bao nhiêu?}
+
+\begin{table}[H]\centering\small
+\caption{Khoảng cách Q4/Q1 đo bằng hai thước đo}
+\begin{tabular}{lrr}
+\toprule
+Năm & Theo median & Theo mean\\
+\midrule
+2010 & 5,75 lần & 7,66 lần\\
+2012 & 5,73 lần & 7,05 lần\\
+2014 & \textbf{5,61 lần} & \textbf{6,90 lần}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Năm 2014, khoảng cách giàu nghèo là \n{5,61 lần} theo median nhưng \n{6,90 lần} theo mean, chênh nhau 1,3 lần. Kiểm chứng thêm: chỉ cần bỏ 1\% hộ có thu nhập cao nhất của Q4, mean của nhóm này tụt từ \n{62,3} xuống \n{59,7} triệu, trong khi median hầu như không đổi (51,5 triệu).
+
+\begin{kl}
+Báo cáo dùng \n{median} cho mọi biến tiền tệ, vì một thước đo mà 1\% số quan sát làm dịch chuyển được thì không mô tả đúng “hộ điển hình”. Mean chỉ được dùng khi bản chất phép tính là cộng dồn (tính tỷ trọng, tổng chi của cả nhóm) hoặc với biến không có đuôi dài như số người trong hộ.
+\end{kl}
+
+% =====================================================================
+\section{Phân tích chính}
+
+\subsection{Thu nhập}
+
+\subsubsection{Thu nhập của bốn nhóm hộ qua ba năm}
+
+\begin{ct}
+$M_{Q,t}$ = trung vị thu nhập/người của nhóm $Q$ trong năm $t$. \quad
+Tốc độ tăng: \quad $g_Q = \dfrac{M_{Q,2014}-M_{Q,2010}}{M_{Q,2010}} \times 100\%$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Trung vị thu nhập bình quân đầu người (triệu đồng/người/năm)}
+\begin{tabular}{lrrrr}
+\toprule
+Nhóm & 2010 & 2012 & 2014 & Tăng 2010–2014\\
+\midrule
+Q1 & 5,38 & 7,49 & 9,18 & $+70{,}5\%$\\
+Q2 & 10,34 & 15,13 & 18,66 & $\mathbf{+80{,}5\%}$\\
+Q3 & 16,78 & 24,12 & 29,56 & $+76{,}1\%$\\
+Q4 & 30,93 & 42,90 & 51,53 & $+66{,}6\%$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h06_thu_nhap_Q}{0.95}{Trái: mức thu nhập trung vị của bốn nhóm. Phải: cùng dữ liệu nhưng quy về chỉ số với năm 2010 = 100, để so tốc độ tăng thay vì so mức.}
+
+\textbf{Mô tả.} Cả bốn nhóm đều đi lên qua từng đợt khảo sát, không nhóm nào đi xuống. Hộ nghèo nhất cũng tăng thu nhập \n{70,5\%} sau bốn năm. Nhưng bốn đường ở hình trái không hội tụ mà ngày càng tách xa nhau theo chiều dọc.
+
+Hai nửa của hình trả lời hai câu hỏi khác nhau, và rất dễ nhầm:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{Hình trái đo mức}: độ dốc của mỗi đường chính là \emph{số tiền tăng thêm}. Đường Q4 dốc nhất vì nhóm này tăng \n{20,6} triệu đồng/người, trong khi Q1 chỉ tăng \n{3,8} triệu.
+\item \n{Hình phải đo tốc độ}: quy tất cả về cùng điểm xuất phát 100 nên độ dốc là \emph{phần trăm tăng}. Lúc này thứ tự đảo lại: \n{Q2 vươn lên cao nhất} (chỉ số 180,5) còn \n{Q4 thấp nhất} (166,6).
+\end{itemize}
+
+Nhóm giàu nhất tăng nhiều tiền nhất nhưng tăng chậm nhất so với nền của chính mình. Mục~3.1.4 nói kỹ hơn về tốc độ này.
+
+\subsubsection{Khoảng cách giàu nghèo: đo bằng tiền hay đo bằng số lần?}
+
+\begin{ct}
+Khoảng cách tuyệt đối (tính bằng tiền): \quad $D_t = M_{Q4,t} - M_{Q1,t}$
+\smallskip
+
+Khoảng cách tương đối (tính bằng số lần): \quad $R_t = \dfrac{M_{Q4,t}}{M_{Q1,t}}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Hai cách đo khoảng cách giữa nhóm giàu nhất và nghèo nhất}
+\begin{tabular}{lrrrr}
+\toprule
+Năm & Median Q1 & Median Q4 & Hiệu $D_t$ & Tỷ số $R_t$\\
+\midrule
+2010 & 5,38 & 30,93 & 25,55 triệu & 5,75 lần\\
+2012 & 7,49 & 42,90 & 35,41 triệu & 5,73 lần\\
+2014 & 9,18 & 51,53 & \textbf{42,35 triệu} & \textbf{5,61 lần}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h07_khoang_cach}{0.86}{Cùng một dữ liệu, hai cách đo cho hai câu trả lời ngược chiều nhau.}
+
+\textbf{Mô tả.} Tính bằng tiền, Q4 ngày càng cách xa Q1: hiệu số tăng từ \n{25,6} lên \n{42,4} triệu đồng/người/năm, tức rộng thêm 66\% sau bốn năm. Tính bằng số lần thì ngược lại: tỷ số Q4/Q1 giảm nhẹ từ 5,75 xuống \n{5,61} lần.
+
+Hai kết quả này không mâu thuẫn. Khi các nhóm tăng xấp xỉ cùng một tỷ lệ phần trăm thì tỷ số giữ gần như nguyên, nhưng cùng một phần trăm ấy áp lên hai nền rất khác nhau: 66,6\% của 30,93 triệu là 20,6 triệu, còn 70,5\% của 5,38 triệu chỉ là 3,8 triệu.
+
+\begin{kl}
+Khoảng cách giàu nghèo vẫn còn rất lớn. Mức độ chênh lệch chỉ thu hẹp không đáng kể (5,75 \ra\ 5,61 lần, tức 2,4\% sau bốn năm), trong khi số tiền chênh lệch thực tế mà một hộ cảm nhận được thì tăng thêm \n{16,8 triệu đồng} mỗi người mỗi năm.
+\end{kl}
+
+\subsubsection{Chia 100 đồng thu nhập của cả nước cho bốn nhóm}
+
+Hai cách đo ở trên đều chỉ so hai nhóm ở hai đầu. Cách thứ ba nhìn cả bốn nhóm cùng lúc: gom toàn bộ thu nhập của mẫu lại thành 100 đồng thì mỗi nhóm nhận được bao nhiêu?
+
+\begin{ct}
+Tỷ trọng thu nhập của nhóm $Q$: \quad
+$s_Q = \dfrac{\sum_{i \in Q} \text{income}_i}{\sum_i \text{income}_i} \times 100\%$
+\smallskip
+
+Tỷ trọng dân số của nhóm $Q$: \quad
+$p_Q = \dfrac{\sum_{i \in Q} \text{size}_i}{\sum_i \text{size}_i} \times 100\%$
+\smallskip
+
+Lưu ý: mỗi nhóm luôn có đúng \n{25\% số hộ}, nhưng \emph{không} phải 25\% số người, vì quy mô hộ khác nhau giữa các nhóm.
+\end{ct}
+
+\hinh{h07b_pie_thu_nhap}{1.0}{Mỗi hình tròn là 100 đồng thu nhập của cả nước trong một năm, chia cho bốn nhóm hộ.}
+
+\begin{table}[H]\centering\small
+\caption{Tỷ trọng thu nhập của từng nhóm qua ba năm, kèm tỷ trọng dân số năm 2014 (\%)}
+\begin{tabular}{lrrrr}
+\toprule
+Nhóm & \% thu nhập 2010 & \% thu nhập 2012 & \% thu nhập 2014 & \% dân số 2014\\
+\midrule
+Q1 & 8,6 & 8,5 & \textbf{8,4} & \textbf{26,8}\\
+Q2 & 15,6 & 16,4 & 16,8 & 25,5\\
+Q3 & 24,5 & 26,0 & 26,3 & 25,1\\
+Q4 & 51,4 & 49,1 & \textbf{48,4} & \textbf{22,5}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Ba hình tròn gần như giống nhau. Sau bốn năm, cách chia thu nhập giữa bốn nhóm hầu như không đổi. Nhóm Q1 nhận \n{8,6\%} năm 2010 và \n{8,4\%} năm 2014, tức còn nhỏ đi một chút. Nhóm Q4 nhận \n{51,4\%} rồi \n{48,4\%}, tức có giảm 3 điểm \%, nhưng phần giảm ấy chuyển sang Q2 (15,6 \ra\ 16,8\%) và Q3 (24,5 \ra\ 26,3\%) chứ không xuống tới nhóm đáy.
+
+Đặt cạnh cột cuối cùng thì chênh lệch mới rõ: mỗi nhóm có đúng 25\% số hộ, nhưng hộ nghèo đông người hơn (4,11 người so với 3,46 người ở Q4) nên nhóm Q1 chiếm \n{26,8\%} dân số. Vậy là hơn một phần tư dân số chỉ nhận được \n{8,4\%} thu nhập, trong khi nhóm Q4 chiếm 22,5\% dân số và nhận gần một nửa. Nửa khá giả (Q3 + Q4) giữ \n{74,8\%}.
+
+\begin{kl}
+Cứ 100 đồng thu nhập của cả nước thì nhóm nghèo nhất, tuy chiếm hơn một phần tư dân số, chỉ nhận được hơn \n{8 đồng}. Con số đó không cải thiện sau bốn năm. Cơ cấu có đổi một chút, nhưng phần đổi đi vào \n{nhóm giữa} chứ không xuống nhóm đáy.
+\end{kl}
+
+\subsubsection{Nhóm nào tăng nhanh nhất?}
+
+\hinh{h08_toc_do_tang}{0.55}{Tốc độ tăng trung vị thu nhập giai đoạn 2010–2014 của từng nhóm, đo bằng phần trăm so với chính mức của nhóm đó năm 2010.}
+
+\textbf{Mô tả.} Nhóm tăng nhanh nhất không phải nhóm nghèo nhất mà là \n{Q2} với $+80{,}5\%$, tiếp theo là Q3 ($+76{,}1\%$). Hai nhóm ở hai đầu tăng chậm hơn: Q1 $+70{,}5\%$ và Q4 $+66{,}6\%$.
+
+Con số này \emph{không} mâu thuẫn với nửa trái của Hình~\ref{fig:h06_thu_nhap_Q}, nơi đường Q4 dốc nhất: dốc ở đó là số tiền tăng thêm (Q4 $+20{,}6$ triệu so với Q1 $+3{,}8$ triệu), còn ở đây là phần trăm so với nền. Nhóm Q4 xuất phát từ 30,93 triệu nên $+20{,}6$ triệu chỉ tương đương $+66{,}6\%$; nhóm Q2 xuất phát từ 10,34 triệu nên $+8{,}3$ triệu đã là $+80{,}5\%$.
+
+\begin{kl}
+Bốn năm này có lợi nhất cho nhóm \n{cận nghèo và trung bình}, tức những hộ đã thoát mức đáy nhưng chưa tới mức khá. Nhóm nghèo nhất tăng chậm hơn cả nhóm liền kề, nên thoát khỏi đáy vẫn là phần khó nhất.
+\end{kl}
+
+\subsubsection{Nông thôn và thành thị}
+
+\begin{ct}
+Tỷ số chênh lệch vùng: \quad $\text{Ratio}_t = \dfrac{\text{median thu nhập/người thành thị}_t}{\text{median thu nhập/người nông thôn}_t}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Trung vị thu nhập bình quân đầu người theo khu vực (triệu đồng)}
+\begin{tabular}{lrrrr}
+\toprule
+Khu vực & 2010 & 2012 & 2014 & Tăng 2010–2014\\
+\midrule
+Thành thị & 21,12 & 28,88 & 34,72 & $+64{,}4\%$\\
+Nông thôn & 11,02 & 16,00 & 19,68 & $\mathbf{+78{,}6\%}$\\
+\midrule
+Tỷ số thành thị / nông thôn & 1,92 & 1,81 & \textbf{1,76} & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h09_khu_vuc}{0.72}{Trung vị thu nhập theo khu vực qua ba đợt khảo sát.}
+
+\textbf{Mô tả.} Nông thôn tăng nhanh hơn thành thị (\n{78,6\%} so với 64,4\%), nên tỷ số thành thị/nông thôn giảm đều qua ba đợt: 1,92 \ra\ 1,81 \ra\ \n{1,76} lần. Tuy nhiên mức thu nhập năm 2014 của nông thôn (19,68 triệu) vẫn \n{thấp hơn} mức mà thành thị đã đạt được từ năm 2010 (21,12 triệu).
+
+Vì sao khoảng cách lại dai dẳng như vậy? Nhìn vào cơ cấu nhóm thu nhập \emph{bên trong} mỗi khu vực sẽ rõ.
+
+\hinh{h09b_phan_bo_Q_khu_vuc}{0.62}{Cơ cấu bốn nhóm thu nhập bên trong từng khu vực, năm 2014. Mỗi cột cộng lại bằng 100\% số hộ của khu vực đó.}
+
+\textbf{Mô tả.} Ở thành thị, \n{45\%} số hộ thuộc nhóm giàu nhất Q4 và \n{76\%} thuộc nửa trên (Q3 + Q4). Ở nông thôn thì ngược lại: \n{61\%} thuộc nửa dưới (Q1 + Q2) và chỉ 17\% thuộc Q4. Riêng nhóm nghèo nhất, nông thôn chiếm \n{32\%} còn thành thị chỉ \n{7,5\%}, chênh hơn bốn lần.
+
+Cơ cấu này \n{gần như không đổi} trong bốn năm: năm 2010 thành thị cũng có 76\% hộ ở Q3 + Q4 và nông thôn 60\% ở Q1 + Q2. Đây là đặc điểm cấu trúc chứ không phải biến động nhất thời.
+
+\begin{kl}
+Nông thôn có tăng trưởng tốt hơn nhưng \n{chưa đuổi kịp}: sau bốn năm, nông thôn vẫn chưa bằng điểm xuất phát của thành thị bốn năm trước. Với tốc độ thu hẹp khoảng 0,08 lần mỗi hai năm, sẽ cần rất nhiều năm nữa để hai khu vực ngang nhau. Và vì cơ cấu nhóm thu nhập bên trong mỗi khu vực gần như đứng yên suốt giai đoạn, khoảng cách này mang tính cấu trúc, không tự mất đi chỉ nhờ thu nhập chung tăng lên.
+\end{kl}
+
+\subsubsection{Giữa các tỉnh}
+
+\hinh{h10_top10_tinh_tang}{0.72}{Mười tỉnh có trung vị thu nhập tăng nhanh nhất giai đoạn 2010–2014.}
+
+\textbf{Mô tả.} Dẫn đầu là \n{Điện Biên} ($+122{,}5\%$: 4,9 \ra\ 10,9 triệu), \n{Hòa Bình} ($+118{,}4\%$) và \n{Thái Nguyên} ($+117{,}1\%$). Phần lớn là tỉnh miền núi phía Bắc và Bắc Trung Bộ, xuất phát từ nền rất thấp. Điện Biên và Hà Giang chỉ khoảng 5 triệu đồng/người/năm vào năm 2010 nên cùng một mức tăng tuyệt đối nhỏ cũng tạo ra phần trăm lớn.
+
+\textbf{Có tỉnh nào thụt lùi không?} \n{Không có tỉnh nào} có trung vị thu nhập năm 2014 thấp hơn năm 2010. Tỉnh tăng chậm nhất là \n{Bắc Kạn} ($+14{,}8\%$: 9,1 \ra\ 10,4 triệu), sau đó là Vĩnh Long ($+31{,}9\%$) và Sơn La ($+32{,}6\%$).
+
+\begin{kl}
+Tăng trưởng thu nhập diễn ra ở \n{toàn bộ 63 tỉnh}, không nơi nào đi lùi. Nhưng tốc độ rất chênh lệch: từ $+14{,}8\%$ (Bắc Kạn) đến $+122{,}5\%$ (Điện Biên). Hai đầu bảng đều là tỉnh miền núi phía Bắc, nên “miền núi” không đồng nghĩa với tăng nhanh hay tăng chậm.
+\end{kl}
+
+
+\subsubsection{Kiểm chứng: đo thu nhập theo hộ hay theo đầu người?}
+
+Toàn bộ phần 3.1 ở trên dùng \n{thu nhập bình quân đầu người} (\texttt{Inc\_head}). Biến gốc \texttt{income} là thu nhập của cả hộ, và hai cách đo này không cho cùng một câu trả lời, vì hộ nghèo đông người hơn hộ giàu.
+
+\begin{ct}
+$\text{Inc\_head}_i = \dfrac{\text{income}_i}{\text{size}_i}$ \qquad với $\text{size}_i$ là số người trong hộ $i$.
+\end{ct}
+
+\hinh{h31_ho_vs_dau_nguoi}{1.0}{Trái: tỷ số Q4/Q1 theo hai cách đo. Phải: tốc độ tăng 2010–2014 của từng nhóm theo hai cách đo.}
+
+\begin{table}[H]\centering\small
+\caption{Trung vị thu nhập theo hai cách đo (triệu đồng/năm)}
+\begin{tabular}{lrrrcrr}
+\toprule
+& 2010 & 2012 & 2014 & & Tăng 2010–2014 & Q4/Q1 năm 2014\\
+\midrule
+\multicolumn{7}{l}{\textit{Theo đầu người}}\\
+\quad Q1 & 5,38 & 7,49 & 9,18 & & $+70{,}5\%$ & \\
+\quad Q4 & 30,93 & 42,90 & 51,53 & & $+66{,}6\%$ & \textbf{5,61}\\
+\multicolumn{7}{l}{\textit{Cả hộ}}\\
+\quad Q1 & 21,78 & 29,26 & 34,71 & & $+59{,}4\%$ & \\
+\quad Q4 & 110,03 & 151,22 & 177,10 & & $+61{,}0\%$ & \textbf{5,10}\\
+\midrule
+\multicolumn{7}{l}{\textit{Số người trung bình trong hộ}}\\
+\quad Q1 & 4,41 & 4,20 & 4,11 & & $-6{,}8\%$ & \\
+\quad Q4 & 3,49 & 3,51 & 3,46 & & $-0{,}9\%$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Hai cách đo thống nhất ở phần lớn kết luận nhưng lệch nhau ở hai chỗ.
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Mức chênh lệch nhỏ hơn khi đo theo hộ}: 5,10 lần thay vì 5,61 lần năm 2014. Hộ Q1 có 4,11 người còn hộ Q4 chỉ 3,46 người, nên thu nhập cả hộ của nhóm nghèo không thấp bằng thu nhập trên mỗi người.
+\item \n{Chiều của tỷ số đảo lại}: đo theo đầu người, tỷ số Q4/Q1 giảm từ 5,75 xuống 5,61; đo theo hộ, nó lại tăng từ 5,05 lên \n{5,10}. Nguyên nhân là quy mô hộ Q1 giảm 6,8\% trong bốn năm còn hộ Q4 gần như không đổi ($-0{,}9\%$), nên phép chia cho số người làm nhóm Q1 trông khá lên nhanh hơn thực tế.
+\item \n{Tốc độ tăng thấp hơn ở mọi nhóm} khi đo theo hộ (Q1: $+59{,}4\%$ thay vì $+70{,}5\%$), cũng vì hộ ngày càng ít người.
+\end{itemize}
+
+Những kết luận \emph{không} phụ thuộc vào cách đo: thứ tự bốn nhóm, việc cả bốn nhóm đều tăng, việc nhóm giữa tăng nhanh nhất còn Q1 và Q4 tăng chậm nhất, và việc khoảng cách tính bằng tiền nới rộng liên tục (88,3 \ra\ 142,4 triệu đồng/hộ/năm, tương ứng 25,5 \ra\ 42,4 triệu đồng/người/năm).
+
+\begin{luuy}
+Nhận định “khoảng cách giàu nghèo thu hẹp nhẹ 2,4\%” ở mục~3.1.2 \n{chỉ đúng khi đo theo đầu người}. Nếu đo bằng thu nhập cả hộ thì tỷ số đi theo chiều ngược lại. Báo cáo giữ cách đo theo đầu người vì đó là cơ sở chia nhóm Q1–Q4 và vì nó phản ánh mức sống của từng thành viên, nhưng không khẳng định khoảng cách đang thu hẹp: cả hai cách đo đều cho thấy mức thu hẹp, nếu có, là rất nhỏ so với mức nới rộng tính bằng tiền.
+\end{luuy}
+
+\subsection{Chi tiêu}
+
+\subsubsection{Thu nhập tăng thì chi tiêu vào đâu tăng, vào đâu giảm?}
+
+\begin{ct}
+Tỷ trọng của khoản chi $j$ trong năm $t$: \quad
+$s_{j,t} = \dfrac{\sum_i x_{ij,t}}{\sum_i \text{tot}_{i,t}} \times 100\%$
+\smallskip
+
+Thay đổi sau bốn năm: \quad $\Delta_j = s_{j,2014} - s_{j,2010}$ \quad (đơn vị: \n{điểm phần trăm})
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Tỷ trọng 13 khoản chi trong tổng chi tiêu cả nước (\%)}
+\begin{tabular}{lrrrr}
+\toprule
+Khoản chi & 2010 & 2012 & 2014 & $\Delta$ (điểm \%)\\
+\midrule
+Thực phẩm khác & 41,58 & 44,96 & 43,42 & $\mathbf{+1{,}84}$\\
+Chi ngoài ăn uống & 23,01 & 21,98 & 24,42 & $\mathbf{+1{,}41}$\\
+Điện & 2,37 & 2,54 & 3,02 & $+0{,}65$\\
+Bảo hiểm y tế & 0,32 & 0,36 & 0,47 & $+0{,}16$\\
+Nước & 0,37 & 0,35 & 0,45 & $+0{,}08$\\
+Thuốc, viện phí & 5,40 & 4,82 & 5,47 & $+0{,}06$\\
+Rác & 0,07 & 0,08 & 0,10 & $+0{,}02$\\
+Thuốc lá & 1,26 & 1,06 & 1,07 & $-0{,}18$\\
+Chi hỗ trợ khám chữa bệnh & 1,20 & 1,14 & 0,95 & $-0{,}26$\\
+Sửa chữa nhà & 2,67 & 1,80 & 2,28 & $-0{,}39$\\
+Giáo dục & 5,68 & 5,71 & 5,21 & $-0{,}47$\\
+Nhiên liệu & 7,58 & 7,49 & 6,57 & $-1{,}02$\\
+Gạo & 8,49 & 7,74 & 6,57 & $\mathbf{-1{,}92}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h11_thay_doi_ty_trong}{0.72}{Khoản nào chiếm chỗ nhiều hơn, khoản nào bị thu hẹp trong rổ chi sau bốn năm.}
+
+\textbf{Mô tả.} Tính bằng tiền thì mọi khoản đều tăng, vì tổng chi/người tăng khoảng 60\% trong bốn năm. Nhìn số tiền thì không rút ra được gì, phải xét tỷ trọng mới biết khoản nào chiếm chỗ nhiều hơn.
+
+Tăng mạnh nhất là \n{thực phẩm khác} ($+1{,}84$ điểm \%) và \n{chi ngoài ăn uống} gồm quần áo, đi lại, giải trí ($+1{,}41$ điểm \%). Giảm mạnh nhất là \n{gạo} ($-1{,}92$) và \n{nhiên liệu} ($-1{,}02$).
+
+\begin{kl}
+Khi thu nhập tăng, hộ gia đình chuyển tiền từ \n{lương thực cơ bản} (gạo) sang \n{thực phẩm đa dạng hơn} và các nhu cầu bậc cao hơn (quần áo, đi lại, giải trí). Hộ càng khá thì phần chi cho lương thực càng nhỏ. Riêng \n{giáo dục giảm 0,47 điểm \%}, phần này xem kỹ ở mục~3.2.5.
+\end{kl}
+
+\subsubsection{Rổ chi tiêu tập trung vào những khoản nào?}
+
+\hinh{h12_pareto}{0.86}{Biểu đồ Pareto: cột là tỷ trọng từng khoản, đường là tỷ trọng cộng dồn. Cột và đường dùng chung một trục vì cùng đơn vị \%.}
+
+\textbf{Mô tả.} Rổ chi rất tập trung. Bốn khoản đầu chiếm \n{81,0\%} tổng chi tiêu: thực phẩm khác (43,4\%), chi ngoài ăn uống (24,4\%), gạo (6,6\%) và nhiên liệu (6,6\%). Sáu khoản đầu chiếm 91,7\%; bảy khoản còn lại cộng lại chưa tới 9\%.
+
+Thứ tự bốn khoản lớn nhất \n{không đổi qua cả ba đợt khảo sát} (thực phẩm khác \ra\ chi ngoài ăn uống \ra\ gạo \ra\ nhiên liệu), nên chỉ cần một biểu đồ cho năm 2014 là đủ mô tả cả giai đoạn.
+
+\begin{kl}
+Cứ 100 đồng chi ra thì \n{68 đồng dành cho ăn uống} (thực phẩm khác + gạo) và các nhu cầu sinh hoạt hằng ngày. Giáo dục, y tế, bảo hiểm tuy quan trọng nhưng chiếm tỷ trọng nhỏ, nên các kết quả về chúng ở dưới đều là nói về một phần nhỏ của rổ chi.
+\end{kl}
+
+\subsubsection{Thuốc lá}
+
+\hinh{h13_thuoc_la}{0.86}{Trái: tỷ trọng chi thuốc lá trong rổ chi. Phải: tỷ lệ hộ có phát sinh khoản chi này.}
+
+\textbf{Mô tả.} Tỷ trọng chi thuốc lá giảm dần khi thu nhập tăng: năm 2014 là 1,29\% ở Q1 nhưng chỉ \n{0,83\%} ở Q4. Xu hướng theo thời gian cũng giảm ở mọi nhóm (Q4: 1,09\% năm 2010 xuống 0,83\% năm 2014).
+
+Tỷ lệ hộ có chi cho thuốc lá cũng giảm: ở Q1 từ \n{71,1\%} (2010) xuống \n{64,6\%} (2014); ở Q4 từ 64,8\% xuống 60,7\%. Ở cả ba năm, hộ nghèo đều có tỷ lệ hút thuốc cao hơn hộ giàu.
+
+\begin{kl}
+Thuốc lá là khoản mà hộ nghèo chi nhiều hơn cả về \emph{tỷ trọng} lẫn \emph{tỷ lệ hộ tham gia}. Hộ Q1 đang chi vượt thu, nên 1,3\% rổ chi cho thuốc lá là khoản có thể cắt giảm. Điểm tích cực là tỷ lệ hộ hút thuốc giảm ở tất cả các nhóm.
+\end{kl}
+
+\subsubsection{Gạo và thực phẩm khác}
+
+\hinh{h14_gao_nrice}{0.86}{Bản đồ nhiệt tỷ trọng chi cho gạo (trái) và thực phẩm khác (phải), theo nhóm thu nhập và theo năm.}
+
+\textbf{Mô tả.} Hai bản đồ nhiệt cho hai kết quả trái ngược:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{Gạo} giảm theo cả hai chiều. Theo nhóm: từ \n{13,0\%} (Q1) xuống \n{4,0\%} (Q4) năm 2014. Theo thời gian: Q1 giảm mạnh từ 17,4\% (2010) xuống 13,0\% (2014), trong khi Q4 gần như đứng yên (4,5\% xuống 4,0\%).
+\item \n{Thực phẩm khác} thì gần như \n{không đổi} giữa các nhóm: dao động 42,6–44,7\% ở cả bốn nhóm năm 2014.
+\end{itemize}
+
+\begin{kl}
+Tiền mua gạo gần như cố định bất kể hộ giàu hay nghèo, nên khi rổ chi phình to thì tỷ trọng gạo tự động nhỏ đi. Tỷ trọng chi cho gạo vì vậy là chỉ báo mức sống rất nhạy, nhìn con số này là đoán được hộ thuộc nhóm nào. Tỷ trọng thực phẩm nói chung thì ngược lại, không phân biệt được giàu nghèo, vì cái khác nhau nằm ở chất lượng thực phẩm chứ không ở tỷ lệ chi.
+\end{kl}
+
+\subsubsection{Giáo dục}
+
+\hinh{h15_giao_duc}{0.86}{Trái: tỷ trọng chi cho giáo dục. Phải: tỷ lệ hộ có phát sinh chi giáo dục.}
+
+\textbf{Mô tả.} Tỷ trọng chi giáo dục tăng theo thu nhập nhưng mức chênh không lớn: năm 2014 là \n{4,10\%} ở Q1 và \n{5,39\%} ở Q4. Tỷ lệ hộ có chi giáo dục thì ngược lại, Q4 thấp nhất (54,2\%) trong khi Q1 là 60,0\% và Q3 là 63,1\%.
+
+Theo thời gian, tỷ trọng giáo dục của Q1 \n{giảm} từ 4,65\% (2010) xuống 4,10\% (2014), và tỷ lệ hộ Q1 có chi giáo dục cũng giảm từ 67,7\% xuống 60,0\%.
+
+\begin{luuy}
+Tỷ lệ hộ Q4 có chi giáo dục thấp nhất \n{không} có nghĩa hộ giàu ít đầu tư cho con. Biến này chỉ ghi nhận hộ \emph{có phát sinh chi} hay không, mà hộ giàu có quy mô nhỏ hơn (3,46 người so với 4,11 người ở Q1) nên xác suất có trẻ đang đi học cũng thấp hơn. Dữ liệu không cho biết số trẻ trong độ tuổi đi học của từng hộ nên không tách được hai yếu tố này.
+\end{luuy}
+
+\begin{kl}
+Chi cho giáo dục của nhóm nghèo nhất \n{giảm cả về tỷ trọng lẫn tỷ lệ hộ tham gia} trong giai đoạn 2010–2014. Mục 3.2.7 cho thấy nhóm Q1 chi vượt thu và phải cắt giảm. Đặt cạnh nhau thì giáo dục là khoản bị hoãn khi ngân sách hộ căng thẳng.
+\end{kl}
+
+\subsubsection{Gánh nặng chi tiêu}
+
+\begin{ct}
+Gánh nặng chi thiết yếu của hộ $i$: \quad $b_i = \dfrac{\text{nec}_i}{\text{income}_i}$
+\smallskip
+
+Tổng chi so với thu nhập: \quad $c_i = \dfrac{\text{tot}_i}{\text{income}_i}$
+\smallskip
+
+Báo cáo lấy \emph{trung vị} của $b_i$ và $c_i$ trong từng nhóm, không lấy trung bình (lý do ở mục~\ref{sec:median}).
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Chi tiêu so với thu nhập (trung vị theo từng hộ, \%)}
+\begin{tabular}{lrrrcrrr}
+\toprule
+& \multicolumn{3}{c}{Chi thiết yếu / thu nhập} & & \multicolumn{3}{c}{Tổng chi / thu nhập}\\
+\cmidrule{2-4}\cmidrule{6-8}
+Nhóm & 2010 & 2012 & 2014 & & 2010 & 2012 & 2014\\
+\midrule
+Q1 & 88,6 & 87,1 & \textbf{81,7} & & 116,0 & 113,2 & \textbf{111,5}\\
+Q2 & 66,0 & 65,5 & 61,8 & & 92,0 & 89,3 & 87,2\\
+Q3 & 54,6 & 54,6 & 51,7 & & 78,0 & 77,1 & 74,4\\
+Q4 & 42,8 & 42,6 & 38,6 & & 64,2 & 61,9 & 57,4\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h16_ganh_nang}{0.9}{Trái: gánh nặng chi thiết yếu giảm ở mọi nhóm. Phải: cộng cả rổ chi năm 2014 so với vạch 100\% thu nhập.}
+
+\textbf{Mô tả.} Gánh nặng thiết yếu giảm ở mọi nhóm: Q1 từ 88,6\% xuống \n{81,7\%} thu nhập, Q4 từ 42,8\% xuống 38,6\%. Thu nhập tăng nhanh hơn chi cho nhu cầu cơ bản.
+
+Nhưng phần nhẹ gánh đó không biến thành tiền để dành. Cộng cả rổ chi, tổng chi của hộ Q1 vẫn bằng \n{111,5\%} thu nhập năm 2014, chỉ giảm 4,5 điểm \% sau bốn năm và vẫn \n{vượt xa mốc 100\%}. Vạch 100\% rơi đúng vào giữa Q1 và Q2.
+
+\begin{kl}
+Thu nhập tăng và gánh nặng chi thiết yếu giảm, nhưng hộ nghèo vẫn chi nhiều hơn thu. Phần lớn hộ nhóm Q1 \n{không đủ sống} bằng chính thu nhập của mình; bốn năm tăng trưởng chỉ làm mức thiếu hụt bớt trầm trọng chứ chưa xóa được.
+\end{kl}
+
+\subsubsection{Mức độ không dư dả}
+
+\begin{ct}
+Hộ chi vượt thu: \quad $\text{tot}_i > \text{income}_i$
+\smallskip
+
+Mức thiếu hụt (với hộ vượt thu): \quad $\dfrac{\text{tot}_i - \text{income}_i}{\text{income}_i}$ \qquad
+Phần dư (với hộ cân đối): \quad $\dfrac{\text{income}_i - \text{tot}_i}{\text{income}_i}$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Hộ chi vượt thu: tỷ lệ, mức thiếu hụt và phần dư của nhóm còn lại (\%)}
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{3}{c}{\% hộ chi vượt thu} & \multicolumn{3}{c}{Năm 2014}\\
+\cmidrule(r){2-4}\cmidrule(l){5-7}
+Nhóm & 2010 & 2012 & 2014 & \% hộ vượt & Thiếu hụt & Phần dư\\
+\midrule
+Q1 & 65,7 & 63,2 & \textbf{61,9} & 61,9 & \textbf{41,6} & 16,9\\
+Q2 & 36,1 & 34,2 & 33,3 & 33,3 & 21,9 & 23,8\\
+Q3 & 18,9 & 18,6 & 17,4 & 17,4 & 15,0 & 30,8\\
+Q4 & 10,3 & 9,0 & \textbf{7,0} & 7,0 & 11,5 & \textbf{44,9}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h17_vuot_thu}{0.9}{Trái: tỷ lệ hộ chi nhiều hơn thu. Phải: thiếu bao nhiêu và dư bao nhiêu, năm 2014.}
+
+\textbf{Mô tả.} Năm 2014, \n{61,9\% hộ nhóm Q1} chi nhiều hơn thu, so với chỉ \n{7,0\%} ở nhóm Q4. Mức độ cũng nặng hơn: hộ Q1 vượt thu thiếu \n{41,6\%} thu nhập cả năm, trong khi hộ Q4 vượt thu chỉ thiếu 11,5\%.
+
+Phía ngược lại còn quan trọng hơn cho việc tích lũy: hộ Q1 cân đối được chỉ dư \n{16,9\%} thu nhập, còn hộ Q4 dư \n{44,9\%}, tức gần một nửa thu nhập.
+
+\begin{luuy}
+“Chi vượt thu” chỉ có nghĩa là tổng chi khai báo lớn hơn thu nhập khai báo. Dữ liệu không cho biết hộ bù đắp bằng cách nào: vay nợ, bán tài sản, nhận tiền người thân gửi về, hay khai thiếu thu nhập (thu nhập của hộ nông nghiệp và buôn bán nhỏ thường bị khai thấp). Vì vậy nên đọc con số này là dấu hiệu căng thẳng ngân sách, không phải “62\% hộ nghèo đang mắc nợ”.
+\end{luuy}
+
+\hinh{h28_bubble_thu_chi}{0.78}{Biểu đồ bong bóng năm 2014: mỗi bong bóng là một nhóm thu nhập, cỡ bong bóng bằng tỷ lệ hộ chi vượt thu của nhóm đó.}
+
+\textbf{Mô tả.} Trục hoành là thu nhập, trục tung là chi tiêu, cỡ bong bóng là tỷ lệ hộ vượt thu:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item \n{Q1 là nhóm duy nhất có chi tiêu cao hơn thu nhập} (chi 10,1 so với thu 9,2 triệu đồng/người). Ba nhóm còn lại đều chi ít hơn thu, và càng sang phải khoảng cách càng rộng: Q4 chi \n{31,1} triệu trên mức thu nhập \n{51,5} triệu.
+\item \n{Bong bóng nhỏ dần từ trái sang phải}: 62\% hộ Q1 vượt thu, xuống 33\%, 17\% rồi chỉ còn 7\% ở Q4.
+\item Tính theo tỷ lệ chi trên thu nhập: \n{1,11 lần} ở Q1 và \n{0,57 lần} ở Q4, tức nhóm giàu nhất chỉ tiêu hết hơn một nửa thu nhập.
+\end{itemize}
+
+\begin{kl}
+Chênh lệch giữa hai nhóm không nằm ở thu nhập mà ở \n{khả năng để dành}: một bên thiếu 41,6\% thu nhập, một bên dư 44,9\%. Chính khoảng cách này quyết định ai tích lũy được tài sản; hệ quả của nó nằm ở phần 3.3.
+\end{kl}
+
+\subsubsection{Vì sao có hộ không đủ sống? Kiểm tra ba yếu tố}
+
+Mục này so sánh \n{hộ chi vượt thu} với \n{hộ cân đối}. Nguyên tắc chung: luôn so \n{trong cùng một nhóm thu nhập}, vì hộ vượt thu phần lớn là hộ nghèo (61,9\% hộ Q1 nhưng chỉ 7,0\% hộ Q4), nếu gộp cả bốn nhóm thì chênh lệch tìm được có thể chỉ phản ánh “nghèo thì tiêu khác” chứ không phải “mất cân đối thì tiêu khác”.
+
+\paragraph{Yếu tố 1: môi trường sống.}
+
+\hinh{h18_top10_tinh_vuot_thu}{0.72}{Mười tỉnh có tỷ lệ hộ chi vượt thu cao nhất năm 2014.}
+
+\textbf{Mô tả.} Dẫn đầu là \n{Cao Bằng (56,9\%)}, Bắc Kạn (52,0\%), Yên Bái (49,1\%), Sơn La (48,4\%), đều cao hơn hẳn mức trung bình cả nước (29,9\%). Mười tỉnh này có mấy điểm chung:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item Thu nhập trung vị chỉ \n{15,2} triệu đồng/người/năm, thấp hơn mức chung của các tỉnh (21,7 triệu).
+\item Tỷ lệ hộ nông thôn \n{80\%}, cao hơn mức chung (72\%).
+\item Phần lớn là tỉnh \n{miền núi phía Bắc} (Cao Bằng, Bắc Kạn, Yên Bái, Sơn La, Lạng Sơn, Điện Biên) hoặc \n{duyên hải miền Trung – Tây Nguyên} (Quảng Ngãi, Quảng Nam, Đắk Nông).
+\end{itemize}
+
+Nhưng con số trên có một điểm cần cẩn thận: tỉnh nghèo vốn đã có nhiều hộ thuộc nhóm Q1, nên tỷ lệ chung của tỉnh phần lớn phản ánh \emph{tỉnh đó có bao nhiêu hộ nghèo}, chứ chưa nói được \emph{sống ở đó có tốn kém hay không}. Để tách hai chuyện này, ta cố định mức thu nhập, chỉ so các hộ Q1 với nhau.
+
+\begin{table}[H]\centering\small
+\caption{Chỉ xét hộ nhóm Q1 năm 2014, chia 63 tỉnh làm hai nửa theo mức thu nhập của tỉnh}
+\begin{tabular}{lrr}
+\toprule
+& Nửa tỉnh giàu hơn & Nửa tỉnh nghèo hơn\\
+\midrule
+\% hộ Q1 chi vượt thu & \textbf{64,5} & \textbf{61,5}\\
+Chi tiêu/người của hộ Q1 (triệu đồng) & \textbf{11,1} & \textbf{9,4}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Khi cố định mức thu nhập, quan hệ đảo chiều nhẹ: nửa số tỉnh giàu hơn có \n{64,5\%} hộ Q1 chi vượt thu, cao hơn nửa số tỉnh nghèo hơn (\n{61,5\%}). Nguyên nhân nằm ở mặt bằng chi: hộ Q1 sống tại nhóm tỉnh giàu chi \n{11,1} triệu đồng/người/năm, so với \n{9,4} triệu ở nhóm tỉnh nghèo, cao hơn khoảng 18\%. Chênh lệch về tỷ lệ vượt thu chỉ 3 điểm \% nên đây là dấu hiệu yếu, không phải kết luận mạnh.
+
+\begin{kl}
+Môi trường sống ảnh hưởng theo hai chiều ngược nhau. Xét trên toàn bộ dân cư, hộ không đủ sống tập trung ở các tỉnh nghèo, miền núi, nông thôn. Nhưng xét riêng trong nhóm nghèo nhất, sống ở tỉnh giàu hơn lại khó trang trải hơn vì mặt bằng chi tiêu cao hơn khoảng 18\%. Hai kết luận này trả lời hai câu hỏi khác nhau nên không mâu thuẫn, và chiều thứ hai chỉ lộ ra khi cố định mức thu nhập trước lúc so sánh.
+\end{kl}
+
+\paragraph{Yếu tố 2: hộ đông con.}
+
+\hinh{h20_dong_con}{0.62}{Số người trung bình trong hộ, năm 2014, so trong cùng nhóm thu nhập.}
+
+\textbf{Mô tả.} Giả thuyết “không đủ sống vì đông con” không đúng với dữ liệu này: hộ chi vượt thu \n{ít người hơn} hộ cân đối ở cả bốn nhóm.
+
+\begin{kl}
+Dữ liệu không ủng hộ yếu tố “đông con”. Hộ mất cân đối ngân sách trung bình ít hơn khoảng \n{nửa người} so với hộ cân đối cùng nhóm thu nhập. Kết quả này hợp lý vì thu nhập đã tính theo đầu người, hộ đông người chưa chắc chi/người cao.
+\end{kl}
+
+\paragraph{Yếu tố 3: xu hướng tiêu dùng.}
+
+Hai yếu tố trên đều không giải thích được, nên còn lại câu hỏi trực tiếp nhất: hai nhóm hộ tiêu tiền khác nhau thế nào? Mục này so hộ chi vượt thu với hộ cân đối \n{trong cùng nhóm nghèo nhất Q1, năm 2014}. Cố định mức thu nhập như vậy để chênh lệch tìm được không phải là chênh lệch giàu nghèo.
+
+\hinh{h21_xu_huong_2nhom}{1.0}{Trái: số tiền chi bình quân đầu người cho từng khoản. Phải: tỷ lệ hộ có phát sinh khoản chi đó.}
+
+\begin{table}[H]\centering\small
+\caption{Chi bình quân đầu người của hộ nhóm Q1 năm 2014 (triệu đồng/người/năm)}
+\begin{tabular}{lrrr}
+\toprule
+Khoản chi & Hộ chi vượt thu & Hộ cân đối & Gấp\\
+\midrule
+Thực phẩm khác & 5,51 & 3,25 & 1,70\\
+Chi ngoài ăn uống & 2,94 & 1,76 & 1,67\\
+Gạo & 1,46 & 1,30 & \textbf{1,12}\\
+Thuốc, viện phí & 0,83 & 0,33 & 2,48\\
+Nhiên liệu & 0,71 & 0,35 & 2,03\\
+Giáo dục & 0,57 & 0,25 & 2,30\\
+Điện & 0,28 & 0,18 & 1,57\\
+Sửa chữa nhà & 0,19 & 0,02 & \textbf{10,30}\\
+\midrule
+\textbf{Tổng chi} & \textbf{12,85} & \textbf{7,61} & \textbf{1,69}\\
+\textit{Thu nhập} & \textit{6,5} & \textit{7,5} & \textit{0,87}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Hộ chi vượt thu chi nhiều hơn ở \n{hầu như mọi khoản}, tổng cộng gấp \n{1,69 lần}, trong khi thu nhập của họ lại thấp hơn (6,5 so với 7,5 triệu đồng/người). Nhưng mức chênh rất khác nhau tùy khoản:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Tính bằng tiền}, phần chênh lớn nhất nằm ở \n{thực phẩm khác} ($+2{,}26$ triệu/người) và \n{chi ngoài ăn uống} ($+1{,}18$ triệu). Đây là hai khoản chiếm hơn hai phần ba rổ chi nên chỉ cần cao hơn 70\% là đã tạo ra khoảng cách lớn.
+\item \n{Tính bằng số lần}, ấn tượng nhất là \n{sửa chữa nhà} (gấp 10,3 lần) và \n{y tế} (gấp 2,5 lần), nhưng số tiền tuyệt đối nhỏ: sửa nhà chỉ chênh \n{0,17} triệu đồng/người, bằng một phần mười ba khoản thực phẩm.
+\item \n{Gạo gần như bằng nhau} (1,12 lần): khoản cứng nhất trong rổ chi không phân biệt hai nhóm.
+\item Ở cột bên phải, khác biệt rõ nhất về \emph{tỷ lệ hộ có chi} là sửa chữa nhà (8,4\% so với 4,2\%) và hỗ trợ khám chữa bệnh (28,3\% so với 22,6\%). Các khoản này không xảy ra với mọi hộ mà chỉ rơi vào một số hộ.
+\end{itemize}
+
+\begin{luuy}
+Hai thước đo dẫn tới hai kết luận khác nhau. Nếu chỉ nhìn số lần thì sửa nhà và y tế nổi bật, dễ kết luận “vượt thu là do cú sốc”. Nhưng tính bằng tiền thì thực phẩm khác và chi ngoài ăn uống mới chiếm phần lớn khoảng cách. Một phép thử bổ sung: nếu đưa riêng chi \emph{thực phẩm khác} về mức của hộ cân đối thì \n{27,5\%} số hộ vượt thu trở lại cân đối, còn nếu đưa riêng chi \emph{sửa nhà} về mức đó thì chỉ \n{4,7\%} thoát, vì sửa nhà chiếm 2,3\% rổ chi còn thực phẩm chiếm 43\%.
+\end{luuy}
+
+\begin{kl}
+Hộ không đủ sống \n{không tiêu hoang}: họ chi cho gạo gần bằng hộ cân đối, và tiêu nhiều hơn chủ yếu ở các khoản sinh hoạt hằng ngày. Mặt bằng sinh hoạt của họ đắt hơn hoặc nhu cầu thực tế lớn hơn, chứ không phải mua sắm xa xỉ. Y tế và sửa nhà chênh mạnh nhất về tỷ lệ nhưng chỉ rơi vào một số hộ, nên chúng là cú sốc đẩy một bộ phận hộ qua ranh giới; còn xét trên toàn nhóm thì phần lớn khoảng cách nằm ở \n{chi phí sinh hoạt thường ngày}.
+\end{kl}
+
+\subsection{Tài sản}
+
+Phần này loại \n{284 hộ} thiếu toàn bộ khối tài sản (mục 2.1), còn lại 27.877 hộ.
+
+\subsubsection{Giá nhà giữa các tỉnh}
+
+\hinh{h23_top10_gia_nha}{1.0}{Mười tỉnh/thành có giá trị nhà ở trung vị cao nhất, mỗi năm một biểu đồ.}
+
+\textbf{Mô tả.} Thứ hạng khá ổn định qua ba đợt: \n{Hà Nội} luôn đứng đầu (1.363 \ra\ 1.775 \ra\ \n{1.560} triệu đồng), sau đó là \n{TP.HCM} và \n{Đà Nẵng}. Nhóm bám sát gồm các tỉnh công nghiệp quanh Hà Nội: Bắc Ninh, Vĩnh Phúc, Hưng Yên, Hải Dương, Hải Phòng, Quảng Ninh.
+
+Hai điểm đáng chú ý:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=2pt,topsep=2pt]
+\item Giá nhà Hà Nội năm 2014 (\n{1.560} triệu) \n{thấp hơn} năm 2012 (1.775 triệu), phù hợp với giai đoạn thị trường bất động sản chững lại 2013–2014. Đà Nẵng cũng giảm mạnh từ 1.200 xuống 970 triệu.
+\item Khoảng cách giữa tỉnh đắt nhất và rẻ nhất rất lớn: năm 2014, trung vị giá nhà ở Hà Nội gấp khoảng \n{19,5 lần} tỉnh thấp nhất (Lai Châu, 80 triệu).
+\end{itemize}
+
+Chênh lệch không chỉ nằm ở chỗ tỉnh nào giàu hơn. Ngay trong \emph{cùng một nhóm thu nhập}, nhà ở thành thị vẫn đắt hơn hẳn:
+
+\hinh{h23b_gia_nha_kv_Q}{0.72}{Giá trị nhà ở trung vị theo khu vực và nhóm thu nhập, năm 2014.}
+
+\textbf{Mô tả.} Tỷ số thành thị / nông thôn là \n{2,5} lần ở Q1; 2,0 ở Q2; 2,3 ở Q3 và \n{3,0} lần ở Q4, tức khoảng cách rộng ra ở nhóm giàu chứ không hẹp lại. So cách khác: nhà của hộ \n{giàu nhất ở nông thôn} (400 triệu) chỉ ngang với nhà của hộ \n{Q2 ở thành thị} (400 triệu), tức là leo lên nhóm giàu nhất của nông thôn mới chỉ bằng nhóm cận nghèo của thành thị về tài sản nhà ở.
+
+\begin{luuy}
+Giá trị nhà là con số \n{chủ hộ tự ước lượng}, không phải giá giao dịch. Ở nông thôn, nhà thường gắn với đất rộng nhưng khó bán nên chủ hộ có xu hướng định giá thấp. Chênh lệch trên vì vậy là cận trên của chênh lệch thật về chất lượng nhà ở.
+\end{luuy}
+
+\subsubsection{Giá nhà tăng nhanh hơn hay chậm hơn thu nhập?}
+
+\begin{ct}
+Chỉ số so với năm gốc 2010: \quad
+$I^{\text{nhà}}_t = \dfrac{H_t}{H_{2010}} \times 100$, \qquad
+$I^{\text{thu nhập}}_t = \dfrac{M_t}{M_{2010}} \times 100$
+\smallskip
+
+Số năm thu nhập để mua nhà: \quad
+$\text{Năm}_t = \text{median}\left(\dfrac{\text{house}_i}{\text{income}_i}\right)$
+\end{ct}
+
+\begin{table}[H]\centering\small
+\caption{Giá nhà và thu nhập, lấy năm 2010 làm gốc = 100}
+\begin{tabular}{lrrrr}
+\toprule
+Năm & Giá nhà trung vị & Thu nhập/người & Chỉ số giá nhà & Chỉ số thu nhập\\
+\midrule
+2010 & 150 triệu & 13,17 triệu & 100 & 100\\
+2012 & 250 triệu & 19,28 triệu & 167 & 146\\
+2014 & 300 triệu & 23,61 triệu & \textbf{200} & \textbf{179}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hinh{h24_gia_nha_vs_thu_nhap}{0.9}{Trái: hai chỉ số so với năm 2010. Phải: giá nhà quy ra số năm thu nhập của cả hộ.}
+
+\textbf{Mô tả.} Trong bốn năm, giá trị nhà ở trung vị \n{tăng gấp đôi} (chỉ số 200) trong khi thu nhập bình quân đầu người tăng \n{79\%} (chỉ số 179). Quy ra số năm thu nhập của cả hộ, một căn nhà trung vị tương đương \n{3,21} năm thu nhập năm 2010 và \n{3,69} năm vào năm 2014, tức xa tầm với hơn, dù mức tăng đã chậm lại giữa 2012 và 2014 (3,79 xuống 3,69).
+
+\begin{kl}
+Nhà ở tạo ra một kênh chênh lệch độc lập với thu nhập. Hộ đã có nhà từ năm 2010 thấy giá trị tài sản tăng gấp đôi mà không phải làm gì thêm, còn hộ chưa có nhà phải tích lũy nhiều năm thu nhập hơn trước. Hộ Q1 chỉ dư 16,9\% thu nhập mỗi năm, phần lớn còn chi vượt thu, nên gần như không thể rút ngắn khoảng cách này bằng tiết kiệm.
+\end{kl}
+
+\subsubsection{Đồ công nghệ, phương tiện và tiện ích đã phổ cập tới đâu?}
+
+\hinh{h25_pho_cap_tai_san}{1.0}{Trái: tỷ lệ hộ sở hữu qua ba đợt khảo sát. Phải: tỷ lệ sở hữu năm 2014 theo nhóm thu nhập.}
+
+\begin{table}[H]\centering\small
+\caption{Tỷ lệ hộ sở hữu (\%)}
+\begin{tabular}{lrrrcrrrr}
+\toprule
+& \multicolumn{3}{c}{Cả nước} & & \multicolumn{4}{c}{Năm 2014, theo nhóm}\\
+\cmidrule{2-4}\cmidrule{6-9}
+Tài sản & 2010 & 2012 & 2014 & & Q1 & Q2 & Q3 & Q4\\
+\midrule
+Máy gia dụng & 94,7 & 96,1 & 94,8 & & 82 & 98 & 99 & 100\\
+TV & 82,7 & 90,8 & 92,3 & & 80 & 94 & 98 & 97\\
+Điện thoại & 76,8 & 83,9 & \textbf{89,8} & & 75 & 91 & 96 & 97\\
+Xe máy & 73,1 & 80,2 & 83,2 & & 69 & 82 & 89 & 93\\
+Máy giải trí & 58,1 & 57,9 & 57,5 & & 41 & 56 & 64 & 68\\
+Xe đạp & 45,4 & 52,4 & 50,8 & & 42 & 60 & 58 & 43\\
+Ô tô & 0,9 & 1,3 & 1,7 & & 0 & 1 & 1 & \textbf{5}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Ba nhóm tài sản diễn biến khác nhau:
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Đã phổ cập}: máy gia dụng (94,8\%), TV (92,3\%) và điện thoại (89,8\%). Điện thoại tăng nhanh nhất, từ 76,8\% lên 89,8\%. Ngay cả nhóm Q1 cũng đạt 75–82\%, nên các tài sản này \n{gần như không còn phân biệt được giàu nghèo}.
+\item \n{Đang phổ cập}: xe máy tăng từ 73,1\% lên 83,2\%, chênh lệch giữa Q1 (69\%) và Q4 (93\%) vẫn còn 24 điểm \%.
+\item \n{Chưa phổ cập}: ô tô chỉ 1,7\% cả nước, và dù Q4 cao gấp nhiều lần các nhóm khác thì cũng chỉ 5\%, quá hiếm để dùng làm thước đo.
+\end{itemize}
+
+Hai trường hợp đặc biệt: \n{máy giải trí} gần như đứng yên (58,1\% xuống 57,5\%) nhưng lại chênh lệch mạnh theo thu nhập (41\% ở Q1 so với 68\% ở Q4); \n{xe đạp} có dạng hình chữ U ngược, 42\% ở Q1, lên 60\% ở Q2 rồi tụt về 43\% ở Q4, vì hộ khá giả thay xe đạp bằng xe máy.
+
+\begin{kl}
+Các tài sản cơ bản đã tới cả nhóm nghèo nhất. Nhưng vì đã bão hòa nên tỷ lệ sở hữu không còn là thước đo giàu nghèo tốt; muốn phân biệt phải nhìn vào \n{giá trị} tài sản (nhà ở chênh 19,5 lần giữa các tỉnh) hoặc những tài sản chưa phổ cập như ô tô.
+\end{kl}
+
+
+\subsubsection{Tỷ lệ sở hữu của từng nhóm thu nhập qua ba năm}
+
+Mục trên chỉ xét cả nước và riêng năm 2014. Mục này tách theo từng nhóm thu nhập và theo dõi qua cả ba đợt khảo sát, đồng thời bổ sung hai tài sản chưa xét: giường/đệm (\texttt{bed}) và bàn ghế (\texttt{tab}).
+
+\begin{ct}
+$\text{Tỷ lệ sở hữu}_{Q,t,A} = \dfrac{\text{số hộ nhóm } Q \text{ năm } t \text{ có } A_i > 0}{\text{số hộ nhóm } Q \text{ năm } t}\times 100\%$
+\end{ct}
+
+\hinh{h26_pho_cap_Q_nam}{1.0}{Tỷ lệ hộ sở hữu từng tài sản, tách theo bốn nhóm thu nhập, 2010–2014. Chín ô dùng chung thang 0–100\%.}
+
+\begin{table}[H]\centering\small
+\caption{Khoảng cách tỷ lệ sở hữu giữa Q4 và Q1 (điểm \%)}
+\begin{tabular}{lrrrr}
+\toprule
+Tài sản & 2010 & 2012 & 2014 & Thay đổi 2012\ra2014\\
+\midrule
+Điện thoại & 37,1 & 34,6 & \textbf{22,1} & $-12{,}5$\\
+Xe máy & 30,0 & 27,9 & \textbf{24,6} & $-3{,}3$\\
+TV & 14,2 & 19,2 & 16,5 & $-2{,}7$\\
+Máy giải trí & 22,9 & 29,9 & 26,6 & $-3{,}3$\\
+Giường/đệm & 6,1 & 6,8 & 7,5 & $+0{,}7$\\
+Bàn ghế & 25,8 & 31,9 & \textbf{32,7} & $+0{,}8$\\
+Máy gia dụng & 13,1 & 12,5 & 17,2 & $+4{,}7$\\
+Ô tô & 3,2 & 4,1 & 4,4 & $+0{,}3$\\
+Xe đạp & $-6{,}1$ & $-0{,}3$ & 0,3 & $+0{,}6$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Chín ô của Hình~\ref{fig:h26_pho_cap_Q_nam} cho thấy ba dạng đường khác nhau.
+
+\begin{itemize}[leftmargin=1.3em,itemsep=3pt,topsep=2pt]
+\item \n{Bốn đường chụm lại}: điện thoại là trường hợp rõ nhất, khoảng cách Q4$-$Q1 từ 37,1 điểm \% xuống còn \n{22,1}. Xe máy cũng chụm lại nhưng chậm hơn (30,0 xuống 24,6). Đây là hai tài sản duy nhất thật sự đang phổ cập theo nghĩa khoảng cách giàu nghèo hẹp lại.
+\item \n{Bốn đường song song}: bàn ghế, máy giải trí và máy gia dụng giữ nguyên hoặc \emph{giãn ra}. Bàn ghế có khoảng cách lớn nhất bảng năm 2014 ($32{,}7$ điểm \%: Q1 chỉ 47,5\% còn Q4 tới 81,0\%).
+\item \n{Đường Q4 nằm dưới cùng}: xe đạp là tài sản duy nhất mà nhóm giàu nhất sở hữu ít hơn nhóm nghèo nhất ở năm 2010 ($-6{,}1$ điểm \%), xem kỹ ở mục sau.
+\end{itemize}
+
+\begin{luuy}
+Hai biến \texttt{bed} và \texttt{tab} có mức nhảy bất thường giữa 2010 và 2012: tỷ lệ hộ có giường/đệm là 51,7\% năm 2010 rồi \n{86,5\%} năm 2012 và 86,3\% năm 2014; bàn ghế là 43,0\% \ra\ 67,0\% \ra\ 68,7\%. Mức nhảy hơn 30 điểm \% trong hai năm rồi đứng yên hoàn toàn không phải là hành vi mua sắm, và giá trị trung vị của hai tài sản này gần như không đổi giữa hai đợt, nên hộ cũng không mua đồ đắt hơn. Nhiều khả năng đợt 2010 ghi nhận thiếu. Báo cáo vì vậy \n{không đọc mức tăng 2010\ra2012 của hai biến này là tăng thật} và khi so sánh chỉ dùng đoạn 2012–2014.
+\end{luuy}
+
+\begin{kl}
+Chỉ có \n{điện thoại và xe máy} đang thật sự phổ cập theo nghĩa khoảng cách Q1–Q4 hẹp lại. Các tài sản còn lại giữ nguyên hoặc giãn khoảng cách, trong đó bàn ghế là tài sản phân hóa mạnh nhất năm 2014. Nói cách khác, tỷ lệ sở hữu chung tăng ở gần như mọi tài sản, nhưng \n{tăng đều ở cả bốn nhóm} nên không xóa được chênh lệch.
+\end{kl}
+
+\subsubsection{Của hộ có sở hữu thì đắt rẻ khác nhau thế nào?}
+
+Tỷ lệ sở hữu chỉ trả lời “có hay không”. Câu hỏi tiếp theo là trong số các hộ \emph{có}, giá trị món đồ chênh nhau bao nhiêu. Phép tính chỉ lấy các hộ có $A_i>0$ để không trộn lẫn chuyện không sở hữu vào giá trị.
+
+\begin{ct}
+$\text{Giá trị TB}_{Q,A} = \text{mean}\big(A_i \mid i \in Q,\ A_i > 0\big)$ \qquad
+$\text{Tỷ số} = \dfrac{\text{Giá trị TB}_{Q4,A}}{\text{Giá trị TB}_{Q1,A}}$
+\end{ct}
+
+\hinh{h27_gia_tri_tai_san_Q}{1.0}{Trái: giá trị trung bình của hộ Q4 gấp bao nhiêu lần hộ Q1, năm 2014. Phải: cùng tỷ số đó khi tính theo hộ và khi chia cho số người trong hộ.}
+
+\begin{table}[H]\centering\small
+\caption{Giá trị trung bình của hộ có sở hữu, năm 2014 (nghìn đồng)}
+\begin{tabular}{lrrrrr}
+\toprule
+Tài sản & Q1 & Q2 & Q3 & Q4 & Q4/Q1\\
+\midrule
+Máy gia dụng & 1.553 & 3.197 & 5.246 & 8.816 & \textbf{5,68}\\
+Điện thoại & 598 & 941 & 1.566 & 2.929 & \textbf{4,90}\\
+Bàn ghế & 1.571 & 2.573 & 3.851 & 6.168 & 3,93\\
+Máy giải trí & 496 & 696 & 1.001 & 1.784 & 3,60\\
+TV & 924 & 1.244 & 1.804 & 3.115 & 3,37\\
+Xe máy & 8.780 & 12.423 & 17.746 & 25.781 & 2,94\\
+Giường/đệm & 1.067 & 1.550 & 1.987 & 2.826 & 2,65\\
+Xe đạp & 538 & 667 & 778 & 1.023 & \textbf{1,90}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Mô tả.} Giá trị tăng đều từ Q1 đến Q4 ở \n{cả tám tài sản}, không có ngoại lệ nào. Mức chênh trải từ \n{1,90 lần} (xe đạp) đến \n{5,68 lần} (máy gia dụng). Đáng chú ý là điện thoại: tỷ lệ sở hữu gần như đã phổ cập (Q1 73,7\%, Q4 96,9\%) nhưng giá trị vẫn chênh \n{4,90 lần}, tức chiếc điện thoại của hộ giàu đắt gấp gần năm lần. Nhóm sản phẩm càng có nhiều phân khúc giá thì tỷ số càng lớn; xe đạp ít phân khúc nhất nên chênh ít nhất.
+
+\textbf{Có phải vì hộ giàu đông người nên mua nhiều món hơn không?} Không. Hộ Q4 có 3,46 người còn hộ Q1 có 4,11 người, nên nếu chia giá trị cho số người thì khoảng cách \n{rộng thêm} chứ không hẹp lại: máy gia dụng từ 5,68 lên 6,70 lần, máy giải trí từ 3,60 lên 4,54 lần. Quy mô hộ không giải thích được chênh lệch này.
+
+\begin{luuy}
+Dữ liệu chỉ ghi \n{tổng giá trị} của mỗi nhóm tài sản, không ghi số lượng món. Báo cáo đọc con số theo giả định \n{mỗi hộ sở hữu một món}, tức coi giá trị ghi nhận là giá của món đó. Nếu trên thực tế hộ giàu sở hữu nhiều món hơn (hai TV thay vì một), thì phần chênh lệch nêu trên là chênh lệch \emph{tổng tài sản} chứ không hoàn toàn là chênh lệch \emph{chất lượng từng món}, và tỷ số 4,90 lần ở điện thoại sẽ là cận trên của chênh lệch về giá mỗi chiếc.
+\end{luuy}
+
+\begin{kl}
+Phổ cập về \n{số hộ sở hữu} không kéo theo phổ cập về \n{giá trị}. Ngay ở những tài sản mà gần như nhà nào cũng có, hộ giàu vẫn dùng đồ đắt hơn từ 2,6 đến 5,7 lần. Vì vậy khi tỷ lệ sở hữu đã bão hòa thì thước đo còn phân biệt được giàu nghèo là giá trị, không phải tỷ lệ.
+\end{kl}
+
+\subsubsection{Xe đạp: hai cách đo cho hai kết luận ngược nhau}
+
+\hinh{h29_xe_dap}{1.0}{Trái: tỷ lệ hộ có xe đạp theo nhóm thu nhập. Phải: năm 2014, giá trị xe đạp tính trên mọi hộ và tính riêng trên hộ có xe đạp.}
+
+\textbf{Mô tả.} Tỷ lệ sở hữu xe đạp có dạng hình chữ U ngược ở cả ba năm: năm 2014 là \n{42,3\%} ở Q1, lên \n{59,9\%} ở Q2, 58,2\% ở Q3 rồi tụt về \n{42,7\%} ở Q4. Hộ nghèo nhất không đủ tiền mua, hộ giàu nhất đã chuyển sang xe máy.
+
+Điều đáng nói nằm ở giá trị. Nếu tính trung bình trên \n{mọi hộ} thì năm 2014 nhóm Q3 đạt 453 nghìn đồng, cao hơn cả Q4 (436 nghìn), và dễ kết luận rằng nhóm trung lưu đang nâng cấp xe đạp còn nhóm giàu thì không. Nhưng nếu chỉ tính trên \n{hộ thực sự có xe đạp} thì thứ tự trở lại bình thường: Q1 538, Q2 667, Q3 778 và Q4 \n{1.023} nghìn đồng. Chiếc xe đạp của hộ Q4 vẫn đắt nhất.
+
+\begin{kl}
+Trung bình trên mọi hộ trộn hai thứ khác nhau vào một con số: \emph{bao nhiêu hộ có} và \emph{món đồ đáng giá bao nhiêu}. Nhóm Q4 có giá trị xe đạp bình quân thấp không phải vì xe của họ rẻ mà vì chỉ 42,7\% số hộ còn giữ xe đạp. Khi một tài sản có tỷ lệ sở hữu chênh lệch lớn giữa các nhóm thì phải tách riêng hai phép đo, nếu không sẽ rút ra kết luận ngược.
+\end{kl}
+
+\subsubsection{Máy gia dụng: mức giảm năm 2014 là thật hay là lỗi dữ liệu?}
+
+\hinh{h30_hmachine}{1.0}{Trái: giá trị máy gia dụng trung bình của hộ có sở hữu, theo nhóm thu nhập. Phải: trung bình và các phân vị trên của toàn bộ hộ có máy gia dụng.}
+
+\textbf{Mô tả.} Giá trị máy gia dụng tăng từ 2010 đến 2012 rồi giảm mạnh vào 2014 ở \n{cả bốn nhóm}: Q1 $-38{,}3\%$, Q2 $-38{,}0\%$, Q3 $-40{,}3\%$ và Q4 $-48{,}4\%$. Nhìn riêng nhóm Q4 thì rất dễ kết luận rằng hộ giàu đang rút khỏi nhóm tài sản này để dồn sang nhà và xe.
+
+Hai dấu hiệu cho thấy nên thận trọng. Thứ nhất, mức giảm xảy ra \n{đồng loạt ở cả bốn nhóm} chứ không riêng nhóm giàu, điều khó giải thích bằng một thay đổi hành vi của riêng hộ khá giả. Thứ hai, phần đuôi trên của phân phối bị cắt: giá trị lớn nhất là \n{1.201.200} nghìn đồng năm 2010 và \n{1.162.100} năm 2012 nhưng chỉ còn \n{88.500} năm 2014, tức nhỏ hơn mười ba lần. Phân vị 95\% cũng tụt từ 29.100 xuống 16.000.
+
+\begin{luuy}
+Một thay đổi hành vi làm giảm giá trị thì không có lý do gì phải cắt cụt đúng phần đuôi trên của phân phối, và cũng không có lý do gì tác động đều lên cả bốn nhóm thu nhập. Dạng số liệu này giống với việc đợt 2014 giới hạn giá trị khai báo hoặc thay đổi danh mục đồ được tính hơn là giống với một làn sóng bán bớt tài sản. Báo cáo vì vậy \n{không rút kết luận nào} về xu hướng giá trị máy gia dụng giai đoạn 2012–2014, và ở mục trên chỉ dùng số liệu năm 2014 để so sánh \emph{giữa các nhóm trong cùng một năm}, là phép so sánh không bị ảnh hưởng bởi thay đổi này.
+\end{luuy}
+
+% =====================================================================
+\section{Kết luận chung}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=6pt,topsep=3pt]
+\item \n{Thu nhập tăng ở mọi nhóm, mọi vùng, mọi tỉnh.} Bốn nhóm tăng 66,6–80,5\%; nông thôn tăng nhanh hơn thành thị (78,6\% so với 64,4\%); cả 63 tỉnh đều tăng, không tỉnh nào đi lùi. Nhóm hưởng lợi nhiều nhất là \n{Q2}, tức nhóm cận nghèo.
+
+\item \n{Nhưng khoảng cách giàu nghèo vẫn lớn, và lớn hơn nếu tính bằng tiền.} Tỷ số Q4/Q1 chỉ giảm từ 5,75 xuống \n{5,61 lần} nếu đo theo đầu người, và thậm chí nhích lên (5,05 \ra\ 5,10) nếu đo theo thu nhập cả hộ; trong khi đó hiệu số tăng từ 25,6 lên \n{42,4 triệu} đồng/người/năm. Nông thôn năm 2014 vẫn chưa bằng thành thị năm 2010.
+
+\item \n{Thu nhập tăng, gánh nặng thiết yếu giảm, nhưng hộ nghèo không dư dả hơn.} Chi thiết yếu của Q1 giảm từ 88,6\% xuống \n{81,7\%} thu nhập, song tổng chi vẫn bằng \n{111,5\%} thu nhập và \n{61,9\%} hộ Q1 chi nhiều hơn thu. Phần lớn nhóm nghèo nhất \n{không đủ sống} bằng thu nhập của mình.
+
+\item \n{Khoảng cách chủ yếu nằm ở chi phí ăn uống hằng ngày; cú sốc chỉ đẩy một bộ phận hộ qua ranh giới.} Hộ vượt thu \emph{ít người hơn} hộ cân đối và chi cho gạo gần như bằng nhau (gấp \n{1,12} lần), nhưng tổng chi gấp \n{1,69} lần. Tính bằng số lần thì sửa chữa nhà (10,3) và y tế (2,5) nổi bật nhất; tính bằng tiền thì thực phẩm khác và chi ngoài ăn uống chiếm khoảng hai phần ba khoảng cách. Về môi trường, hộ không đủ sống tập trung ở tỉnh nghèo miền núi; nhưng cùng một mức nghèo thì sống ở tỉnh giàu lại khó trang trải hơn vì mặt bằng chi cao hơn 18\%.
+
+\item \n{Khi thu nhập tăng, tiền chuyển từ lương thực sang nhu cầu bậc cao.} Tỷ trọng gạo giảm 1,92 điểm \% trong bốn năm và giảm từ 13,0\% (Q1) xuống 4,0\% (Q4); ngược lại chi ngoài ăn uống tăng. Riêng \n{giáo dục của nhóm Q1 giảm} cả về tỷ trọng lẫn tỷ lệ hộ tham gia, đây là khoản bị hoãn khi ngân sách căng.
+
+\item \n{Tài sản là nơi khoảng cách đọng lại.} Giá nhà tăng gấp đôi, nhanh hơn thu nhập (+79\%), nên số năm thu nhập cần để mua nhà tăng từ 3,21 lên \n{3,69} năm. Đồ dùng cơ bản đã phổ cập tới cả nhóm nghèo nhất nên tỷ lệ sở hữu không còn phân biệt được giàu nghèo, nhưng \n{giá trị} thì vẫn phân biệt rõ: hộ Q4 dùng đồ đắt hơn hộ Q1 từ \n{1,9 đến 5,7 lần} ở cả tám loại tài sản, và riêng điện thoại vẫn chênh 4,9 lần dù gần như nhà nào cũng có.
+\end{enumerate}
+
+\begin{tcolorbox}[colback=tintC, colframe=tintC, boxrule=0pt, arc=5pt, left=12pt, right=12pt, top=9pt, bottom=9pt]
+\textbf{Trả lời câu hỏi nghiên cứu.} Bốn năm 2010–2014 làm mọi nhóm khá lên, nhưng phần khá lên ấy được chia \emph{theo tỷ lệ}, nên ai xuất phát với nhiều hơn thì kết thúc với khoảng cách lớn hơn. Tính bằng tiền, khoảng cách giàu nghèo rộng thêm 16,8 triệu đồng mỗi người mỗi năm. Với nhóm nghèo nhất, cái thay đổi không phải là dư dả mà là thiếu ít hơn: từ chi vượt thu 116\% xuống 111,5\% thu nhập. Phần lớn khoảng cách đó nằm ở chi phí ăn uống hằng ngày, còn y tế và sửa nhà là cú sốc đẩy thêm một bộ phận hộ qua ranh giới. Cả hai nguyên nhân đều khó thu hẹp bằng nỗ lực tiết kiệm của bản thân hộ.
+\end{tcolorbox}
+
+% =====================================================================
+\section{Hạn chế của nghiên cứu}
+
+\begin{enumerate}[leftmargin=1.5em,itemsep=4pt,topsep=3pt]
+\item \n{Không theo dõi được từng hộ.} Ba đợt khảo sát là ba mẫu độc lập, không có mã hộ. Mọi so sánh theo thời gian là so sánh giữa các nhóm.
+\item \n{Không có trọng số mẫu.} Kết quả mô tả đúng cho 28.196 hộ trong mẫu; suy rộng ra cả nước cần thận trọng.
+\item \n{Không quy về một mốc giá.} Tiền của mỗi năm là giá năm đó, nên các so sánh qua thời gian dùng tỷ trọng; những con số “tăng bao nhiêu \%” đã bao gồm cả phần trượt giá.
+\item \n{Thu nhập và tài sản là số tự khai}, thường bị khai thấp ở hộ nông nghiệp và buôn bán nhỏ, có thể làm tỷ lệ “chi vượt thu” bị thổi lên.
+\item \n{Một biến có ô trống nhiều và không ngẫu nhiên}: chi nhiên liệu năm 2014 (813 hộ, tập trung ở hộ nghèo nông thôn). Cách xử lý và kiểm tra độ nhạy ở mục~\ref{sec:fuel}; hệ quả là không kết luận được xu hướng của tỷ lệ hộ Q1 chi vượt thu.
+\item \n{Ba biến tài sản có dấu hiệu đổi cách ghi giữa các đợt}: giường/đệm và bàn ghế bị ghi thiếu ở đợt 2010, máy gia dụng bị cắt phần đuôi trên ở đợt 2014. Báo cáo không so sánh hai biến đầu qua mốc 2010 và không kết luận xu hướng giá trị của biến thứ ba.
+\item \n{Cỡ mẫu nhỏ khi chia sâu.} Ở cấp tỉnh, đặc biệt khi lọc thêm theo nhóm thu nhập, cỡ mẫu chỉ còn vài chục hộ; sai số chuẩn của tỷ lệ lên tới 4–5 điểm \%.
+\item \n{Chỉ mô tả, không suy luận nhân quả.} Báo cáo không dùng kiểm định giả thuyết, nên không khẳng định mức ý nghĩa thống kê của bất kỳ chênh lệch nào; những chỗ có rủi ro nhiễu đều được nêu kèm cỡ mẫu.
+\end{enumerate}
+
+% =====================================================================
+\section*{Phụ lục — Mã nguồn}
+\addcontentsline{toc}{section}{Phụ lục — Mã nguồn}
+
+Toàn bộ số liệu và biểu đồ trong báo cáo được tạo từ một tệp duy nhất: \texttt{report\_EDA.ipynb}, chạy trên \texttt{processed/vhlss\_merged.csv} (dữ liệu gốc đã ghép ba đợt khảo sát). Notebook gồm 36 ô mã, sắp xếp theo đúng thứ tự các mục của báo cáo:
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}p{0.2\linewidth}X@{}}
+\toprule
+\textbf{Ô mã} & \textbf{Nội dung}\\
+\midrule
+1–4 & Tổng quan mẫu, cỡ mẫu theo tỉnh (mục 1)\\
+5–9 & Thống kê ô trống, cách xử lý, tạo biến và chia nhóm (mục 2.1–2.2)\\
+10–13 & Phân phối thu nhập, mean so với median (mục 2.3)\\
+14–20 & Thu nhập theo nhóm, khoảng cách, biểu đồ tròn, tốc độ tăng, khu vực, cơ cấu nhóm theo khu vực, tỉnh (mục 3.1)\\
+21–28 & Cơ cấu chi, Pareto, thuốc lá, gạo, giáo dục, gánh nặng, chi vượt thu, bong bóng tổng hợp (mục 3.2.1–3.2.7)\\
+29–32 & Ba yếu tố: môi trường, đông con, xu hướng tiêu dùng (mục 3.2.8)\\
+33–36 & Giá nhà theo tỉnh, giá nhà theo khu vực, giá nhà so với thu nhập, phổ cập tài sản (mục 3.3)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Thư viện sử dụng: \texttt{pandas}, \texttt{numpy}, \texttt{matplotlib}, \texttt{seaborn}. Hình được lưu vào thư mục \texttt{presentation/figs\_nb/} và chèn trực tiếp vào báo cáo này.
+
+\end{document}
