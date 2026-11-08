@@ -75,8 +75,19 @@ Cập nhật 08/11/2026. Đây là bản đọc nhanh; công thức, estimator v
 - **Mô hình:** các nhân tố tài sản cộng gộp, năm và tương tác năm × từng tài sản. Xét điều kiện của đủ chín tài sản; tài sản quá hiếm có thể chỉ đủ mô tả trong một số Q.
 - **Giả thuyết cho tài sản $j$:** năm 2010 $H_0:\beta_j=0$; năm 2014 $H_0:\beta_j+\gamma_j=0$; thay đổi qua thời gian $H_0:\gamma_j=0$. Mỗi giả thuyết đối là khác 0. Có thêm kiểm định chung cho cả nhóm hệ số.
 - **Estimator:** hệ số mô hình và các tổ hợp hệ số tương ứng; chúng là mối liên hệ có điều chỉnh cho những tài sản khác thực sự có trong mô hình.
-- **Phương pháp:** **ANOVA nhiều nhân tố và tương tác — Chap 8**; trình bày qua mô hình tuyến tính cho thiết kế không cân bằng. Lập bảng SS–df–MS. Dùng F từng phần nếu mô hình sai số chuẩn, độc lập và phương sai chung phù hợp; nếu không, dùng **Wald–HC3**, phần mở rộng đã được cho phép, khi đủ điều kiện xấp xỉ.
+- **Phương pháp:** **ANOVA nhiều nhân tố và tương tác — Chap 8**, trình bày qua mô hình tuyến tính cho thiết kế không cân bằng, với hai phiên bản song song: **A giả sử phương sai bằng nhau, dùng F cổ điển; B không giả sử phương sai bằng nhau, dùng Wald–HC3** (ngoài lớp, đã được cho phép). Cùng mẫu, tập tài sản, mô hình và giả thuyết; lập bảng SS–df–MS và đối chiếu SE, CI, p của hai bản. F chỉ có diễn giải cổ điển khi các điều kiện sai số phù hợp; HC3 vẫn cần đủ hỗ trợ dữ liệu và điều kiện xấp xỉ.
 - **Trả lời được:** liên hệ của mỗi tài sản với thu nhập sau điều chỉnh, và liên hệ đó có đổi qua thời gian không. Chưa suy ra quan hệ nhân quả hoặc “không có ý nghĩa = không còn phản ánh mức sống”.
+
+### Đối chiếu hai phiên bản ANOVA
+
+| Nội dung | A — Giả sử phương sai bằng nhau | B — Không giả sử phương sai bằng nhau |
+|---|---|---|
+| Hệ số, mẫu, mô hình, SS | Giống bản B | Giống bản A |
+| Độ bất định | SE và CI theo covariance cổ điển | SE và CI theo HC3 |
+| Kiểm định | F từng phần | Wald χ² xấp xỉ |
+| Vai trò | Đối chiếu theo giả định cổ điển | Suy luận chính của câu 8 khi cho phép phương sai khác nhau |
+
+Hai phiên bản là kiểm tra độ nhạy của cùng phân tích. Báo cả hai, không chọn theo p nhỏ hơn. p Holm cho danh sách kiểm định chính dùng kết quả bản B của câu 8; bản A báo p theo giả định để đối chiếu. Chi tiết công thức và cách diễn giải nằm ở mục 11 của plan đầy đủ.
 
 ## Kiểm tra và nguyên tắc chung
 
