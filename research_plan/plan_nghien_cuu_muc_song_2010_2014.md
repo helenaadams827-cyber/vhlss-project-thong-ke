@@ -32,6 +32,51 @@ Các câu giáo dục và gánh nặng chăm sóc người bệnh đã được 
 
 Các mục dưới viết đầy đủ biến, giả thuyết và điều kiện. “Có thay đổi” là câu hỏi kiểm định; chiều tăng/giảm và độ lớn mới quyết định cách diễn giải cải thiện.
 
+## Sample và loại test: quy ước cụ thể
+
+**Một quan sát là một hộ trong một năm.** Ví dụ mẫu thu nhập 2010 là vector 9.399 giá trị `income / size` của 9.399 hộ, không phải một số mean của năm. Tính hai mean từ hai vector hộ rồi mới lập thống kê kiểm định. Dùng chỉ tiêu đầu người không biến mỗi thành viên thành một quan sát độc lập.
+
+Hai năm được coi là mẫu độc lập theo mô hình đã thống nhất; không ghép hộ theo dòng. Mẫu của các câu khác nhau có thể trùng hộ; điều đó không biến từng phép so sánh năm thành paired test, và cũng không có nghĩa các kết quả khác câu độc lập với nhau.
+
+| Câu | Tên test chính xác | Quan hệ giữa mẫu | Phương sai tổng thể | Phía kiểm định |
+|---|---|---|---|---|
+| 1, 2 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Hộ 2014 so với hộ 2010 | Chưa biết; dùng hai phương sai mẫu riêng, không gộp | Hai phía |
+| 3a | Cùng công thức hai mẫu ở trên; ưu tiên estimate/CI | 2014 so với 2010, riêng từng khu vực và chỉ tiêu | Chưa biết, không giả sử bằng nhau | CI hai phía; không thêm p vào luận điểm chính |
+| 3b | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Thành thị so với nông thôn, cùng năm 2014 | Chưa biết, không giả sử bằng nhau | Hai phía |
+| 4 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Q1 năm 2014 so với Q1 năm 2010 | Chưa biết, không giả sử bằng nhau | Một phía tăng |
+| 5a | **Independent two-proportion Z-test**, pooled proportion dưới $H_0$ — Chap 7 §7.4 | Các chỉ báo `edu > 0` của hai năm | Không phải phân loại known/unknown variance của test mean; tham số là hai tỷ lệ chưa biết | Hai phía |
+| 5b, 6 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Hai nhóm hộ theo năm, lọc đúng điều kiện từng câu | Chưa biết, không giả sử bằng nhau | Hai phía |
+| 7 | **Pearson chi-square test of independence** trên bảng 4 × 2 — Chap 9 §9.2 | Một mẫu hộ của một năm cho từng tài sản, phân vào tám ô | Không có giả định cùng phương sai thu nhập | Bác bỏ ở đuôi phải của χ²; $H_1$ là có liên hệ |
+| 8A | **Partial F-tests in a multifactor linear model with selected interactions** | Hộ của cả hai năm gộp trong từng Q; các hộ độc lập theo mô hình | Chưa biết nhưng giả sử phương sai sai số chung; ước lượng từ residual mean square | F đuôi phải cho các ràng buộc hệ số bằng 0 |
+| 8B | **HC3 heteroskedasticity-robust Wald tests** cho đúng các ràng buộc của 8A | Cùng mẫu và mô hình 8A | Chưa biết, không áp đặt phương sai chung | Wald χ² đuôi phải; không phải F cổ điển |
+
+Các test mean của bài **không phải one-sample**, không phải known-variance Z-test và không phải paired t-test. Phương pháp Chap 7 §7.2.4 thường có tên phần mềm là Welch two-sample t-test; không cần chứng minh hai phương sai khác nhau trước khi dùng.
+
+### Mẫu của từng câu, trên dữ liệu hiện tại
+
+| Câu | Mẫu 2010 | Mẫu 2014 | Giá trị của một quan sát |
+|---|---|---|---|
+| 1 | 9.399 hộ có thu nhập/quy mô hợp lệ | 9.398 hộ tương ứng | Thu nhập đầu người danh nghĩa hoặc thực |
+| 2 | 9.387 hộ đủ cả 13 khoản chi và quy mô hợp lệ | 8.579 hộ tương ứng | Tiêu dùng thực đầu người |
+| 3a | Riêng từng khu vực, lấy đúng mẫu của biến thu nhập hoặc tiêu dùng | Tương tự, riêng từng khu vực năm 2014 | Thu nhập hoặc tiêu dùng thực đầu người |
+| 3b | Không dùng 2010 cho phép so sánh cuối kỳ | 2.692 hộ thành thị và 5.887 hộ nông thôn đủ chi | Tiêu dùng thực đầu người |
+| 4 | 2.346 hộ `Quart = 1` đủ chi | 1.845 hộ `Quart = 1` đủ chi | Tiêu dùng thực đầu người |
+| 5a | 9.399 hộ có `edu` hợp lệ, giữ cả chi 0 | 9.398 hộ tương ứng | 1 nếu `edu > 0`, 0 nếu `edu = 0` |
+| 5b | 5.963 hộ có `edu > 0`, quy mô hợp lệ | 5.637 hộ tương ứng | Chi giáo dục thực đầu người |
+| 6 | 2.350 hộ Q1 có `med`, `aid`, thu nhập hợp lệ và thu nhập dương | 2.352 hộ tương ứng | Tỷ số `(med + aid)/income` |
+| 7 | Mọi hộ có `Quart` và giá trị tài sản đang xét hợp lệ | Làm thành mẫu/bảng riêng năm 2014 | Một cặp nhãn `(Quart, sở hữu có/không)` |
+| 8A/8B | Hộ trong Q đang xét, đủ thu nhập/quy mô và các tài sản thật sự dùng | Gộp cùng Q năm 2014; có biến năm để phân biệt | Một thu nhập thực đầu người kèm năm và các chỉ báo tài sản |
+
+Cỡ mẫu câu 7 khác theo tài sản; ví dụ TV dùng 9.218 hộ năm 2010 và 9.354 hộ năm 2014. Cỡ mẫu cuối của câu 8 chưa khóa vì cần chốt tập nhân tố đủ điều kiện; hai phiên bản A/B phải dùng cùng các hộ. Số hộ từng khu vực và từng tài sản được ghi đầy đủ trong plan chi tiết. Các số trên là kiểm tra mẫu hợp lệ, chưa phải kết quả giả thuyết.
+
+### Câu 8 thuộc loại ANOVA nào?
+
+- **Không phải one-way ANOVA. Cũng không phải một mô hình chỉ có hai factor.** Mỗi tài sản có/không là một factor riêng.
+- Trong mỗi Q, nếu đủ chín tài sản thì có **10 factor hai mức**: năm + chín tài sản. Khi phải giảm tập tài sản còn $k_q$ biến, số factor là $k_q+1$.
+- **Có tương tác chọn lọc:** năm × từng tài sản, để hỏi mối liên hệ thu nhập–sở hữu có thay đổi từ 2010 sang 2014 không. Không có tương tác giữa các tài sản với nhau hoặc các tương tác bậc cao khác.
+- **Quart là điều kiện chia mẫu thành bốn mô hình**, không phải một factor bổ sung bên trong từng mô hình. Không dùng repeated-measures ANOVA.
+- Chap 8 §8.3 dạy **two-factor ANOVA with interaction**. Câu 8 mở rộng ý tưởng này sang nhiều factor; phần mở rộng và cách xử lý thiết kế không cân bằng cần được giải thích riêng. Nếu chỉ xét năm và TV, đó mới là ví dụ hai factor có tương tác, nhưng chưa điều chỉnh cho các tài sản khác như mô hình chính.
+
 ## 1. Khóa cách hiểu dữ liệu và đối tượng suy luận
 
 | Nội dung | Quy ước của bài |
@@ -410,6 +455,15 @@ Các tài sản **không cần độc lập với nhau**. Mô hình phải xem x
 
 Các bảng tỷ lệ sở hữu theo Quart và năm đi trước mô hình để thấy mức phổ biến. Chúng mô tả trên hồ sơ hợp lệ của từng tài sản. Mẫu mô hình đồng thời cần đủ các biến thực sự đưa vào mô hình; phải báo tỷ lệ mất mẫu theo năm/Q và sự khác biệt với mẫu mô tả.
 
+### Phân loại mô hình chính xác
+
+Tên mô hình chính: **multifactor ANOVA / linear model with selected year-by-asset interactions**, dùng mẫu hộ độc lập giữa các quan sát theo mô hình làm việc, với ô không cân bằng. Nếu có đủ chín biến tài sản, đây là mô hình **10 factor**, không phải one-way hoặc chỉ two-factor ANOVA. Các factor đều hai mức; Quart dùng để chia thành bốn lần phân tích riêng. Chỉ giữ tương tác năm × từng tài sản, không dùng full factorial gồm mọi tương tác của 10 factor.
+
+- **Bản A:** partial F-test cho một hoặc nhiều ràng buộc tuyến tính; phương sai sai số **chưa biết nhưng giả sử chung**, được ước lượng bằng $MS_E$. Không phải known-variance test.
+- **Bản B:** cùng mô hình OLS và ràng buộc, dùng covariance HC3 và Wald χ² xấp xỉ; phương sai **chưa biết, không cần chung**. Không gọi đây là Welch one-way ANOVA hay F cổ điển.
+- Hai bản đều có tương tác như nhau; việc dùng HC3 không thêm hay bỏ tương tác.
+- Chap 8 §8.2 nói hai factor không tương tác; §8.3 nói hai factor có tương tác. Mô hình nhiều factor hiện tại là suy rộng cấu trúc của §8.3, không phải công thức hai factor nguyên dạng trong slide.
+
 ### 8b. Mô hình nhiều nhân tố và tương tác với năm
 
 Trong mỗi Quart $q$, mô hình dự kiến là:
@@ -477,7 +531,7 @@ Trường hợp phải giảm nhân tố, kết luận chỉ điều chỉnh cho
 ### Phần nối với kiến thức lớp
 
 - Chap 8 §8.1: so sánh trung bình, phân rã biến thiên, SS/df/MS.
-- Chap 8 §8.2–8.3: nhiều nhân tố và tương tác. Mô hình câu 8 mở rộng số nhân tố và giữ các tương tác phục vụ đúng câu hỏi thời gian.
+- Chap 8 §8.2: hai nhân tố không tương tác; §8.3: hai nhân tố có tương tác. Mô hình câu 8 suy rộng số nhân tố và chỉ giữ các tương tác phục vụ câu hỏi thời gian.
 - Giả thuyết F cổ điển cần mô hình sai số phù hợp, gồm phương sai chung; dữ liệu hộ quan sát chưa cho phép diễn giải nhân tố thành nguyên nhân.
 
 ### Cố định phần chung trước khi so sánh
@@ -617,6 +671,50 @@ JB kiểm tra phân phối của **giá trị hộ**, không kiểm tra trực t
 | Holm | Điều chỉnh p cho danh sách kiểm định khoa học của bài | Ngoài lớp; mục 11 |
 
 Các số trang trên là thứ tự trang PDF. Lecture 4 và Lecture 5 có thể có số trang in trên slide khác thứ tự PDF.
+
+### Sổ mẫu chi tiết cho các phép so sánh khu vực
+
+Câu 3a so sánh hai mẫu hộ theo năm riêng trong từng dòng, không lấy thành thị/nông thôn làm một cặp theo dõi:
+
+| Chỉ tiêu | Khu vực | $n_{2010}$ | $n_{2014}$ |
+|---|---|---|---|
+| Thu nhập thực đầu người | Thành thị | 2.649 | 2.781 |
+| Thu nhập thực đầu người | Nông thôn | 6.750 | 6.617 |
+| Tiêu dùng thực đầu người, đủ 13 khoản | Thành thị | 2.646 | 2.692 |
+| Tiêu dùng thực đầu người, đủ 13 khoản | Nông thôn | 6.741 | 5.887 |
+
+Câu 3b dùng hai ô tiêu dùng năm 2014 để so sánh thành thị với nông thôn. Câu 3a ưu tiên CI cho thay đổi trong từng khu vực, chưa thêm p-value của bốn đối chiếu này vào luận điểm chính.
+
+### Sổ mẫu của bảng chéo câu 7
+
+Mỗi dòng dưới tạo **hai bảng riêng**, một bảng cho 2010 và một bảng cho 2014, không gộp thành bảng ba chiều rồi gọi là cùng phép χ² hai biến:
+
+| Tài sản | Hồ sơ hợp lệ 2010 | Hồ sơ hợp lệ 2014 |
+|---|---|---|
+| `oto` | 9.222 | 9.354 |
+| `moto` | 9.218 | 9.353 |
+| `bicycle` | 9.221 | 9.354 |
+| `bed` | 9.214 | 9.351 |
+| `tab` | 9.219 | 9.354 |
+| `tele` | 9.217 | 9.353 |
+| `tv` | 9.218 | 9.354 |
+| `emachine` | 9.221 | 9.354 |
+| `hmachine` | 9.218 | 9.353 |
+
+Mỗi hộ chỉ vào một ô của một bảng tài sản/năm. Cùng hộ có thể xuất hiện ở nhiều bảng tài sản khác nhau; các bảng này không phải các mẫu độc lập với nhau. Điều chỉnh Holm không đòi các p trong danh sách độc lập.
+
+### Mẫu ứng viên của mô hình câu 8
+
+Nếu yêu cầu đủ **cả chín** tài sản và thu nhập/quy mô hợp lệ, số hộ ứng viên là:
+
+| Q | 2010 | 2014 | Gộp hai năm cho một mô hình |
+|---|---|---|---|
+| Q1 | 2.212 | 2.310 | 4.522 |
+| Q2 | 2.324 | 2.348 | 4.672 |
+| Q3 | 2.334 | 2.344 | 4.678 |
+| Q4 | 2.342 | 2.347 | 4.689 |
+
+Đây chưa phải cỡ mẫu mô hình cuối cùng. Khi nhân tố quá hiếm phải đưa về mô tả, tập $S_q$ có thể giảm và mẫu complete cases theo các biến thực sự dùng có thể thay đổi. Phải ghi lại số hộ sau quyết định này, rồi khóa cùng mẫu cho A/B. Các cỡ mẫu trên không làm mất vấn đề ô tô Q1 chỉ có một hộ năm 2010.
 
 ## 14. Cách triển khai notebook sau khi chốt plan
 
