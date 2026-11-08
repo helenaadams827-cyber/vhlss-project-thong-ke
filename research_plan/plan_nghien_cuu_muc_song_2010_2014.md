@@ -4,7 +4,7 @@ Cập nhật 08/11/2026. [Outline đọc nhanh](outline_muc_song_2010_2014.md) �
 
 **Mạch bài:** thu nhập thực → thu nhập có trang trải chi tiêu không → thành thị/nông thôn, Q1–Q4 và Q1 → giáo dục/y tế → từng tài sản riêng.
 
-**Thay đổi đã chốt:** bỏ mô hình nhiều nhân tố và mọi tương tác; chín tài sản, không xét `house`; one-way ANOVA có/không từng tài sản với hai phiên bản phương sai. Thêm chênh lệch thu–chi và tỷ lệ chi vượt thu nhập. Phần y tế đang chọn lại thước đo, không coi chi cao/thấp tự nó là mức sống xấu/tốt. Chưa tính kết quả kiểm định.
+**Thay đổi đã chốt:** bỏ mô hình nhiều nhân tố và mọi tương tác; chín tài sản, không xét `house`; one-way ANOVA có/không từng tài sản với hai phiên bản phương sai. Thêm chênh lệch thu–chi và tỷ lệ chi vượt thu nhập. Phần y tế đang chọn lại thước đo, không coi chi cao/thấp tự nó là mức sống xấu/tốt. Chưa tính kết quả kiểm định thay đổi mức sống; đã chạy normality test và kiểm tra số đếm cho thu–chi, xem [diagnostics](kiem_tra_phan_phoi_thu_chi.md).
 
 ## 1. Định nghĩa dữ liệu và sample
 
@@ -241,6 +241,10 @@ Hai bản vẫn có cùng bảng SS mô tả dữ liệu gốc; không tạo b�
 
 ## 6. Distribution check, estimators và nhiều phép kiểm định
 
+**Phạm vi Chap 9 đã chốt:** dùng normality test và Pearson χ² independence; không thêm Mann–Whitney, Kruskal–Wallis hay các phép rank/resampling vào plan. Chỉ thêm phương pháp khi câu hỏi/điều kiện thực sự đòi hỏi, không vì dữ liệu hộ không chuẩn mà tự đổi tham số mean.
+
+**Diagnostics đã thực hiện:** [bảng kiểm tra thu–chi](kiem_tra_phan_phoi_thu_chi.md) bao gồm 10 mẫu D, 10 mẫu M và điều kiện số đếm của năm đối chiếu tỷ lệ. JB bác bỏ chuẩn ở các mẫu liên tục; một hộ đóng góp 78,41% SS của D toàn mẫu 2010, 82,46% trong Q4. Vì vậy không coi n lớn là chứng nhận t/CI mean đáng tin, đặc biệt toàn mẫu/Q4. Các số đếm tỷ lệ đều đạt ngưỡng ≥10. Đây chưa phải kết quả test thay đổi giữa năm; diagnostics các mẫu tài sản chưa được thay thế bởi audit này.
+
 - **Lecture 4/Chap 4:** tham số do câu hỏi quyết định. Mean dùng $\bar X$; tỷ lệ dùng $\hat p$; estimator khác estimate. Mean không chệch trong mô hình iid có kỳ vọng hữu hạn, chưa bảo đảm CI/p chính xác hoặc sửa được mẫu thiếu.
 - **Chap 2–3:** số hộ/0/thiếu, histogram hoặc Q–Q, mean/median/variance/skewness/kurtosis, ảnh hưởng quan sát lớn; phân phối lấy mẫu/CLT. Không tự nhận n >30 đủ với đuôi mạnh.
 - **Chap 9, trang 21:** JB chẩn đoán chuẩn với $m_r=N^{-1}\sum(x_i-\bar x)^r$, $g_1=m_3/m_2^{3/2}$, $g_2=m_4/m_2^2-3$:
@@ -295,4 +299,4 @@ Bảng n có/không theo từng Q/năm/tài sản sẽ đi cùng 9 bảng tổng
 
 Mỗi câu: Markdown câu hỏi/biến/parameter/estimator/H₀–H₁ → code tạo biến và bộ lọc/n → diagnostics → tính từng bước statistic/df/CI/p → đối chiếu thư viện → note diễn giải và giới hạn. Code dùng tên như `real_income_per_person`, `real_income_expense_balance_per_person`, `expenses_exceed_income`, `owns_tv`.
 
-Chưa thêm mọi chỉ số tìm được từ papers vào bài. Y tế và các chỉ số bổ sung đang ở bước chọn thước đo; chưa chạy kiểm định, chưa điền kết luận thực nghiệm, chưa tạo báo cáo PDF.
+Chưa thêm mọi chỉ số tìm được từ papers vào bài. Y tế và các chỉ số bổ sung đang ở bước chọn thước đo; đã chạy normality test và kiểm tra số đếm thu–chi; chưa chạy test thay đổi 2010–2014, chưa điền kết luận mức sống, chưa tạo báo cáo PDF.
