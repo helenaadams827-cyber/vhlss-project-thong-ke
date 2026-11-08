@@ -2,9 +2,9 @@
 
 Cập nhật 08/11/2026. [Outline đọc nhanh](outline_muc_song_2010_2014.md) · [Các thước đo từ papers](thuoc_do_muc_song_tu_papers.md).
 
-**Mạch bài:** thu nhập thực → khả năng trang trải toàn mẫu và Q1–Q4 → thành thị/nông thôn → giáo dục/y tế → từng tài sản riêng.
+**Mạch bài:** thu nhập thực → khả năng trang trải toàn mẫu và Q1–Q4 → thành thị/nông thôn → chi giáo dục → từng tài sản riêng.
 
-**Thay đổi đã chốt:** bỏ mô hình nhiều nhân tố và mọi tương tác; chín tài sản, không xét `house`; one-way ANOVA có/không từng tài sản với hai phiên bản phương sai. Thêm chênh lệch thu–chi và tỷ lệ chi vượt thu nhập. Phần y tế đang chọn lại thước đo, không coi chi cao/thấp tự nó là mức sống xấu/tốt. Chưa tính kết quả kiểm định thay đổi mức sống; đã chạy normality test và kiểm tra số đếm cho thu–chi, xem [diagnostics](kiem_tra_phan_phoi_thu_chi.md).
+**Phạm vi đã chốt:** sáu câu; bỏ câu y tế, FGT chưa có ngưỡng, equivalence scale và chỉ số tài sản PCA. Chín tài sản, không xét `house`; one-way ANOVA có/không từng tài sản với hai phiên bản phương sai, không nhiều nhân tố/tương tác. Chênh lệch thu–chi D và tỷ lệ còn lại M chỉ mô tả; kiểm định khả năng trang trải dùng tỷ lệ chi vượt thu nhập. Chưa tính kết quả kiểm định thay đổi mức sống; đã chạy normality test và kiểm tra số đếm cho thu–chi, xem [diagnostics](kiem_tra_phan_phoi_thu_chi.md). Các test mean/ANOVA còn lại phải đạt kiểm tra của đúng mẫu trước khi diễn giải, không coi việc giữ câu hỏi là đã xác nhận điều kiện.
 
 ## 1. Định nghĩa dữ liệu và sample
 
@@ -29,7 +29,7 @@ $$
 C=rice+nrice+tobaco+nfood+edu+med+hins+aid+water+elec+garb+fuel+fhouse.
 $$
 
-Chỉ tính $C$ khi đủ cả 13 khoản hợp lệ. Đây là tổng chi/tiêu dùng ghi nhận của bài, chưa phải aggregate phúc lợi chính thức đầy đủ. Không cộng giá trị tài sản/nhà.
+Chỉ tính $C$ khi đủ cả 13 khoản hợp lệ. Đây là tổng chi/tiêu dùng ghi nhận của bài, chưa phải aggregate phúc lợi chính thức đầy đủ. Không cộng giá trị tài sản/nhà. Bỏ câu hỏi y tế riêng không loại `med`, `hins`, `aid` khỏi tổng chi.
 
 $$
 c^R=(C/n)\frac{100}{P_t},\qquad
@@ -107,8 +107,8 @@ Giả thuyết thay đổi trung bình/tỷ lệ mặc định hai phía, $\alph
 | Đối chiếu | Tham số và giả thuyết | Estimator | Test |
 |---|---|---|---|
 | 2a: tiêu dùng thực | $\Delta_c=E(c^R_{14}\mid V_{14}=1)-E(c^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean | t hai mẫu, hai phía |
-| 2b: chênh lệch thu–chi | $\Delta_D=E(D^R_{14}\mid V_{14}=1)-E(D^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean của $D^R$ | t hai mẫu, hai phía |
-| 2c: tỷ lệ chi vượt thu | $p_t=P(C>I\mid V_t=1)$; H₀ $p_{14}=p_{10}$, H₁ khác nhau | $\hat p_{14}-\hat p_{10}$ | P, hai phía |
+| Mô tả chênh lệch thu–chi | Mức $D^R$ và chênh lệch mô tả giữa năm | Mean/median, độ phân tán của $D^R$ | Không test/CI mean D trong plan chính: đã phát hiện ảnh hưởng quan sát lớn |
+| 2b: tỷ lệ chi vượt thu | $p_t=P(C>I\mid V_t=1)$; H₀ $p_{14}=p_{10}$, H₁ khác nhau | $\hat p_{14}-\hat p_{10}$ | P, hai phía |
 
 #### Phạm vi toàn mẫu và Q1–Q4 đã chốt
 
@@ -122,17 +122,16 @@ $$
 | Chỉ tiêu, trong từng g | H₀ | H₁ | Estimator / test |
 |---|---|---|---|
 | Tỷ lệ chi vượt thu | $p_{g,14}-p_{g,10}=0$ | $p_{g,14}-p_{g,10}\ne0$ | $\hat p_{g,14}-\hat p_{g,10}$; P — hai tỷ lệ độc lập, pooled dưới H₀ |
-| Chênh lệch thu–chi thực đầu người | $\mu_{D,g,14}-\mu_{D,g,10}=0$ | $\mu_{D,g,14}-\mu_{D,g,10}\ne0$ | $\bar D^R_{g,14}-\bar D^R_{g,10}$; independent t, unknown variances/not assumed equal |
 
-Có 10 giả thuyết thu–chi chính, hai phía 5%, chưa tính đối chiếu tiêu dùng 2a. $M=(I-C)/I$ báo mô tả độ dư/thiếu tương đối trong cả năm phạm vi; chưa thêm một họ kiểm định mean M. Báo p thô và p Holm cho danh sách chính của toàn bài; cùng một giả thuyết không được đưa vào nhiều lần vì xuất hiện ở nhiều phần trình bày.
+Có 5 giả thuyết tỷ lệ thu–chi chính, hai phía 5%, chưa tính đối chiếu tiêu dùng 2a. $D^R$ và $M=(I-C)/I$ báo mô tả độ dư/thiếu trong cả năm phạm vi; bỏ năm test mean D và không thêm test mean M. Báo p thô và p Holm cho danh sách chính của toàn bài; cùng một giả thuyết không được đưa vào nhiều lần vì xuất hiện ở nhiều phần trình bày.
 
-Mỗi dòng kết quả dự kiến gồm: phạm vi, n hai năm, mức chỉ tiêu hai năm, thay đổi 2014−2010, CI 95%, thống kê Z hoặc t/df, p thô, p Holm và note về mẫu/diagnostics. Chênh lệch tỷ lệ báo điểm phần trăm; $D^R$ báo cùng đơn vị tiền giá 2010/người/năm.
+Mỗi dòng kiểm định tỷ lệ dự kiến gồm: phạm vi, n hai năm, tỷ lệ hai năm, thay đổi 2014−2010 theo điểm phần trăm, CI 95%, thống kê Z, p thô, p Holm và note về mẫu/diagnostics. $D^R$ báo mô tả cùng đơn vị tiền giá 2010/người/năm, không kèm p/CI mean D.
 
 Toàn mẫu có cùng các hộ của bốn Q, nên các kết quả không độc lập. Đây là thay đổi theo thời gian **trong từng phạm vi**, không phải kiểm định Q1 khác Q4 hay mức cải thiện đồng đều. Không suy khác biệt giữa hai mức thay đổi từ việc một p có ý nghĩa còn p kia không. “Phạm vi cả nước” chỉ phạm vi mẫu; chưa có trọng số để gọi là ước lượng quốc gia đầy đủ.
 
 Kiểm tra phân phối/đuôi của $D^R$ và số có/không của Z riêng cho từng g/năm. Tỷ lệ thiếu, kiểm tra tổng 12 khoản bỏ fuel và ảnh hưởng mẫu được báo trong đủ năm phạm vi, không chỉ toàn mẫu hoặc Q1.
 
-**Diễn giải Q1 trong bảng Q1–Q4:** dùng chính hai đối chiếu thu–chi đã có của Q1; thêm mức thu nhập, tiêu dùng thực và $M$ làm bối cảnh mô tả. Không đặt lại câu hỏi Q1 hoặc thêm kiểm định một phía cho tiêu dùng Q1. Đây là so nhóm thu nhập thấp nhất theo nhãn từng năm, không theo cùng hộ hay đo giảm nghèo tuyệt đối. Không test thu nhập Q4 khác Q1 như một phát hiện mới.
+**Diễn giải Q1 trong bảng Q1–Q4:** dùng chính kiểm định tỷ lệ chi vượt thu đã có của Q1; thêm mức thu nhập, tiêu dùng thực, $D^R$ và $M$ làm bối cảnh mô tả. Không đặt lại câu hỏi Q1 hoặc thêm kiểm định một phía cho tiêu dùng Q1. Đây là so nhóm thu nhập thấp nhất theo nhãn từng năm, không theo cùng hộ hay đo giảm nghèo tuyệt đối. Không test thu nhập Q4 khác Q1 như một phát hiện mới.
 
 $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thiếu theo dòng thu/chi ghi nhận. Đọc cùng mức thu nhập/tiêu dùng và phân phối $M$; không dùng một mean dương để kết luận tất cả hộ trang trải đủ. Việc tiêu dùng tăng không được mặc định là tốt khi không xét nguồn lực và nhu cầu.
 
@@ -140,7 +139,7 @@ $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thi�
 
 ### Câu 3 — Thành thị/nông thôn thay đổi thế nào?
 
-**3a:** với từng khu vực $a$ và chỉ tiêu $X\in\{y^R,c^R,D^R\}$, ước lượng $\Delta_{a,X}=E(X_{14}\mid a)-E(X_{10}\mid a)$, thêm điều kiện hợp lệ của X. Giả thuyết tham chiếu H₀ $\Delta_{a,X}=0$, H₁ khác 0; ưu tiên estimate/CI theo công thức t hai mẫu, không thêm mọi p vào luận điểm chính. Tỷ lệ chi vượt thu và $M$ theo khu vực dùng bảng mô tả/CI.
+**3a:** với từng khu vực $a$ và chỉ tiêu $X\in\{y^R,c^R\}$, ước lượng $\Delta_{a,X}=E(X_{14}\mid a)-E(X_{10}\mid a)$, thêm điều kiện hợp lệ của X. Giả thuyết tham chiếu H₀ $\Delta_{a,X}=0$, H₁ khác 0; ưu tiên estimate/CI theo công thức t hai mẫu khi diagnostics phù hợp, không thêm mọi p vào luận điểm chính. Tỷ lệ chi vượt thu báo mô tả/CI theo khu vực; $D^R$ và $M$ chỉ mô tả, không thêm test/CI mean.
 
 **3b:** riêng 2014, so tiêu dùng thành thị với nông thôn: H₀ $\mu_{c,U}=\mu_{c,R}$; H₁ khác nhau. Test t hai mẫu, hai phía. Kiểm định này chưa trả lời khoảng cách đã thu hẹp từ 2010.
 
@@ -151,15 +150,7 @@ $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thi�
 - Trên hồ sơ hợp lệ chung, $E(e^R)=P(edu>0)E(e^R\mid edu>0)$: thay đổi mean chung có thể nằm ở một hoặc cả hai thành phần. Không gọi hai kết quả là độc lập.
 - Thiếu số người đi học/kết quả giáo dục: chưa đo được tiếp cận, chất lượng hoặc chi mỗi người học. CPI chung chưa là giá giáo dục riêng.
 
-### Câu 5 — Y tế: đang lựa chọn lại thước đo
-
-`med + aid` là hai khoản thuốc/chăm sóc ghi nhận; `hins` riêng. Tỷ số cũ $B=(med+aid)/income$ có thể mô tả, nhưng **chưa coi giảm mean B là cải thiện mức sống**, hoặc tăng mean B là xấu đi.
-
-Cần phân biệt sức khỏe, tiếp cận điều trị và bảo vệ tài chính. File chủ yếu có khoản chi, không có sức khỏe, nhu cầu điều trị chưa đáp ứng, đầy đủ OOP/hoàn trả, thuế, nợ và chuẩn nhu cầu cơ bản. Vì vậy chưa gán một kiểm định thay thế cho câu 5. Các khoản này đã nằm trong C của câu 2; chưa cộng kết quả y tế như một xác nhận tài chính độc lập.
-
-Hướng thước đo và papers được trình bày riêng trong [ghi chú nghiên cứu](thuoc_do_muc_song_tu_papers.md). Một biểu thức “thu nhập sau y tế − chi khác” bằng $I-C$ nếu chi khác là $C-(med+aid)$; không tạo một chỉ tiêu mới có thông tin độc lập bằng cách đổi tên cùng hiệu số.
-
-### Câu 6 — Sở hữu tài sản có liên quan Quart không? — Chap 9
+### Câu 5 — Sở hữu tài sản có liên quan Quart không? — Chap 9
 
 Chín biến: `oto`, `moto`, `bicycle`, `bed`, `tab`, `tele`, `tv`, `emachine`, `hmachine`. Bỏ `house`. Chỉ báo $A_j=1$ nếu giá trị dương, 0 nếu 0; thiếu/âm chưa xác định.
 
@@ -177,7 +168,7 @@ $$
 
 Có 18 bảng dự kiến. Đã kiểm tra cả 18 bảng có kỳ vọng tối thiểu ≥5, nhỏ nhất khoảng 20,16; chưa tính χ²/p. Số kỳ vọng là điều kiện, không bắt buộc mọi số quan sát ≥5. Không yêu cầu phương sai thu nhập bằng nhau hay thu nhập chuẩn. Bác bỏ chưa nói mọi cặp Q đều khác; hai p riêng qua năm chưa là test thay đổi mối liên hệ.
 
-### Câu 7 — One-way ANOVA riêng từng tài sản — Chap 8
+### Câu 6 — One-way ANOVA riêng từng tài sản — Chap 8
 
 **Câu hỏi đã chốt:** trong một Q và năm cố định, thu nhập thực của hộ có và không có tài sản j có khác nhau không?
 
@@ -237,7 +228,7 @@ Hai bản vẫn có cùng bảng SS mô tả dữ liệu gốc; không tạo b�
 
 **Phạm vi Chap 9 đã chốt:** dùng normality test và Pearson χ² independence; không thêm Mann–Whitney, Kruskal–Wallis hay các phép rank/resampling vào plan. Chỉ thêm phương pháp khi câu hỏi/điều kiện thực sự đòi hỏi, không vì dữ liệu hộ không chuẩn mà tự đổi tham số mean.
 
-**Diagnostics đã thực hiện:** [bảng kiểm tra thu–chi](kiem_tra_phan_phoi_thu_chi.md) bao gồm 10 mẫu D, 10 mẫu M và điều kiện số đếm của năm đối chiếu tỷ lệ. JB bác bỏ chuẩn ở các mẫu liên tục; một hộ đóng góp 78,41% SS của D toàn mẫu 2010, 82,46% trong Q4. Vì vậy không coi n lớn là chứng nhận t/CI mean đáng tin, đặc biệt toàn mẫu/Q4. Các số đếm tỷ lệ đều đạt ngưỡng ≥10. Đây chưa phải kết quả test thay đổi giữa năm; diagnostics các mẫu tài sản chưa được thay thế bởi audit này.
+**Diagnostics đã thực hiện:** [bảng kiểm tra thu–chi](kiem_tra_phan_phoi_thu_chi.md) bao gồm 10 mẫu D, 10 mẫu M và điều kiện số đếm của năm đối chiếu tỷ lệ. JB bác bỏ chuẩn ở các mẫu liên tục; một hộ đóng góp 78,41% SS của D toàn mẫu 2010, 82,46% trong Q4. Vì ảnh hưởng mạnh này, bỏ test/CI mean D khỏi plan chính, giữ mô tả; không phải cứ JB bác bỏ là phải bỏ test t. Các số đếm tỷ lệ đều đạt ngưỡng ≥10. Đây chưa phải kết quả test thay đổi giữa năm; các mean thu nhập/tiêu dùng/giáo dục và mẫu tài sản vẫn cần diagnostics riêng.
 
 - **Lecture 4/Chap 4:** tham số do câu hỏi quyết định. Mean dùng $\bar X$; tỷ lệ dùng $\hat p$; estimator khác estimate. Mean không chệch trong mô hình iid có kỳ vọng hữu hạn, chưa bảo đảm CI/p chính xác hoặc sửa được mẫu thiếu.
 - **Chap 2–3:** số hộ/0/thiếu, histogram hoặc Q–Q, mean/median/variance/skewness/kurtosis, ảnh hưởng quan sát lớn; phân phối lấy mẫu/CLT. Không tự nhận n >30 đủ với đuôi mạnh.
@@ -251,7 +242,7 @@ JB áp dụng giá trị hộ/nhóm, không kiểm tra trực tiếp phân phố
 
 Phương sai mẫu khác chưa chứng minh tổng thể khác; phương sai mẫu gần cũng chưa chứng minh phương sai chung. Bản A cần đọc theo các giả định của nó, B vẫn cần độc lập và xấp xỉ phù hợp. Thiếu thông tin thiết kế khảo sát chưa được giải quyết bằng bất cứ công thức trên.
 
-**Nhiều kiểm định:** khóa danh sách p chính trước khi xét p; dùng Holm cho các test chính câu 1, 2, 3b, 4, 6 và bản B của 7 đủ điều kiện. Nếu dùng p danh nghĩa để kết luận thì đưa vào danh sách. A báo p theo giả định để đối chiếu, không dùng làm lựa chọn thay thế khi B không đạt. JB là diagnostics riêng; các bảng chỉ CI không bị âm thầm thêm p. Holm không khắc phục p đầu vào kém tin cậy. CI thường chưa được điều chỉnh đồng thời. Phần y tế chưa có test mới trong danh sách.
+**Nhiều kiểm định:** khóa danh sách p chính trước khi xét p; dùng Holm cho các test chính câu 1, tiêu dùng 2a, năm tỷ lệ ở câu 2, câu 3b, 4, 5 và bản B của 6 đủ điều kiện. Không đưa test mean D vào danh sách. Nếu dùng p danh nghĩa để kết luận thì đưa vào danh sách. A báo p theo giả định để đối chiếu, không dùng làm lựa chọn thay thế khi B không đạt. JB là diagnostics riêng; các bảng chỉ CI không bị âm thầm thêm p. Holm không khắc phục p đầu vào kém tin cậy. CI thường chưa được điều chỉnh đồng thời.
 
 ## 7. Sổ mẫu đã kiểm tra
 
@@ -261,10 +252,10 @@ Các n sau chỉ là kiểm tra hồ sơ hợp lệ, chưa là kết quả giả
 |---|---|---|
 | Thu nhập đầu người | 9.399 | 9.398 |
 | Tiêu dùng, $D^R$, $M$, chỉ báo chi vượt thu nhập, đủ 13 khoản | 9.387 | 8.579 |
-| Q1 đủ chi cho hai kiểm định thu–chi | 2.346 | 1.845 |
-| Q2 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.149 |
-| Q3 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.272 |
-| Q4 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.313 |
+| Q1 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.346 | 1.845 |
+| Q2 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.149 |
+| Q3 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.272 |
+| Q4 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.313 |
 | Giáo dục có/không chi | 9.399 | 9.398 |
 | Giáo dục thực/người trong nhóm chi dương | 5.963 | 5.637 |
 
@@ -287,10 +278,10 @@ Hồ sơ hợp lệ từng tài sản (có Q; thu nhập/quy mô hiện đều h
 | `emachine` | 9.221 | 9.354 |
 | `hmachine` | 9.218 | 9.353 |
 
-Bảng n có/không theo từng Q/năm/tài sản sẽ đi cùng 9 bảng tổng hợp. Tài sản khác nhau không bắt buộc cùng complete cases; A/B của cùng đối chiếu phải cùng hộ. Câu 6 mỗi tài sản/năm là một bảng 4 × 2; câu 7 tách thêm Q rồi so hai nhóm trong Q đó.
+Bảng n có/không theo từng Q/năm/tài sản sẽ đi cùng 9 bảng tổng hợp. Tài sản khác nhau không bắt buộc cùng complete cases; A/B của cùng đối chiếu phải cùng hộ. Câu 5 mỗi tài sản/năm là một bảng 4 × 2; câu 6 tách thêm Q rồi so hai nhóm trong Q đó.
 
-## 8. Triển khai sau khi chốt lựa chọn thước đo
+## 8. Triển khai sáu câu đã giữ lại
 
 Mỗi câu: Markdown câu hỏi/biến/parameter/estimator/H₀–H₁ → code tạo biến và bộ lọc/n → diagnostics → tính từng bước statistic/df/CI/p → đối chiếu thư viện → note diễn giải và giới hạn. Code dùng tên như `real_income_per_person`, `real_income_expense_balance_per_person`, `expenses_exceed_income`, `owns_tv`.
 
-Chưa thêm mọi chỉ số tìm được từ papers vào bài. Y tế và các chỉ số bổ sung đang ở bước chọn thước đo; đã chạy normality test và kiểm tra số đếm thu–chi; chưa chạy test thay đổi 2010–2014, chưa điền kết luận mức sống, chưa tạo báo cáo PDF.
+Không còn câu hỏi y tế hay các hướng chưa chốt từ papers trong phạm vi triển khai. Bỏ các đối chiếu tài sản không đủ điều kiện khỏi suy luận, chỉ báo mô tả/trạng thái thiếu thông tin; không ép đủ 72 p-value. Đã chạy normality test và kiểm tra số đếm thu–chi; chưa chạy test thay đổi 2010–2014, chưa điền kết luận mức sống, chưa tạo báo cáo PDF.
