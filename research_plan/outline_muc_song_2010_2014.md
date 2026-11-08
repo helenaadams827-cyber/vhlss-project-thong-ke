@@ -26,7 +26,18 @@ Cập nhật 08/11/2026. [Plan chi tiết](plan_nghien_cuu_muc_song_2010_2014.md
 | Tỷ lệ hộ chi vượt thu nhập | $Z=1\{C>I\}$, $p=P(Z=1)$ | $H_0:p_{2014}=p_{2010}$; $H_1$: khác nhau. **Independent two-proportion Z-test**, pooled dưới H₀ — Chap 7 §7.4 |
 | Tỷ lệ thu nhập còn lại | $M=(I-C)/I$ nếu $I>0$ | Mô tả độ dư/thiếu tương đối; chưa thêm kiểm định chỉ để tăng số phép test |
 
-- **Mẫu:** hộ đủ cả 13 khoản chi và thu nhập/quy mô hợp lệ: 9.387 hộ năm 2010; 8.579 hộ năm 2014. Tính $I-C$ trong từng hộ trước, rồi so hai mẫu năm.
+- **Phạm vi hai kiểm định thu–chi đã chốt:** toàn mẫu phạm vi cả nước và riêng Q1, Q2, Q3, Q4. Trong mỗi phạm vi, so hộ năm 2014 với hộ năm 2010; không so Q1 với Q4 bằng các test này.
+- **Mẫu:** hộ đủ cả 13 khoản chi và thu nhập/quy mô hợp lệ. Tính $I-C$ trong từng hộ trước, rồi so hai mẫu năm. Giữ nhãn Quart gốc trước khi lọc thiếu.
+
+| Phạm vi | Hộ hợp lệ 2010 | Hộ hợp lệ 2014 | Hai kiểm định chính |
+|---|---|---|---|
+| Toàn mẫu | 9.387 | 8.579 | Tỷ lệ $C>I$; mean $D^R$ |
+| Q1 | 2.346 | 1.845 | Tỷ lệ $C>I$; mean $D^R$ |
+| Q2 | 2.347 | 2.149 | Tỷ lệ $C>I$; mean $D^R$ |
+| Q3 | 2.347 | 2.272 | Tỷ lệ $C>I$; mean $D^R$ |
+| Q4 | 2.347 | 2.313 | Tỷ lệ $C>I$; mean $D^R$ |
+
+Với mỗi phạm vi g: $H_0:p_{g,2014}=p_{g,2010}$ và $H_0:\mu_{D,g,2014}=\mu_{D,g,2010}$; hai H₁ tương ứng là khác nhau. Có **10 giả thuyết thu–chi chính** (5 phạm vi × 2 chỉ tiêu), mặc định hai phía. $M$ mô tả bổ sung trong cả năm phạm vi. Toàn mẫu bao gồm các Q nên các kết quả không độc lập; đưa mỗi giả thuyết vào danh sách Holm một lần.
 - **Ý nghĩa:** mức dư trung bình và tỷ lệ thiếu hụt bổ sung nhau. Mean dương chưa có nghĩa mọi hộ đều trang trải đủ.
 - **Giới hạn:** đây là chênh lệch theo khoản ghi nhận, chưa phải tiết kiệm thực tế hay khả năng trả nợ; thiếu tài sản thanh khoản/nợ. Thu nhập đủ chi cũng chưa tự chứng minh chất lượng sống tốt nếu nhu cầu chưa được đáp ứng.
 - Giữ `fuel` thiếu; kiểm tra tổng 12 khoản bỏ nhiên liệu ở cả hai năm để đánh giá ảnh hưởng cấu phần/mất mẫu, không coi đó là sửa được tổng chi thiếu.
@@ -39,13 +50,13 @@ Cập nhật 08/11/2026. [Plan chi tiết](plan_nghien_cuu_muc_song_2010_2014.md
 - **Mức tiền:** thay đổi trung bình thu nhập, tiêu dùng, $D^R$ và CI — Chap 7 §7.2.4, hai mẫu độc lập, phương sai chưa biết/không giả sử bằng nhau.
 - **Tỷ lệ thiếu hụt:** bảng $P(C>I)$ và CI theo khu vực/năm; ưu tiên mô tả phạm vi, chưa thêm mọi p-value.
 - **Đối chiếu cuối kỳ:** tiêu dùng thành thị so với nông thôn năm 2014; $H_0:\mu_U=\mu_R$, $H_1:\mu_U\ne\mu_R$; cùng test t hai mẫu. Mẫu đủ chi: 2.692 hộ thành thị và 5.887 hộ nông thôn.
-- Không suy ra hai mức tăng khác nhau hoặc khoảng cách thu hẹp từ các CI/p riêng.
+- Không suy ra hai mức tăng khác nhau hoặc khoảng cách thu hẹp từ các CI/p riêng. Tương tự, một Q có p nhỏ và Q khác không có chưa chứng minh thay đổi giữa hai Q khác nhau.
 
 ### Câu 4. Nhìn đủ Q1–Q4 rồi tập trung Q1: tiêu dùng tăng có đi cùng trang trải tốt hơn không?
 
 - Giữ nhãn Q từng năm; thành viên Q1 có thể khác nhau. Bảng bốn Q là bước dẫn vào, không kiểm định thu nhập Q4 khác Q1 như phát hiện mới.
 - **4a — Tiêu dùng Q1:** $H_0:\Delta\mu_c\le0$; $H_1:\Delta\mu_c>0$; independent t, unknown variances/not assumed equal, một phía — Chap 7 §7.2.4.
-- **4b — Hộ Q1 chi vượt thu nhập:** $H_0:p_{Q1,2014}=p_{Q1,2010}$; $H_1$: khác nhau; independent two-proportion Z-test — Chap 7 §7.4.
+- **4b — Trang trải trong Q1–Q4:** đọc lại hai đối chiếu thu–chi của từng Q đã có ở câu 2, rồi tập trung diễn giải Q1. Bao gồm test tỷ lệ chi vượt thu và test mean $D^R$; không chạy hay tính Holm lần thứ hai cho cùng giả thuyết.
 - **Mẫu đủ chi:** 2.346 hộ Q1 năm 2010 và 1.845 hộ Q1 năm 2014. Báo thêm $D^R$, $M$, CI và mức mất mẫu. Chưa gọi Q1 theo nhãn là nghèo theo chuẩn tuyệt đối.
 
 ## III. Giáo dục và y tế
