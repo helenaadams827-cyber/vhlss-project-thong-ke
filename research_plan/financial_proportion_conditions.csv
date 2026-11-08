@@ -1,0 +1,6 @@
+scope,min_observed_count,min_pooled_expected_count,count_condition_at_least_10
+All,2501,2661.6579093843925,True
+Q1,637,633.9298496778811,True
+Q2,731,754.7310943060497,True
+Q3,400,414.1641047845854,True
+Q4,162,199.5334763948498,True
