@@ -1,6 +1,6 @@
 # Thước đo mức sống từ papers: dùng được gì với file hiện có?
 
-Ngày nghiên cứu: 08/11/2026. Đây là danh sách để chọn thước đo, chưa tự đưa tất cả vào kiểm định. [Outline hiện tại](outline_muc_song_2010_2014.md) · [Plan phương pháp](plan_nghien_cuu_muc_song_2010_2014.md).
+Ngày nghiên cứu: 08/11/2026. Hai hướng ở mục 1–2 đã được chọn cho toàn mẫu và riêng Q1–Q4; các hướng khác vẫn là đề xuất, chưa tự đưa vào kiểm định. [Outline hiện tại](outline_muc_song_2010_2014.md) · [Plan phương pháp](plan_nghien_cuu_muc_song_2010_2014.md).
 
 Ký hiệu $I=income$, $C=$ tổng 13 khoản ghi nhận, $n=size$. Thu/chi cả năm, cùng đơn vị; tiền thực quy về giá 2010. Mỗi dòng là hộ, chưa có trọng số khảo sát quốc gia.
 
@@ -10,7 +10,7 @@ Ký hiệu $I=income$, $C=$ tổng 13 khoản ghi nhận, $n=size$. Thu/chi cả
 
 - Đại lượng nghiên cứu là $P(C>I)$. Paper ước lượng phân phối chung bằng copula; bài của mình có thể dùng tỷ lệ mẫu trực tiếp, không cần tái tạo mô hình đó.
 - **Tạo biến:** $Z_i=1\{C_i>I_i\}$; $\hat p_t=\sum Z_i/N_t$.
-- **Câu hỏi:** năm 2014 có ít hộ chi vượt thu nhập hơn năm 2010 không? Làm tương tự riêng Q1 nếu cần.
+- **Câu hỏi đã chốt phạm vi:** tỷ lệ chi vượt thu thay đổi thế nào giữa 2010 và 2014, trong toàn mẫu và riêng Q1, Q2, Q3, Q4? Dùng giả thuyết hai phía; dấu chênh lệch/CI cho biết hướng thay đổi.
 - **Test lớp:** hai tỷ lệ độc lập, pooled dưới H₀ — Chap 7 §7.4; kiểm tra điều kiện số đếm.
 - **Giới hạn:** chỉ đo bất cân đối dòng thu/chi ghi nhận; chưa phân biệt tiêu tài sản tích lũy với khó khăn thực sự, không ước lượng rủi ro cá nhân tương lai của mô hình gốc.
 
@@ -27,7 +27,7 @@ D_i^R=\frac{I_i-C_i}{n_i}\frac{100}{CPI_t},\qquad
 M_i=\frac{I_i-C_i}{I_i}\quad(I_i>0).
 $$
 
-- **Câu hỏi:** hộ còn lại bao nhiêu nguồn lực sau chi ghi nhận; mức này thay đổi ra sao ở toàn mẫu/Q1?
+- **Câu hỏi đã chốt phạm vi:** hộ còn lại bao nhiêu nguồn lực sau chi ghi nhận; mean chênh lệch thực đầu người thay đổi ra sao trong toàn mẫu và riêng Q1–Q4?
 - **Test:** mean $D^R$ giữa hai mẫu độc lập, phương sai chưa biết và không giả sử bằng nhau — Chap 7 §7.2.4. $M$ dùng mô tả độ dư/thiếu tương đối.
 - Đây chưa phải FMR đầy đủ của paper, tiết kiệm thực tế hoặc khả năng chống chịu cú sốc; không có nợ/tài sản thanh khoản.
 
@@ -112,8 +112,8 @@ Giữ thu nhập/tiêu dùng thực đầu người làm nền tảng; C13 chỉ
 | Vai trò | Thước đo | Trạng thái |
 |---|---|---|
 | Nền tảng | Thu nhập và tiêu dùng thực đầu người | Đã có trong plan |
-| Trục bổ sung chính | $D^R$, $M$ và tỷ lệ $C>I$ | Đã đưa vào phần thu–chi, chờ triển khai sau khi chốt câu hỏi |
-| Tập trung phần đáy | Các chỉ tiêu trên trong Q1; FGT nếu có z phù hợp | Q1 đã có; FGT còn cần chốt z |
+| Trục bổ sung chính | Test $D^R$ và tỷ lệ $C>I$; mô tả $M$ | Đã chọn cho toàn mẫu và từng Q1–Q4: 10 giả thuyết chính, chưa chạy kiểm định |
+| Phân bố cải thiện | Các chỉ tiêu thu–chi trong đủ Q1–Q4, tập trung Q1 | Đã chốt phạm vi; FGT vẫn chỉ là đề xuất cần ngưỡng z |
 | Kiểm tra độ nhạy | Equivalence scale căn bậc hai | Đề xuất, chưa tự áp dụng |
 | Điều kiện vật chất | Tỷ lệ sở hữu và one-way ANOVA riêng từng tài sản | Đã chốt; chưa thêm PCA |
 | Y tế | Bảo vệ tài chính/khả năng đáp ứng nhu cầu | Đang chọn lại thước đo vì giới hạn dữ liệu |
