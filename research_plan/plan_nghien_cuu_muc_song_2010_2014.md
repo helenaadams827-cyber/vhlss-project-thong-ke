@@ -14,7 +14,7 @@ Cập nhật 08/11/2026. [Outline đọc nhanh](outline_muc_song_2010_2014.md) �
 - `nfood` không bao gồm các khoản chi riêng. `aid` là tiền chi chăm sóc người bệnh. `med` là tiền thuốc; `hins` là chi bảo hiểm.
 - Giữ `Quart` gốc trước lọc thiếu; Q1 là nhóm thu nhập thấp nhất theo nhãn từng năm, chưa phải chuẩn nghèo tuyệt đối. Không theo cùng hộ và chưa tính riêng bất định của điểm cắt nhóm.
 - Tài sản dương là có, 0 là không; thiếu/âm là chưa biết. Điện/nước/rác chỉ là khoản chi, chưa đo tiếp cận dịch vụ. Không xét `house` theo yêu cầu mới.
-- Thiếu chi giữ là thiếu, đặc biệt `fuel`; không điền 0. Mỗi câu lọc đúng biến cần dùng, không dùng chung một complete-case mask cho mọi câu.
+- Theo yêu cầu mới, chỉ ô `fuel` trống được gán 0 trong bản phân tích; không sửa Excel gốc và không gán 0 cho khoản thiếu khác. Đây là quy ước, không xác nhận hộ thực sự không chi nhiên liệu. Mỗi câu lọc đúng biến cần dùng, không dùng chung một complete-case mask cho mọi câu.
 - Thiếu trọng số/PSU/tầng và mã theo dõi: các CI/p là suy luận theo mô hình làm việc, chưa hiệu chỉnh đầy đủ thiết kế khảo sát quốc gia.
 
 ## 2. Biến phân tích
@@ -29,7 +29,7 @@ $$
 C=rice+nrice+tobaco+nfood+edu+med+hins+aid+water+elec+garb+fuel+fhouse.
 $$
 
-Chỉ tính $C$ khi đủ cả 13 khoản hợp lệ. Đây là tổng chi/tiêu dùng ghi nhận của bài, chưa phải aggregate phúc lợi chính thức đầy đủ. Không cộng giá trị tài sản/nhà. Bỏ câu hỏi y tế riêng không loại `med`, `hins`, `aid` khỏi tổng chi.
+Chỉ tính $C$ khi đủ cả 13 khoản hợp lệ sau khi gán `fuel` trống bằng 0; khoản khác còn thiếu thì không tính tổng cho hộ đó. Có 3 ô fuel trống năm 2010 và 813 năm 2014; sau xử lý còn 9/7 hộ thiếu `fhouse`. Đây là tổng chi/tiêu dùng theo quy ước của bài, chưa phải aggregate phúc lợi chính thức đầy đủ. Không cộng giá trị tài sản/nhà. Bỏ câu hỏi y tế riêng không loại `med`, `hins`, `aid` khỏi tổng chi.
 
 $$
 c^R=(C/n)\frac{100}{P_t},\qquad
@@ -85,9 +85,13 @@ $$
 
 Kiểm tra số có/không quan sát và kỳ vọng theo tỷ lệ gộp; lấy ngưỡng thận trọng ≥10 để dùng xấp xỉ. Đây là test hai tỷ lệ, không phải test mean với phương sai đã biết.
 
+**Riêng câu 2b — muốn kiểm định tỷ lệ chi vượt thu giảm:** lấy A = 2014, B = 2010. Đặt $H_0:p_{14}\ge p_{10}$, $H_1:p_{14}<p_{10}$. Chap 7 §7.4 trình bày tại biên $p_{14}=p_{10}$, dùng đúng thống kê Z ở trên và p một phía trái $\Phi(Z_{test})$. Miền bác bỏ thô 5%: $Z_{test}<-1,645$; các kết luận trong danh sách chính dựa p đã điều chỉnh Holm. Có thể báo thêm cận trên một phía 95% cho $p_{14}-p_{10}$ bằng $\widehat\Delta_p+z_{0.95}SE_{unpooled}$; cận âm hỗ trợ hướng giảm. CI hai phía 95% ở trên vẫn báo để thể hiện độ lớn, nhưng không bắt buộc nằm dưới 0 để test một phía 5% bác bỏ.
+
+Hướng giảm được chốt theo câu hỏi trước khi chạy test, không đổi hướng để lấy p nhỏ. Nếu dùng test hai phía 5% đã định trước và CI 95% của $p_{14}-p_{10}$ nằm hoàn toàn dưới 0, vẫn có bằng chứng tỷ lệ giảm; chỉ bác bỏ bằng nhau mà không xét chiều thì chưa đủ. Đây là tỷ lệ hộ, không phải mức tiền vượt thu có điều kiện trên $C>I$.
+
 ### Quy tắc đọc kết quả
 
-Giả thuyết thay đổi trung bình/tỷ lệ mặc định hai phía, $\alpha=5\%$. ANOVA và χ² dùng miền bác bỏ phía phải cho giả thuyết có khác biệt. Báo estimate, CI và p phù hợp. “Có khác biệt” chưa xác định chiều tốt/xấu; không bác bỏ chưa chứng minh bằng nhau. CI 95% thông thường là khoảng riêng lẻ, chưa có bảo đảm đồng thời.
+Mức ý nghĩa $\alpha=5\%$; riêng tỷ lệ chi vượt thu dùng một phía trái, các test mean và tỷ lệ chi giáo dục giữ hai phía. ANOVA và χ² dùng miền bác bỏ phía phải cho giả thuyết có khác biệt. Báo estimate, CI và p phù hợp. “Có khác biệt” chưa xác định chiều tốt/xấu; không bác bỏ chưa chứng minh bằng nhau. CI 95% thông thường là khoảng riêng lẻ, chưa có bảo đảm đồng thời.
 
 ## 4. Câu hỏi và giả thuyết
 
@@ -102,13 +106,13 @@ Giả thuyết thay đổi trung bình/tỷ lệ mặc định hai phía, $\alph
 
 ### Câu 2 — Thu nhập có trang trải chi tiêu tốt hơn không?
 
-Đặt $V_t=1$ khi đủ hồ sơ thu/chi/quy mô để tính các chỉ tiêu. Tham số có điều kiện trên $V_t=1$; kết quả chưa tự suy rộng sang hộ thiếu chi.
+Đặt $V_t=1$ khi đủ hồ sơ thu/chi/quy mô sau quy ước `fuel` trống = 0. Tham số có điều kiện trên $V_t=1$ và quy ước này; kết quả chưa tự suy rộng sang hộ còn thiếu chi.
 
 | Đối chiếu | Tham số và giả thuyết | Estimator | Test |
 |---|---|---|---|
 | 2a: tiêu dùng thực | $\Delta_c=E(c^R_{14}\mid V_{14}=1)-E(c^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean | t hai mẫu, hai phía |
 | Mô tả chênh lệch thu–chi | Mức $D^R$ và chênh lệch mô tả giữa năm | Mean/median, độ phân tán của $D^R$ | Không test/CI mean D trong plan chính: đã phát hiện ảnh hưởng quan sát lớn |
-| 2b: tỷ lệ chi vượt thu | $p_t=P(C>I\mid V_t=1)$; H₀ $p_{14}=p_{10}$, H₁ khác nhau | $\hat p_{14}-\hat p_{10}$ | P, hai phía |
+| 2b: tỷ lệ chi vượt thu có giảm? | $p_t=P(C>I\mid V_t=1)$; H₀ $p_{14}\ge p_{10}$, H₁ $p_{14}<p_{10}$ | $\hat p_{14}-\hat p_{10}$ | P, một phía trái, pooled tại biên bằng nhau |
 
 #### Phạm vi toàn mẫu và Q1–Q4 đã chốt
 
@@ -121,21 +125,21 @@ $$
 
 | Chỉ tiêu, trong từng g | H₀ | H₁ | Estimator / test |
 |---|---|---|---|
-| Tỷ lệ chi vượt thu | $p_{g,14}-p_{g,10}=0$ | $p_{g,14}-p_{g,10}\ne0$ | $\hat p_{g,14}-\hat p_{g,10}$; P — hai tỷ lệ độc lập, pooled dưới H₀ |
+| Tỷ lệ chi vượt thu | $p_{g,14}-p_{g,10}\ge0$ | $p_{g,14}-p_{g,10}<0$ | $\hat p_{g,14}-\hat p_{g,10}$; P — hai tỷ lệ độc lập, một phía trái, pooled tại biên bằng nhau |
 
-Có 5 giả thuyết tỷ lệ thu–chi chính, hai phía 5%, chưa tính đối chiếu tiêu dùng 2a. $D^R$ và $M=(I-C)/I$ báo mô tả độ dư/thiếu trong cả năm phạm vi; bỏ năm test mean D và không thêm test mean M. Báo p thô và p Holm cho danh sách chính của toàn bài; cùng một giả thuyết không được đưa vào nhiều lần vì xuất hiện ở nhiều phần trình bày.
+Có 5 giả thuyết tỷ lệ thu–chi chính, một phía trái 5%, chưa tính đối chiếu tiêu dùng 2a vẫn hai phía. $D^R$ và $M=(I-C)/I$ báo mô tả độ dư/thiếu trong cả năm phạm vi; bỏ năm test mean D và không thêm test mean M. Báo p thô và p Holm cho danh sách chính của toàn bài; cùng một giả thuyết không được đưa vào nhiều lần vì xuất hiện ở nhiều phần trình bày.
 
 Mỗi dòng kiểm định tỷ lệ dự kiến gồm: phạm vi, n hai năm, tỷ lệ hai năm, thay đổi 2014−2010 theo điểm phần trăm, CI 95%, thống kê Z, p thô, p Holm và note về mẫu/diagnostics. $D^R$ báo mô tả cùng đơn vị tiền giá 2010/người/năm, không kèm p/CI mean D.
 
 Toàn mẫu có cùng các hộ của bốn Q, nên các kết quả không độc lập. Đây là thay đổi theo thời gian **trong từng phạm vi**, không phải kiểm định Q1 khác Q4 hay mức cải thiện đồng đều. Không suy khác biệt giữa hai mức thay đổi từ việc một p có ý nghĩa còn p kia không. “Phạm vi cả nước” chỉ phạm vi mẫu; chưa có trọng số để gọi là ước lượng quốc gia đầy đủ.
 
-Kiểm tra phân phối/đuôi của $D^R$ và số có/không của Z riêng cho từng g/năm. Tỷ lệ thiếu, kiểm tra tổng 12 khoản bỏ fuel và ảnh hưởng mẫu được báo trong đủ năm phạm vi, không chỉ toàn mẫu hoặc Q1.
+Kiểm tra phân phối/đuôi của $D^R$ và số có/không của Z riêng cho từng g/năm. Báo tỷ lệ thiếu trước/sau xử lý fuel và số hộ được bổ sung trong đủ năm phạm vi, không chỉ toàn mẫu hoặc Q1.
 
 **Diễn giải Q1 trong bảng Q1–Q4:** dùng chính kiểm định tỷ lệ chi vượt thu đã có của Q1; thêm mức thu nhập, tiêu dùng thực, $D^R$ và $M$ làm bối cảnh mô tả. Không đặt lại câu hỏi Q1 hoặc thêm kiểm định một phía cho tiêu dùng Q1. Đây là so nhóm thu nhập thấp nhất theo nhãn từng năm, không theo cùng hộ hay đo giảm nghèo tuyệt đối. Không test thu nhập Q4 khác Q1 như một phát hiện mới.
 
 $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thiếu theo dòng thu/chi ghi nhận. Đọc cùng mức thu nhập/tiêu dùng và phân phối $M$; không dùng một mean dương để kết luận tất cả hộ trang trải đủ. Việc tiêu dùng tăng không được mặc định là tốt khi không xét nguồn lực và nhu cầu.
 
-**Thiếu dữ liệu:** báo thiếu theo năm, khu vực, Q; tính tổng 12 khoản không gồm `fuel` ở cả hai năm. Đối chiếu tổng 12 trên mẫu đủ 13 và mọi hộ đủ 12 để tách khác biệt cấu phần/mẫu. Đây là chỉ tiêu khác, không khôi phục nhiên liệu thiếu. Tính thiếu hụt từ 12 khoản không được gọi là thiếu hụt theo tổng chi đầy đủ.
+**Quy ước fuel và kiểm tra ảnh hưởng:** tổng 13 khoản có fuel trống = 0 là bản chính. Không gán 0 cho `fhouse` còn thiếu. Đặt tỷ lệ mô tả bản chính cạnh tỷ lệ trên nhóm đủ chi và có fuel được ghi nhận, báo n tương ứng để thấy ảnh hưởng của việc bổ sung hộ. Đối chiếu này không xác nhận giá trị nhiên liệu bị thiếu thực sự bằng 0. [Sổ mẫu](financial_sample_audit.csv) lưu số ô gán và số đếm nhóm có fuel ghi nhận; Excel gốc được giữ nguyên.
 
 ### Câu 3 — Thành thị/nông thôn thay đổi thế nào?
 
@@ -251,18 +255,18 @@ Các n sau chỉ là kiểm tra hồ sơ hợp lệ, chưa là kết quả giả
 | Đối chiếu | 2010 | 2014 |
 |---|---|---|
 | Thu nhập đầu người | 9.399 | 9.398 |
-| Tiêu dùng, $D^R$, $M$, chỉ báo chi vượt thu nhập, đủ 13 khoản | 9.387 | 8.579 |
-| Q1 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.346 | 1.845 |
-| Q2 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.149 |
-| Q3 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.272 |
-| Q4 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.313 |
+| Tiêu dùng, $D^R$, $M$, chỉ báo chi vượt thu nhập, sau quy ước fuel | 9.390 | 9.391 |
+| Q1 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.346 | 2.350 |
+| Q2 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.347 | 2.349 |
+| Q3 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.349 | 2.346 |
+| Q4 đủ chi cho kiểm định tỷ lệ và mô tả thu–chi | 2.348 | 2.346 |
 | Giáo dục có/không chi | 9.399 | 9.398 |
 | Giáo dục thực/người trong nhóm chi dương | 5.963 | 5.637 |
 
 | Khu vực | Thu nhập 2010 | Thu nhập 2014 | Đủ chi 2010 | Đủ chi 2014 |
 |---|---|---|---|---|
-| Thành thị | 2.649 | 2.781 | 2.646 | 2.692 |
-| Nông thôn | 6.750 | 6.617 | 6.741 | 5.887 |
+| Thành thị | 2.649 | 2.781 | 2.648 | 2.781 |
+| Nông thôn | 6.750 | 6.617 | 6.742 | 6.610 |
 
 Hồ sơ hợp lệ từng tài sản (có Q; thu nhập/quy mô hiện đều hợp lệ) là tổng hai nhóm có/không trước tách Q:
 
