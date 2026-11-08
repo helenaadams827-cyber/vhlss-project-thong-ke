@@ -6,7 +6,16 @@ Ngày cập nhật: 08/11/2026.
 
 **Mạch bài:** thu nhập thực → tiêu dùng thực → thành thị/nông thôn → Q1–Q4 và tập trung Q1 → giáo dục → gánh nặng chăm sóc người bệnh → tài sản có còn phân biệt thu nhập không.
 
-Các câu giáo dục và gánh nặng chăm sóc người bệnh đã được đồng ý. Cập nhật mới: được phép dùng kiến thức ngoài lớp và xét tất cả biến tài sản bằng mô hình nhiều nhân tố. Phần tài sản dùng mô hình tuyến tính theo cấu trúc ANOVA, kiểm định Wald với HC3 để cho phép phương sai khác nhau; nội dung ngoài lớp được đánh dấu rõ.
+Các câu giáo dục và gánh nặng chăm sóc người bệnh đã được đồng ý. Outline mới dành hai câu hỏi nghiên cứu rõ ràng cho Chap 9 và Chap 8: **câu 7 kiểm định độc lập sở hữu–Quart bằng χ²; câu 8 xét nhiều nhân tố tài sản và tương tác với năm bằng ANOVA/mô hình tuyến tính**. Với câu 8, dùng F cổ điển nếu điều kiện phù hợp; nếu không, dùng Wald–HC3 khi chính điều kiện xấp xỉ của phương án này phù hợp. Kiến thức ngoài lớp đã được cho phép và được đánh dấu riêng.
+
+### Bốn phần của bài
+
+| Phần | Nội dung | Câu hỏi |
+|---|---|---|
+| I. Mặt bằng nguồn lực và tiêu dùng | Thu nhập có tăng thực không, tiêu dùng có thay đổi không? | 1–2 |
+| II. Phạm vi của cải thiện | Thành thị/nông thôn → Q1–Q4 → tập trung Q1 | 3–4 |
+| III. Giáo dục và chăm sóc người bệnh | Phân biệt tỷ lệ có chi với mức chi; xem gánh nặng của Q1 | 5–6 |
+| IV. Điều kiện vật chất | Sở hữu khác giữa các Q không → liên hệ riêng của các tài sản trong từng Q và từng năm | 7–8 |
 
 ### Đọc nhanh các câu hỏi
 
@@ -18,7 +27,8 @@ Các câu giáo dục và gánh nặng chăm sóc người bệnh đã được 
 | 4 | Q1 có tăng tiêu dùng thực? | Trung bình Q1 năm 2014 − Q1 năm 2010 | t hai mẫu một phía tăng, Chap 7 |
 | 5 | Giáo dục: nhiều hộ có chi hơn hay nhóm có chi chi nhiều hơn? | Chênh lệch tỷ lệ có chi; chênh lệch trung bình có điều kiện | Z hai tỷ lệ và t hai trung bình, Chap 7 |
 | 6 | Gánh nặng thuốc/chăm sóc người bệnh của Q1 có giảm? | Chênh lệch trung bình tỷ số chi/thu nhập | t hai mẫu phương sai riêng, Chap 7 |
-| 7 | Tài sản nào phân biệt thu nhập trong từng Q; mối liên hệ có đổi qua thời gian? | Hệ số từng tài sản ở mỗi năm và tương tác với năm | ANOVA nhiều nhân tố qua mô hình tuyến tính; Wald–HC3 ngoài lớp |
+| 7 | Tỷ lệ sở hữu từng tài sản có khác giữa Q1–Q4 trong từng năm? | Độc lập giữa sở hữu và Quart; tỷ lệ sở hữu từng Q | χ² độc lập, Chap 9 §9.2 |
+| 8 | Sau khi xét các tài sản khác, tài sản nào còn phân biệt thu nhập trong từng Q; mối liên hệ có đổi qua thời gian? | Hệ số từng tài sản ở mỗi năm và tương tác với năm | ANOVA nhiều nhân tố, Chap 8; F nếu phù hợp, Wald–HC3 là mở rộng |
 
 Các mục dưới viết đầy đủ biến, giả thuyết và điều kiện. “Có thay đổi” là câu hỏi kiểm định; chiều tăng/giảm và độ lớn mới quyết định cách diễn giải cải thiện.
 
@@ -133,7 +143,7 @@ Kiểm tra số có/không ở từng nhóm và các tần số kỳ vọng theo
 - Các kiểm định mặc định hai phía, $\alpha=5\%$: $H_0:\Delta=0$ và $H_1:\Delta\ne0$.
 - Câu Q1 tăng tiêu dùng giữ hướng một phía đã thống nhất trước đây.
 - Với câu hỏi “cải thiện” nhưng dùng hai phía, chỉ diễn giải có bằng chứng tăng khi kết quả có hướng dương và CI phù hợp. Bác bỏ $H_0$ tự nó chưa xác định chiều.
-- Các CI 95% là khoảng riêng lẻ, chưa có bảo đảm đồng thời 95%. Với loạt kiểm định khoa học của bài, báo cả p thô và p điều chỉnh Holm như mục 10; các kiểm định JB chỉ phục vụ diagnostics và được ghi riêng.
+- Các CI 95% là khoảng riêng lẻ, chưa có bảo đảm đồng thời 95%. Với loạt kiểm định khoa học của bài, báo cả p thô và p điều chỉnh Holm như mục 11; các kiểm định JB chỉ phục vụ diagnostics và được ghi riêng.
 
 ## 3. Câu 1 — Thu nhập đầu người có cải thiện sau khi điều chỉnh giá không?
 
@@ -338,13 +348,54 @@ $$
 
 **Phạm vi trả lời:** gánh nặng của hai khoản chi ghi nhận. `hins` trình bày riêng. Không gọi đây là chỉ tiêu chi y tế thảm họa chuẩn quốc tế; chi thấp có thể do ít bệnh hoặc không chi trả được, chưa khẳng định sức khỏe tốt hơn.
 
-## 9. Câu 7 — Những tài sản nào còn phân biệt thu nhập, trong từng Q và từng năm?
+## 9. Câu 7 — Tỷ lệ sở hữu tài sản có còn khác giữa Q1–Q4 không? — Chap 9
+
+**Vai trò:** xác định tài sản nào phân biệt các nhóm thu nhập về tỷ lệ sở hữu. Đây là một câu hỏi nghiên cứu chính, dùng trực tiếp Chap 9; không chỉ dùng chương này để kiểm tra chuẩn.
+
+**Câu hỏi cụ thể:** Trong riêng năm 2010, rồi riêng năm 2014, tỷ lệ sở hữu mỗi tài sản có khác giữa Q1–Q4 không?
+
+**Biến:** `Year`, `Quart` và chỉ báo có/không của từng tài sản trong danh sách `oto`, `moto`, `bicycle`, `bed`, `tab`, `tele`, `tv`, `emachine`, `hmachine`. Giá trị dương là có, 0 là không, thiếu/âm là chưa biết. Mỗi bảng dùng những hộ có Quart và tài sản đó hợp lệ, không yêu cầu đủ tất cả tài sản hay khoản chi.
+
+Với tài sản $j$, năm $t$, đặt:
+
+$$
+p_{j,q,t}=P(A_j=1\mid Quart=q,Year=t).
+$$
+
+**Giả thuyết cho mỗi tài sản/năm:**
+
+$$
+H_{0,j,t}:p_{j,1,t}=p_{j,2,t}=p_{j,3,t}=p_{j,4,t};
+\qquad H_{1,j,t}:\text{có ít nhất hai tỷ lệ khác nhau}.
+$$
+
+Tương đương $H_0$: sở hữu tài sản $j$ và Quart độc lập trong năm đó. Đây chưa phải giả thuyết sở hữu tài sản làm thay đổi thu nhập.
+
+**Estimator:** $\hat p_{j,q,t}=x_{j,q,t}/n_{j,q,t}$; báo tỷ lệ của cả bốn Q và độ lớn chênh lệch, bên cạnh kiểm định chung.
+
+**Phương pháp:** kiểm định độc lập Pearson $\chi^2$, Chap 9 §9.2, trang PDF 11–13. Lập bảng $4\times2$ cho từng tài sản/năm; chín tài sản × hai năm = 18 bảng dự kiến.
+
+$$
+E_{qa}=\frac{R_qC_a}{N},\qquad
+\chi^2=\sum_{q=1}^4\sum_{a=0}^1\frac{(O_{qa}-E_{qa})^2}{E_{qa}}
+\approx\chi^2_{(4-1)(2-1)}=\chi^2_3.
+$$
+
+**Điều kiện:** quan sát hộ độc lập theo mô hình làm việc, mỗi hộ thuộc đúng một ô, và tần số kỳ vọng đủ lớn. Kiểm tra mọi $E_{qa}\ge5$; điều kiện này áp dụng cho **số kỳ vọng**, không bắt buộc mọi số quan sát đều ít nhất 5. Không cần phân phối thu nhập chuẩn hay phương sai thu nhập bằng nhau.
+
+**Đã kiểm tra khả năng áp dụng:** trên dữ liệu hiện tại, cả 18 bảng đều có tần số kỳ vọng nhỏ nhất trên 5 (nhỏ nhất khoảng 20,16). Đây là kiểm tra thiết kế, chưa phải kết quả kiểm định mối liên hệ. Vì vậy, ô tô hiếm bên trong Q1 có thể gây khó cho mô hình câu 8 nhưng chưa ngăn kiểm định sở hữu ô tô giữa bốn Q ở câu này.
+
+**Báo kết quả sau này:** bảng tỷ lệ Q1–Q4 cho hai năm, $\chi^2$, df, p thô và p Holm. Chỉ bác bỏ kiểm định chung chưa chỉ ra tất cả cặp Q đều khác nhau; không tự chạy thêm mọi cặp.
+
+**Phạm vi trả lời:** mối liên hệ giữa nhóm thu nhập và sở hữu trong từng năm. Một năm có ý nghĩa, năm kia không chưa chứng minh mối liên hệ đã yếu đi. Câu 8 kiểm tra trực tiếp thay đổi của mối liên hệ với thu nhập trong mô hình nhiều nhân tố; đó là tham số khác, không phải kiểm định sự thay đổi của chính mối liên hệ $\chi^2$. Tỷ lệ sở hữu cao/thấp được đọc từ bảng tỷ lệ, không suy ra từ p-value.
+
+## 10. Câu 8 — Những tài sản nào còn phân biệt thu nhập, trong từng Q và từng năm?
 
 **Câu hỏi cụ thể:** Trong cùng nhóm thu nhập, sở hữu mỗi loại tài sản có liên hệ riêng với thu nhập đầu người không, sau khi xét đồng thời các tài sản còn lại? Mối liên hệ đó có thay đổi giữa 2010 và 2014 không?
 
 Đây là câu hỏi về **mối liên hệ có điều chỉnh trong mô hình**, khác với chênh lệch trung bình thô của hai nhóm sở hữu. Không gọi hệ số là tác động nhân quả.
 
-### 7a. Biến dùng và phạm vi
+### 8a. Biến dùng và phạm vi
 
 | Nhóm | Biến |
 |---|---|
@@ -359,7 +410,7 @@ Các tài sản **không cần độc lập với nhau**. Mô hình phải xem x
 
 Các bảng tỷ lệ sở hữu theo Quart và năm đi trước mô hình để thấy mức phổ biến. Chúng mô tả trên hồ sơ hợp lệ của từng tài sản. Mẫu mô hình đồng thời cần đủ các biến thực sự đưa vào mô hình; phải báo tỷ lệ mất mẫu theo năm/Q và sự khác biệt với mẫu mô tả.
 
-### 7b. Mô hình nhiều nhân tố và tương tác với năm
+### 8b. Mô hình nhiều nhân tố và tương tác với năm
 
 Trong mỗi Quart $q$, mô hình dự kiến là:
 
@@ -384,7 +435,7 @@ Cấu trúc dùng các nhân tố tài sản cộng gộp và các tương tác 
 
 **Estimator:** vector hệ số OLS $\hat\theta_q=(X_q'X_q)^{-1}X_q'y_q$ khi ma trận thiết kế có hạng đầy đủ. Đây là phần mở rộng ngoài lớp. Các hệ số là tham số của mô hình tuyến tính/best linear projection trên mẫu mục tiêu; chỉ diễn giải thành chênh lệch kỳ vọng có điều kiện không đổi khi cấu trúc kỳ vọng tuyến tính đã nêu phù hợp.
 
-### 7c. Giả thuyết cho từng tài sản
+### 8c. Giả thuyết cho từng tài sản
 
 Với từng $j$ trong từng Quart $q$:
 
@@ -396,11 +447,11 @@ Với từng $j$ trong từng Quart $q$:
 
 **Estimator tương ứng:** $\hat\beta_{jq}$, $\hat\beta_{jq}+\hat\gamma_{jq}$, $\hat\gamma_{jq}$. Với tổng hai hệ số, SE phải tính cả hiệp phương sai giữa hai estimator, không cộng riêng hai SE.
 
-Cả ba giả thuyết đều dùng kiểm định Wald–HC3 ở mục 10. Thống kê cho một ràng buộc có phân phối $\chi^2_1$ xấp xỉ; có thể trình bày tương đương bằng $Z$ chuẩn xấp xỉ. Báo hệ số, CI, p thô và p điều chỉnh.
+Cả ba giả thuyết là ràng buộc tuyến tính trong ANOVA nhiều nhân tố. Dùng F từng phần nếu mô hình sai số chuẩn, độc lập và phương sai chung phù hợp; nếu không, dùng Wald–HC3 khi điều kiện xấp xỉ của phương án đó phù hợp (mục 11). Báo hệ số, CI, p thô và p điều chỉnh.
 
 **Diễn giải đúng mục tiêu:** một năm có ý nghĩa, năm kia không, chưa kiểm định sự thay đổi; hàng thứ ba mới trả lời việc đó. Không bác bỏ hệ số bằng 0 cũng chưa chứng minh tài sản hết khả năng phân biệt về mặt kinh tế. Muốn khẳng định chênh lệch đủ nhỏ cần chốt ngưỡng nhỏ có ý nghĩa và thiết kế kiểm định tương đương riêng; đó chưa là kết luận được hứa trong plan.
 
-### 7d. Giả thuyết cho cả nhóm tài sản
+### 8d. Giả thuyết cho cả nhóm tài sản
 
 Trong từng Quart, đặt $k_q=|S_q|$:
 
@@ -408,9 +459,9 @@ Trong từng Quart, đặt $k_q=|S_q|$:
 2. **Năm 2014:** $H_0:\beta_{jq}+\gamma_{jq}=0$ với mọi $j$; $H_1$: có ít nhất một tổng khác 0.
 3. **Thay đổi giữa hai năm:** $H_0:\gamma_{jq}=0$ với mọi $j\in S_q$; $H_1$: có ít nhất một hệ số tương tác khác 0.
 
-Mỗi kiểm định chung dùng Wald–HC3 với $k_q$ ràng buộc độc lập, nếu ma trận hiệp phương sai của các ràng buộc khả nghịch. Bác bỏ kiểm định chung cho biết có ít nhất một mối liên hệ phù hợp giả thuyết đối; các kiểm định riêng mới chỉ ra tài sản nào có bằng chứng.
+Mỗi kiểm định chung xét $k_q$ ràng buộc độc lập: dùng F từng phần theo mô hình cổ điển hoặc Wald–HC3 theo điều kiện ở mục 11. Với Wald, cần ma trận hiệp phương sai của các ràng buộc khả nghịch. Bác bỏ kiểm định chung cho biết có ít nhất một mối liên hệ phù hợp giả thuyết đối; các kiểm định riêng mới chỉ ra tài sản nào có bằng chứng.
 
-### 7e. Điểm thiết kế đã kiểm tra, chưa phải kết quả giả thuyết
+### 8e. Điểm thiết kế đã kiểm tra, chưa phải kết quả giả thuyết
 
 Đã kiểm tra số hộ sở hữu trên hồ sơ đủ chín biến, chưa ước lượng hệ số hay tính p:
 
@@ -421,15 +472,27 @@ Mỗi kiểm định chung dùng Wald–HC3 với $k_q$ ràng buộc độc lậ
 
 Trường hợp phải giảm nhân tố, kết luận chỉ điều chỉnh cho tập $S_q$ thực sự đã dùng; không viết là đã kiểm soát đủ chín tài sản. Phần sở hữu hiếm vẫn có số đếm/tỷ lệ mô tả và ghi rõ vì sao chưa thể kết luận suy luận.
 
-## 10. ANOVA nhiều nhân tố và cách đưa ra kết luận khi phương sai khác nhau
+## 11. ANOVA nhiều nhân tố và cách đưa ra kết luận khi phương sai khác nhau
 
 ### Phần nối với kiến thức lớp
 
 - Chap 8 §8.1: so sánh trung bình, phân rã biến thiên, SS/df/MS.
-- Chap 8 §8.2–8.3: nhiều nhân tố và tương tác. Mô hình câu 7 mở rộng số nhân tố và giữ các tương tác phục vụ đúng câu hỏi thời gian.
+- Chap 8 §8.2–8.3: nhiều nhân tố và tương tác. Mô hình câu 8 mở rộng số nhân tố và giữ các tương tác phục vụ đúng câu hỏi thời gian.
 - Giả thuyết F cổ điển cần mô hình sai số phù hợp, gồm phương sai chung; dữ liệu hộ quan sát chưa cho phép diễn giải nhân tố thành nguyên nhân.
 
-### Phần mở rộng đã được cho phép: HC3 và Wald
+### Nhánh 1 — Kiểm định F theo mô hình ANOVA cổ điển
+
+Với cùng các hộ quan sát, gọi U là mô hình đầy đủ và R là mô hình bị ràng buộc bởi $H_0$. Nếu $H_0$ đặt $r$ ràng buộc độc lập và $p_U=rank(X_U)$:
+
+$$
+F=\frac{(SS_{E,R}-SS_{E,U})/r}{SS_{E,U}/(N-p_U)}.
+$$
+
+Dưới $H_0$, nếu sai số độc lập, chuẩn và cùng phương sai, $F\sim F_{r,N-p_U}$. Đây là nguyên lý SS–df–MS của Chap 8, trình bày qua mô hình tuyến tính để xử lý nhiều nhân tố và cỡ ô không cân bằng. Không chép công thức SS cân bằng trong slide sang dữ liệu nhiều nhân tố này.
+
+Mô hình R và U phải dùng đúng cùng một mẫu. Ví dụ kiểm định hệ số năm 2014 bằng 0 là ràng buộc $\beta_j+\gamma_j=0$, không đơn giản xóa một cột tùy ý. Kiểm tra phần dư, sự khác biệt mức phân tán và ảnh hưởng của điểm lớn; một p kiểm tra chuẩn/phương sai không tự chứng minh mọi giả định.
+
+### Nhánh 2 — Phần mở rộng đã được cho phép: HC3 và Wald
 
 **HC3** là cách ước lượng ma trận hiệp phương sai của các hệ số khi phương sai sai số có thể khác nhau giữa các hộ. Nó thay cách tính độ bất định, không tự thay estimator OLS hoặc sửa sai lệch do mô hình, chọn mẫu và bỏ sót biến.
 
@@ -452,7 +515,7 @@ W=(R\hat\theta-r_0)'
 \approx\chi^2_r\quad\text{dưới }H_0.
 $$
 
-Chọn tham chiếu $\chi^2$ xấp xỉ, không dùng phân phối F cổ điển. Trong triển khai cần truyền rõ covariance HC3 và `use_f=False`; kiểm tra hạng và tính khả nghịch của các ràng buộc. Cách đặt giả thuyết chung và lựa chọn phân phối được đối chiếu với [tài liệu Wald test](https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLSResults.wald_test.html).
+Trong nhánh phương sai khác nhau này, chọn tham chiếu $\chi^2$ xấp xỉ, không dùng phân phối F cổ điển. Trong triển khai cần truyền rõ covariance HC3 và `use_f=False`; kiểm tra hạng và tính khả nghịch của các ràng buộc. Cách đặt giả thuyết chung và lựa chọn phân phối được đối chiếu với [tài liệu Wald test](https://www.statsmodels.org/stable/generated/statsmodels.regression.linear_model.OLSResults.wald_test.html).
 
 **Điều kiện:** quan sát độc lập theo mô hình làm việc, số nhân tố hữu hạn so với cỡ mẫu, các điều kiện moment cho xấp xỉ hiệp phương sai (chẳng hạn moment bậc bốn hữu hạn), ma trận thiết kế được xác định và có đủ hỗ trợ/biến thiên; không có một số ít điểm chi phối xấp xỉ. HC3 không yêu cầu cùng phương sai hay sai số có phân phối chuẩn chính xác, nhưng suy luận vẫn là xấp xỉ mẫu lớn. Nó không khắc phục phụ thuộc cụm trong thiết kế khảo sát khi chưa có thông tin cụm, hoặc một nhóm sở hữu chỉ có một hộ.
 
@@ -461,9 +524,9 @@ Chọn tham chiếu $\chi^2$ xấp xỉ, không dùng phân phối F cổ điể
 Hai bảng phục vụ hai việc riêng:
 
 1. **Bảng phân rã mô hình OLS:** $SS_T=SS_{model}+SS_E$, với df mô hình $rank(X)-1$, df sai số $N-rank(X)$, df tổng $N-1$; tính MS để nối với Chap 8. Đây là phân rã đại số khi có intercept.
-2. **Bảng kiểm định nhân tố và tương tác:** tên tài sản/nhóm hệ số, giả thuyết cụ thể, số ràng buộc, thống kê Wald $W$, phân phối $\chi^2$ xấp xỉ, p thô/p điều chỉnh và các ước lượng liên quan.
+2. **Bảng kiểm định nhân tố và tương tác:** tên tài sản/nhóm hệ số, giả thuyết cụ thể, số ràng buộc, thống kê F và bậc tự do nếu dùng nhánh cổ điển; hoặc Wald $W$ và phân phối $\chi^2$ xấp xỉ nếu dùng nhánh HC3. Báo p thô/p điều chỉnh và các ước lượng liên quan.
 
-Các nhân tố tài sản có tương quan và cỡ ô không cân bằng, nên phần SS của từng nhân tố có thể phụ thuộc cách phân rã; không cộng các partial SS như các phần đóng góp độc lập. Kiểm định dùng các ràng buộc tường minh ở câu 7, tránh việc lựa chọn Type I/II/III làm thay đổi ngầm câu hỏi.
+Các nhân tố tài sản có tương quan và cỡ ô không cân bằng, nên phần SS của từng nhân tố có thể phụ thuộc cách phân rã; không cộng các partial SS như các phần đóng góp độc lập. Kiểm định dùng các ràng buộc tường minh ở câu 8, tránh việc lựa chọn Type I/II/III làm thay đổi ngầm câu hỏi.
 
 Không gắn nhãn Wald $W$ là F cổ điển, và không trình bày SS suy ngược từ bảng robust như một phân rã SS cộng được theo slide.
 
@@ -471,13 +534,13 @@ Không gắn nhãn Wald $W$ là F cổ điển, và không trình bày SS suy ng
 
 Xét nhiều tài sản làm tăng khả năng có p nhỏ ngẫu nhiên. Dùng điều chỉnh **Holm** cho danh sách p của các giả thuyết khoa học được báo như kết luận kiểm định trong toàn plan; báo cả p thô và p điều chỉnh. Đây là kiến thức ngoài lớp, được giải thích và đối chiếu với [tài liệu điều chỉnh p](https://www.statsmodels.org/stable/generated/statsmodels.stats.multitest.multipletests.html).
 
-Danh sách được khóa theo thiết kế trước khi xét p: các kiểm định chính về thu nhập, tiêu dùng, khu vực cuối kỳ, Q1, hai thành phần giáo dục, gánh nặng chăm sóc; cùng các kiểm định tài sản riêng và chung đủ điều kiện ở câu 7. Nếu dùng cả kiểm định thu nhập danh nghĩa để kết luận, đưa nó vào danh sách. Các bảng chỉ mô tả/CI và kiểm định JB chẩn đoán được ghi rõ, không âm thầm biến thành thêm kết luận kiểm định.
+Danh sách được khóa theo thiết kế trước khi xét p: các kiểm định chính về thu nhập, tiêu dùng, khu vực cuối kỳ, Q1, hai thành phần giáo dục, gánh nặng chăm sóc; cùng các kiểm định độc lập tài sản–Quart ở câu 7 và các kiểm định tài sản riêng/chung đủ điều kiện ở câu 8. Nếu dùng cả kiểm định thu nhập danh nghĩa để kết luận, đưa nó vào danh sách. Các bảng chỉ mô tả/CI và kiểm định JB chẩn đoán được ghi rõ, không âm thầm biến thành thêm kết luận kiểm định.
 
 Với $m$ giả thuyết có p hợp lệ, xếp $p_{(1)}\le\cdots\le p_{(m)}$; so sánh tuần tự với $\alpha/(m-i+1)$ và dừng bác bỏ khi gặp phép không đạt. Báo p điều chỉnh theo bước này. Kiểm soát sai lầm cả họ vẫn phụ thuộc việc các p đầu vào đủ hợp lệ; Holm không sửa được HC3 không đáng tin ở nhóm quá hiếm. CI 95% thường vẫn là CI riêng lẻ, chưa tự được điều chỉnh đồng thời theo Holm.
 
 **Hướng kết luận được phép:** tài sản nào có liên hệ với thu nhập trong mô hình; liên hệ đó đã thay đổi hay chưa; độ lớn và độ bất định đến đâu. “Chưa đủ bằng chứng” là một kết quả có thể xảy ra, không bị đổi thành khẳng định bằng cách chọn phương pháp khác.
 
-## 11. Distribution check, estimator và inference được kiểm tra thế nào?
+## 12. Distribution check, estimator và inference được kiểm tra thế nào?
 
 ### Trước hết xác định tham số, rồi mới chọn estimator
 
@@ -510,7 +573,7 @@ JB kiểm tra phân phối của **giá trị hộ**, không kiểm tra trực t
 - Bảng chéo: kiểm tra tần số kỳ vọng cho xấp xỉ $\chi^2$.
 - Tính độc lập đến từ thiết kế/mô hình dữ liệu, không thể được chứng minh chỉ bằng histogram hay JB.
 
-## 12. Bảng đối chiếu kiến thức lớp
+## 13. Bảng đối chiếu kiến thức lớp
 
 | Kiến thức | Dùng vào đâu | Tài liệu |
 |---|---|---|
@@ -521,22 +584,22 @@ JB kiểm tra phân phối của **giá trị hộ**, không kiểm tra trực t
 | $H_0$, $H_1$, $\alpha$, bác bỏ/không bác bỏ | Mọi câu kiểm định | Chap 6 |
 | Hai trung bình độc lập, phương sai riêng | Câu 1–4, 5b, 6 | Chap 7 §7.2.4, trang PDF 14 |
 | Hai tỷ lệ | Câu 5a | Chap 7 §7.4, trang PDF 22 |
-| ANOVA, nhiều nhân tố và tương tác; SS, df, MS | Mô hình tài sản ở câu 7 | Chap 8 §8.1–8.3; suy rộng số nhân tố ngoài slide |
-| Độc lập hai biến phân loại | Phương pháp đã đối chiếu; chưa thêm một loạt kiểm định bảng chéo ngoài mô hình tài sản | Chap 9 §9.2, trang PDF 11–13 |
+| ANOVA, nhiều nhân tố và tương tác; SS, df, MS, F khi điều kiện phù hợp | Mô hình tài sản ở câu 8 | Chap 8 §8.1–8.3; suy rộng số nhân tố ngoài slide |
+| Độc lập hai biến phân loại | Câu 7: sở hữu từng tài sản và Quart, riêng mỗi năm | Chap 9 §9.2, trang PDF 11–13 |
 | Kiểm tra chuẩn JB | Chẩn đoán các biến liên tục và phần dư mô hình | Chap 9 §9.4, trang PDF 21 |
-| OLS nhiều nhân tố, HC3, Wald | Câu 7: hệ số từng năm, thay đổi và kiểm định chung | Ngoài lớp; đã được cho phép, công thức ở mục 9–10 |
-| Holm | Điều chỉnh p cho danh sách kiểm định khoa học của bài | Ngoài lớp; mục 10 |
+| OLS nhiều nhân tố, HC3, Wald | Câu 8: hệ số từng năm, thay đổi và kiểm định chung | Ngoài lớp; đã được cho phép, công thức ở mục 10–11 |
+| Holm | Điều chỉnh p cho danh sách kiểm định khoa học của bài | Ngoài lớp; mục 11 |
 
 Các số trang trên là thứ tự trang PDF. Lecture 4 và Lecture 5 có thể có số trang in trên slide khác thứ tự PDF.
 
-## 13. Cách triển khai notebook sau khi chốt plan
+## 14. Cách triển khai notebook sau khi chốt plan
 
 Mỗi câu dùng cùng trình tự:
 
 1. Markdown: câu hỏi → vai trò trong bài → biến → tham số → giả thuyết.
 2. Code: tạo biến, xác định mẫu và báo số quan sát/thiếu.
 3. Code và note: diagnostics, điều kiện dùng phân phối kiểm định.
-4. Code: tính estimator, phương sai, SE, thống kê, df, CI; đối chiếu phép tính với thư viện. Với mô hình tài sản, kiểm tra thêm residuals, leverage, hạng ma trận, covariance HC3, các contrast và p Holm.
+4. Code: tính estimator, phương sai, SE, thống kê, df, CI; đối chiếu phép tính với thư viện. Với câu 7, kiểm tra bảng quan sát/kỳ vọng và thống kê χ². Với câu 8, kiểm tra thêm residuals, leverage, hạng ma trận, F hoặc covariance HC3/Wald theo nhánh áp dụng, các contrast và p Holm.
 5. Markdown: diễn giải độ lớn, độ bất định, quyết định kiểm định và giới hạn đúng với câu hỏi.
 
 Tên biến thể hiện rõ nội dung và đơn vị, ví dụ `real_income_per_person`, `positive_education_spending`, `medicine_care_income_ratio`, `owns_tv`, `year_2014`, `year_2014_x_owns_tv`. Giữ biến gốc bên cạnh biến dẫn xuất. Không dùng việc ô thiếu trở thành 0 để tăng cỡ mẫu.
@@ -544,7 +607,8 @@ Tên biến thể hiện rõ nội dung và đơn vị, ví dụ `real_income_pe
 ### Những điều plan này chưa khẳng định
 
 - Chưa có kết luận mức sống tăng hay giảm.
-- Phần tài sản dùng mở rộng ANOVA qua mô hình tuyến tính, Wald–HC3 thay tham chiếu F cổ điển; chưa fit mô hình hay đưa kết luận hệ số.
+- Câu 7 đã kiểm tra tần số kỳ vọng nhưng chưa tính thống kê χ²/p hay kết luận về tài sản.
+- Câu 8 dùng ANOVA qua mô hình tuyến tính: F nếu mô hình sai số phù hợp; Wald–HC3 nếu cần xử lý phương sai khác nhau và có đủ hỗ trợ dữ liệu. Chưa fit mô hình hay đưa kết luận hệ số.
 - Đã thấy vấn đề tài sản hiếm; tập nhân tố đủ điều kiện trong từng Q phải được khóa bằng diagnostics trước khi xem p.
 - HC3 và điều chỉnh Holm chưa bảo đảm xấp xỉ tốt khi dữ liệu có điểm chi phối; mỗi trường hợp vẫn cần kiểm tra.
 - Thiếu trọng số, PSU/tầng và mã theo dõi hộ: CI/p là suy luận theo mô hình làm việc, chưa là suy luận đầy đủ theo thiết kế khảo sát quốc gia.
