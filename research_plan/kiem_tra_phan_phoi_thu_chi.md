@@ -42,7 +42,7 @@ Cả năm đối chiếu đạt điều kiện số đếm. Điều này hỗ tr
 
 - Giữ normality test và χ² independence trong Chap 9 theo nội dung đã học. Chưa thêm test thứ hạng.
 - Không chuẩn của giá trị hộ chưa tự động loại t-test mẫu lớn; nhưng cỡ mẫu lớn cũng chưa đủ bảo đảm xấp xỉ tốt khi một điểm chi phối. Đặc biệt không gọi t/CI của D toàn mẫu và Q4 là đã được xác nhận đáng tin chỉ qua n.
-- Nếu dùng kết quả t theo plan thì phải nêu rõ mô hình/xấp xỉ và giới hạn này; hiện chưa chạy test mean hoặc kết luận tăng/giảm. Tỷ lệ chi vượt thu có điều kiện số đếm rõ hơn để làm bằng chứng tài chính chính.
+- Phạm vi đã rút gọn: bỏ test/CI mean D khỏi plan chính, giữ D/M mô tả. Tỷ lệ chi vượt thu làm đối chiếu tài chính chính vì đã đạt điều kiện số đếm. Chưa chạy test thay đổi hoặc kết luận tăng/giảm; các test mean khác vẫn cần diagnostics đúng mẫu.
 - Mann–Whitney kiểm định phân phối/thứ hạng, không tự kiểm định chênh lệch mean. Không đổi tham số để tránh kết quả kiểm tra chuẩn.
 - Audit này chỉ bao gồm D, M và số đếm chi vượt thu; chưa thay thế diagnostics cho 72 nhóm so sánh tài sản hoặc các câu khác.
 
