@@ -48,7 +48,7 @@ $$
 
 ## 3. Quy tắc test và công thức dùng chung
 
-### M — Independent two-sample t-test: unknown variances, not assumed equal
+### Test t hai mẫu — Independent two-sample t-test: unknown variances, not assumed equal
 
 **Chap 7 §7.2.4, trang PDF 14.** Hai mẫu A/B độc lập, hai phương sai tổng thể chưa biết và không ép bằng nhau. Tên phần mềm thường là Welch two-sample t-test.
 
@@ -97,7 +97,7 @@ Mặc định hai phía, $\alpha=5\%$; riêng câu 4a giữ một phía tăng đ
 - **Mẫu:** toàn bộ hộ có thu nhập/quy mô hợp lệ của 2010 so với 2014.
 - **Tham số:** $\Delta_y=E(y^R_{2014})-E(y^R_{2010})$.
 - **H₀:** $\Delta_y=0$; **H₁:** $\Delta_y\ne0$.
-- **Estimator/test:** chênh lệch hai mean; M, hai phía. Hai bản CPI trả lời thay đổi danh nghĩa và theo giá 2010; chúng không độc lập với nhau.
+- **Estimator/test:** chênh lệch hai mean; t hai mẫu, hai phía. Hai bản CPI trả lời thay đổi danh nghĩa và theo giá 2010; chúng không độc lập với nhau.
 - Mean, median, phương sai, CV làm bối cảnh. Không đưa hai CV năm vào t-test và không suy CV thay đổi từ test mean.
 
 ### Câu 2 — Thu nhập có trang trải chi tiêu tốt hơn không?
@@ -106,9 +106,31 @@ Mặc định hai phía, $\alpha=5\%$; riêng câu 4a giữ một phía tăng đ
 
 | Đối chiếu | Tham số và giả thuyết | Estimator | Test |
 |---|---|---|---|
-| 2a: tiêu dùng thực | $\Delta_c=E(c^R_{14}\mid V_{14}=1)-E(c^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean | M, hai phía |
-| 2b: chênh lệch thu–chi | $\Delta_D=E(D^R_{14}\mid V_{14}=1)-E(D^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean của $D^R$ | M, hai phía |
+| 2a: tiêu dùng thực | $\Delta_c=E(c^R_{14}\mid V_{14}=1)-E(c^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean | t hai mẫu, hai phía |
+| 2b: chênh lệch thu–chi | $\Delta_D=E(D^R_{14}\mid V_{14}=1)-E(D^R_{10}\mid V_{10}=1)$; H₀ = 0, H₁ ≠ 0 | Chênh lệch hai mean của $D^R$ | t hai mẫu, hai phía |
 | 2c: tỷ lệ chi vượt thu | $p_t=P(C>I\mid V_t=1)$; H₀ $p_{14}=p_{10}$, H₁ khác nhau | $\hat p_{14}-\hat p_{10}$ | P, hai phía |
+
+#### Phạm vi toàn mẫu và Q1–Q4 đã chốt
+
+Đặt $g\in\{All,Q1,Q2,Q3,Q4\}$. Trong mỗi phạm vi, so hai mẫu hộ độc lập của 2010 và 2014. Với All bỏ điều kiện nhóm; với Q giữ nhãn Quart của chính năm đó:
+
+$$
+p_{g,t}=P(C>I\mid g_t,V_t=1),\qquad
+\mu_{D,g,t}=E(D^R\mid g_t,V_t=1).
+$$
+
+| Chỉ tiêu, trong từng g | H₀ | H₁ | Estimator / test |
+|---|---|---|---|
+| Tỷ lệ chi vượt thu | $p_{g,14}-p_{g,10}=0$ | $p_{g,14}-p_{g,10}\ne0$ | $\hat p_{g,14}-\hat p_{g,10}$; P — hai tỷ lệ độc lập, pooled dưới H₀ |
+| Chênh lệch thu–chi thực đầu người | $\mu_{D,g,14}-\mu_{D,g,10}=0$ | $\mu_{D,g,14}-\mu_{D,g,10}\ne0$ | $\bar D^R_{g,14}-\bar D^R_{g,10}$; independent t, unknown variances/not assumed equal |
+
+Có 10 giả thuyết thu–chi chính, hai phía 5%, chưa tính đối chiếu tiêu dùng 2a. $M=(I-C)/I$ báo mô tả độ dư/thiếu tương đối trong cả năm phạm vi; chưa thêm một họ kiểm định mean M. Báo p thô và p Holm cho danh sách chính của toàn bài; cùng một giả thuyết không được đưa vào nhiều lần vì xuất hiện ở nhiều phần trình bày.
+
+Mỗi dòng kết quả dự kiến gồm: phạm vi, n hai năm, mức chỉ tiêu hai năm, thay đổi 2014−2010, CI 95%, thống kê Z hoặc t/df, p thô, p Holm và note về mẫu/diagnostics. Chênh lệch tỷ lệ báo điểm phần trăm; $D^R$ báo cùng đơn vị tiền giá 2010/người/năm.
+
+Toàn mẫu có cùng các hộ của bốn Q, nên các kết quả không độc lập. Đây là thay đổi theo thời gian **trong từng phạm vi**, không phải kiểm định Q1 khác Q4 hay mức cải thiện đồng đều. Không suy khác biệt giữa hai mức thay đổi từ việc một p có ý nghĩa còn p kia không. “Phạm vi cả nước” chỉ phạm vi mẫu; chưa có trọng số để gọi là ước lượng quốc gia đầy đủ.
+
+Kiểm tra phân phối/đuôi của $D^R$ và số có/không của Z riêng cho từng g/năm. Tỷ lệ thiếu, kiểm tra tổng 12 khoản bỏ fuel và ảnh hưởng mẫu được báo trong đủ năm phạm vi, không chỉ toàn mẫu hoặc Q1.
 
 $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thiếu theo dòng thu/chi ghi nhận. Đọc cùng mức thu nhập/tiêu dùng và phân phối $M$; không dùng một mean dương để kết luận tất cả hộ trang trải đủ. Việc tiêu dùng tăng không được mặc định là tốt khi không xét nguồn lực và nhu cầu.
 
@@ -116,22 +138,22 @@ $D^R$ trả lời độ lớn dư/thiếu; $p$ trả lời bao nhiêu hộ thi�
 
 ### Câu 3 — Thành thị/nông thôn thay đổi thế nào?
 
-**3a:** với từng khu vực $a$ và chỉ tiêu $X\in\{y^R,c^R,D^R\}$, ước lượng $\Delta_{a,X}=E(X_{14}\mid a)-E(X_{10}\mid a)$, thêm điều kiện hợp lệ của X. Giả thuyết tham chiếu H₀ $\Delta_{a,X}=0$, H₁ khác 0; ưu tiên estimate/CI theo M, không thêm mọi p vào luận điểm chính. Tỷ lệ chi vượt thu và $M$ theo khu vực dùng bảng mô tả/CI.
+**3a:** với từng khu vực $a$ và chỉ tiêu $X\in\{y^R,c^R,D^R\}$, ước lượng $\Delta_{a,X}=E(X_{14}\mid a)-E(X_{10}\mid a)$, thêm điều kiện hợp lệ của X. Giả thuyết tham chiếu H₀ $\Delta_{a,X}=0$, H₁ khác 0; ưu tiên estimate/CI theo công thức t hai mẫu, không thêm mọi p vào luận điểm chính. Tỷ lệ chi vượt thu và $M$ theo khu vực dùng bảng mô tả/CI.
 
-**3b:** riêng 2014, so tiêu dùng thành thị với nông thôn: H₀ $\mu_{c,U}=\mu_{c,R}$; H₁ khác nhau. Test M, hai phía. Kiểm định này chưa trả lời khoảng cách đã thu hẹp từ 2010.
+**3b:** riêng 2014, so tiêu dùng thành thị với nông thôn: H₀ $\mu_{c,U}=\mu_{c,R}$; H₁ khác nhau. Test t hai mẫu, hai phía. Kiểm định này chưa trả lời khoảng cách đã thu hẹp từ 2010.
 
 ### Câu 4 — Q1 có cải thiện tiêu dùng và khả năng trang trải không?
 
 Bước dẫn: bảng Q1–Q4 cho mức thu nhập, tiêu dùng, chênh lệch thu–chi và tỷ lệ thiếu hụt. Giữ nhãn nhóm từng năm; không test thu nhập Q4 khác Q1 như khám phá mới.
 
-- **4a:** $\Delta_{c,Q1}=E(c^R_{14}\mid Q1,V=1)-E(c^R_{10}\mid Q1,V=1)$; H₀ $\Delta\le0$, H₁ $\Delta>0$. Chênh lệch mean, M một phía tăng, dùng biên Δ = 0; báo thêm CI hai phía 95%.
-- **4b:** $p_{Q1,t}=P(C>I\mid Q1,V_t=1)$; H₀ $p_{Q1,14}=p_{Q1,10}$; H₁ khác nhau. Chênh lệch tỷ lệ, P hai phía.
+- **4a:** $\Delta_{c,Q1}=E(c^R_{14}\mid Q1,V=1)-E(c^R_{10}\mid Q1,V=1)$; H₀ $\Delta\le0$, H₁ $\Delta>0$. Chênh lệch mean, t hai mẫu một phía tăng, dùng biên Δ = 0; báo thêm CI hai phía 95%.
+- **4b:** trình bày lại hai đối chiếu thu–chi của Q1–Q4 ở câu 2, tập trung Q1. Mỗi Q có test tỷ lệ chi vượt thu (P) và test mean $D^R$ (t hai mẫu), hai phía. Đây là cùng các giả thuyết đã có ở câu 2, không thêm kiểm định hoặc p Holm trùng lặp.
 - **Hỗ trợ:** mức $D^R$, $M$, CI và diagnostics riêng Q1; không theo cùng hộ hoặc gọi đây là giảm nghèo tuyệt đối. Mất mẫu nhiên liệu trong Q1 cần nêu rõ.
 
 ### Câu 5 — Giáo dục: nhiều hộ có chi hay nhóm có chi chi nhiều hơn?
 
 - **5a:** $D_e=1\{edu>0\}$; $p_{e,t}=P(edu_t>0)$. H₀ $p_{e,14}=p_{e,10}$; H₁ khác nhau. Estimator là chênh lệch tỷ lệ; P hai phía. Giữ chi 0, loại thiếu.
-- **5b:** $e^R=(edu/size)100/CPI$, chỉ trong nhóm `edu > 0`. H₀ $E(e^R_{14}\mid edu>0)=E(e^R_{10}\mid edu>0)$; H₁ khác nhau. Estimator chênh lệch mean có điều kiện; M hai phía.
+- **5b:** $e^R=(edu/size)100/CPI$, chỉ trong nhóm `edu > 0`. H₀ $E(e^R_{14}\mid edu>0)=E(e^R_{10}\mid edu>0)$; H₁ khác nhau. Estimator chênh lệch mean có điều kiện; t hai mẫu hai phía.
 - Trên hồ sơ hợp lệ chung, $E(e^R)=P(edu>0)E(e^R\mid edu>0)$: thay đổi mean chung có thể nằm ở một hoặc cả hai thành phần. Không gọi hai kết quả là độc lập.
 - Thiếu số người đi học/kết quả giáo dục: chưa đo được tiếp cận, chất lượng hoặc chi mỗi người học. CPI chung chưa là giá giáo dục riêng.
 
@@ -199,13 +221,13 @@ Với hai nhóm, $F=T_{pooled}^2$, trong đó t gộp phương sai là Chap 7 §
 
 ### B — Unknown variances, not assumed equal: Welch one-way ANOVA
 
-Với đúng hai nhóm, dùng thống kê t và df của phương pháp M rồi trình bày:
+Với đúng hai nhóm, dùng thống kê t và df của công thức t hai mẫu ở mục 3 rồi trình bày:
 
 $$
 F_W=T_{unequal}^2\approx F_{1,\nu}\quad\text{dưới H}_0.
 $$
 
-Vì vậy công thức thực chất đã có ở Chap 7 §7.2.4. Đây là cách biểu diễn hai nhóm của Welch one-way ANOVA; không phải $MS_B/MS_E$ cổ điển khi phương sai khác nhau. CI chênh lệch mean dùng SE/df riêng như M. Tên và cách xử lý phương sai của hai phiên bản được đối chiếu với [tài liệu one-way ANOVA](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f_oneway.html).
+Vì vậy công thức thực chất đã có ở Chap 7 §7.2.4. Đây là cách biểu diễn hai nhóm của Welch one-way ANOVA; không phải $MS_B/MS_E$ cổ điển khi phương sai khác nhau. CI chênh lệch mean dùng SE/df riêng ở mục 3. Tên và cách xử lý phương sai của hai phiên bản được đối chiếu với [tài liệu one-way ANOVA](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f_oneway.html).
 
 Hai bản vẫn có cùng bảng SS mô tả dữ liệu gốc; không tạo bảng SS giả để làm $F_W$ bằng tỷ số MS cổ điển. Bản B là kết quả chính khi cho phép phương sai khác nhau; bản A là đối chiếu dưới giả định cổ điển. Không chọn theo p nhỏ hơn.
 
@@ -241,7 +263,10 @@ Các n sau chỉ là kiểm tra hồ sơ hợp lệ, chưa là kết quả giả
 |---|---|---|
 | Thu nhập đầu người | 9.399 | 9.398 |
 | Tiêu dùng, $D^R$, $M$, chỉ báo chi vượt thu nhập, đủ 13 khoản | 9.387 | 8.579 |
-| Q1 đủ chi cho câu 4 | 2.346 | 1.845 |
+| Q1 đủ chi cho câu 2/4 | 2.346 | 1.845 |
+| Q2 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.149 |
+| Q3 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.272 |
+| Q4 đủ chi cho hai kiểm định thu–chi | 2.347 | 2.313 |
 | Giáo dục có/không chi | 9.399 | 9.398 |
 | Giáo dục thực/người trong nhóm chi dương | 5.963 | 5.637 |
 
