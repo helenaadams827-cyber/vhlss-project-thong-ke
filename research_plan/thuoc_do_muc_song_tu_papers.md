@@ -1,6 +1,6 @@
 # Thước đo mức sống từ papers: dùng được gì với file hiện có?
 
-Ngày nghiên cứu: 08/11/2026. Hai hướng ở mục 1–2 đã được chọn cho toàn mẫu và riêng Q1–Q4; các hướng khác vẫn là đề xuất, chưa tự đưa vào kiểm định. [Outline hiện tại](outline_muc_song_2010_2014.md) · [Plan phương pháp](plan_nghien_cuu_muc_song_2010_2014.md).
+Ngày nghiên cứu: 08/11/2026. Đây là ghi chú tham khảo đã nghiên cứu, không phải danh sách câu hỏi triển khai. Theo phạm vi đã rút gọn: kiểm định tỷ lệ chi vượt thu cho toàn mẫu và Q1–Q4; D/M chỉ mô tả. Bỏ y tế, FGT, equivalence scale và PCA khỏi bài; giữ phần tra cứu dưới đây để lưu nguồn. [Outline hiện tại](outline_muc_song_2010_2014.md) · [Plan phương pháp](plan_nghien_cuu_muc_song_2010_2014.md).
 
 Ký hiệu $I=income$, $C=$ tổng 13 khoản ghi nhận, $n=size$. Thu/chi cả năm, cùng đơn vị; tiền thực quy về giá 2010. Mỗi dòng là hộ, chưa có trọng số khảo sát quốc gia.
 
@@ -28,7 +28,7 @@ M_i=\frac{I_i-C_i}{I_i}\quad(I_i>0).
 $$
 
 - **Câu hỏi đã chốt phạm vi:** hộ còn lại bao nhiêu nguồn lực sau chi ghi nhận; mean chênh lệch thực đầu người thay đổi ra sao trong toàn mẫu và riêng Q1–Q4?
-- **Test:** mean $D^R$ giữa hai mẫu độc lập, phương sai chưa biết và không giả sử bằng nhau — Chap 7 §7.2.4. $M$ dùng mô tả độ dư/thiếu tương đối.
+- **Cách dùng hiện tại:** $D^R$ và $M$ chỉ mô tả. Bỏ đề xuất test mean D khỏi plan chính sau khi diagnostics phát hiện ảnh hưởng quan sát rất lớn ở toàn mẫu/Q4; xem [kiểm tra phân phối](kiem_tra_phan_phoi_thu_chi.md).
 - Đây chưa phải FMR đầy đủ của paper, tiết kiệm thực tế hoặc khả năng chống chịu cú sốc; không có nợ/tài sản thanh khoản.
 
 **Mức phù hợp:** cao; đọc cùng tỷ lệ thiếu hụt ở mục 1, không dùng mean dương thay cho kết luận mọi hộ đủ chi.
@@ -52,7 +52,7 @@ $P_0$ phản ánh tỷ lệ dưới chuẩn; $P_1$ thêm độ sâu thiếu hụ
 - **Chưa đủ để dùng ngay:** phải chốt z và đối tượng nghèo phù hợp. Q1 mỗi năm luôn gần một phần tư, không thay thế một chuẩn tuyệt đối cố định. Nếu lấy z từ phân vị mẫu thì phát sinh bất định điểm cắt; không tự coi nó là ngưỡng biết trước để dùng CI/p đơn giản.
 - Kết quả không trọng số là chỉ số của các hộ trong mô hình mẫu, chưa phải tỷ lệ nghèo quốc gia theo người.
 
-**Mức phù hợp:** có giá trị cho câu hỏi phần đáy, nhưng còn thiếu quyết định về chuẩn z.
+**Trạng thái hiện tại:** bỏ khỏi bài vì chưa có chuẩn z phù hợp.
 
 ## 4. Điều chỉnh nhu cầu theo quy mô hộ: equivalised income/consumption
 
@@ -69,7 +69,7 @@ $$
 - **Test:** hai mean độc lập, unknown variances/not assumed equal — Chap 7 §7.2.4, cho tham số mới.
 - Giữ như kiểm tra độ nhạy; không tự thay chỉ tiêu đầu người hay gọi thu nhập file là disposable income theo đúng định nghĩa OECD.
 
-**Mức phù hợp:** tính được ngay; là lựa chọn bổ sung để bàn, chưa chốt vào bài.
+**Trạng thái hiện tại:** bỏ khỏi bài; giữ cách chia đầu người đã thống nhất.
 
 ## 5. Y tế: đo bảo vệ tài chính, không đồng nhất chi cao với mức sống thấp
 
@@ -82,7 +82,7 @@ $$
 
 **Đối chiếu file:** `med` chỉ là tiền thuốc, `aid` là chăm sóc người bệnh; chưa đủ mọi OOP và hoàn trả. `hins` là khoản bảo hiểm, không phải bằng chứng có/không được bảo hiểm. Không có nhu cầu điều trị chưa đáp ứng, sức khỏe, nợ hay chuẩn chi cơ bản.
 
-Vì vậy chưa tự áp chỉ số catastrophic spending/medical impoverishment chuẩn, hoặc coi giảm `(med + aid)/income` là sống tốt hơn. Có thể mô tả chi thực và khả năng trang trải tổng chi trong nhóm có các khoản này, nhưng chưa chứng minh chính y tế gây thiếu hụt. Đây là hướng cần chọn lại, không ép một kiểm định cho đủ chủ đề.
+Vì vậy không áp chỉ số catastrophic spending/medical impoverishment chuẩn, hoặc coi giảm `(med + aid)/income` là sống tốt hơn. Bỏ câu hỏi y tế riêng khỏi bài; không thêm phân tích nhóm y tế thay thế.
 
 Lưu ý đại số: nếu $H=med+aid$ và chi khác là $C-H$, thì $(I-H)-(C-H)=I-C$. “Thu nhập sau y tế trừ chi khác” không tạo thêm thông tin so với chênh lệch thu–chi chung.
 
@@ -99,7 +99,7 @@ Paper dùng chỉ báo tài sản và PCA để tạo trọng số cho proxy wea
 - PCA cần được kiểm tra ý nghĩa của các tải số; không tự bảo đảm điểm cao luôn là sống tốt hơn. Chưa là tổng tài sản ròng hay chỉ số mức sống toàn diện.
 - Có thể chỉ đếm số nhóm sở hữu để mô tả cho đơn giản, nhưng đó là chỉ tiêu tự định nghĩa với trọng số bằng nhau, **không phải phương pháp PCA của paper**.
 
-**Mức phù hợp:** khả thi nhưng chưa ưu tiên; hiện đã chốt one-way ANOVA từng tài sản, chưa thêm PCA vào plan.
+**Trạng thái hiện tại:** bỏ PCA khỏi bài; giữ one-way ANOVA từng tài sản đã thống nhất.
 
 ## 7. Giữ nền tảng tiêu dùng thực, nhưng không đồng nhất chi cao với sống tốt
 
@@ -107,15 +107,15 @@ Paper dùng chỉ báo tài sản và PCA để tạo trọng số cho proxy wea
 
 Giữ thu nhập/tiêu dùng thực đầu người làm nền tảng; C13 chỉ là proxy của file, chưa có dịch vụ nhà ở và đồ bền đầy đủ. Đọc cùng khả năng trang trải, phân bố/Q1 và điều kiện vật chất; không dùng một khoản chi tăng để kết luận chất lượng hay mọi nhu cầu được đáp ứng.
 
-## Lựa chọn đề xuất cho bài
+## Phạm vi bài sau khi rút gọn
 
 | Vai trò | Thước đo | Trạng thái |
 |---|---|---|
 | Nền tảng | Thu nhập và tiêu dùng thực đầu người | Đã có trong plan |
-| Trục bổ sung chính | Test $D^R$ và tỷ lệ $C>I$; mô tả $M$ | Đã chọn cho toàn mẫu và từng Q1–Q4: 10 giả thuyết chính, chưa chạy kiểm định |
-| Phân bố cải thiện | Các chỉ tiêu thu–chi trong đủ Q1–Q4, tập trung Q1 | Đã chốt phạm vi; FGT vẫn chỉ là đề xuất cần ngưỡng z |
-| Kiểm tra độ nhạy | Equivalence scale căn bậc hai | Đề xuất, chưa tự áp dụng |
+| Trục bổ sung chính | Test tỷ lệ $C>I$; mô tả $D^R$ và $M$ | Toàn mẫu và từng Q1–Q4: 5 giả thuyết tỷ lệ, chưa chạy kiểm định; bỏ test mean D |
+| Phân bố cải thiện | Các chỉ tiêu thu–chi trong đủ Q1–Q4, tập trung Q1 | Đã chốt phạm vi; bỏ FGT khỏi bài |
+| Kiểm tra độ nhạy | Equivalence scale căn bậc hai | Bỏ khỏi bài |
 | Điều kiện vật chất | Tỷ lệ sở hữu và one-way ANOVA riêng từng tài sản | Đã chốt; chưa thêm PCA |
-| Y tế | Bảo vệ tài chính/khả năng đáp ứng nhu cầu | Đang chọn lại thước đo vì giới hạn dữ liệu |
+| Y tế | Bảo vệ tài chính/khả năng đáp ứng nhu cầu | Bỏ câu hỏi riêng khỏi bài vì giới hạn dữ liệu |
 
 Không gọi các chỉ số cùng xuất phát từ I và C là những bằng chứng độc lập. Các nghiên cứu trên cung cấp mục tiêu đo lường; công thức kiểm định vẫn phải khớp đúng tham số, mẫu và điều kiện của bài.
