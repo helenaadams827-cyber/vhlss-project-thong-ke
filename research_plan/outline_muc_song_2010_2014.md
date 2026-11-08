@@ -4,6 +4,51 @@ Cập nhật 08/11/2026. Đây là bản đọc nhanh; công thức, estimator v
 
 **Mạch bài:** nguồn lực và tiêu dùng → phạm vi cải thiện → giáo dục và gánh nặng chăm sóc → điều kiện vật chất.
 
+## Sample và loại test: quy ước cụ thể
+
+**Một quan sát là một hộ trong một năm.** Ví dụ mẫu thu nhập 2010 là vector 9.399 giá trị `income / size` của 9.399 hộ, không phải một số mean của năm. Tính hai mean từ hai vector hộ rồi mới lập thống kê kiểm định. Dùng chỉ tiêu đầu người không biến mỗi thành viên thành một quan sát độc lập.
+
+Hai năm được coi là mẫu độc lập theo mô hình đã thống nhất; không ghép hộ theo dòng. Mẫu của các câu khác nhau có thể trùng hộ; điều đó không biến từng phép so sánh năm thành paired test, và cũng không có nghĩa các kết quả khác câu độc lập với nhau.
+
+| Câu | Tên test chính xác | Quan hệ giữa mẫu | Phương sai tổng thể | Phía kiểm định |
+|---|---|---|---|---|
+| 1, 2 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Hộ 2014 so với hộ 2010 | Chưa biết; dùng hai phương sai mẫu riêng, không gộp | Hai phía |
+| 3a | Cùng công thức hai mẫu ở trên; ưu tiên estimate/CI | 2014 so với 2010, riêng từng khu vực và chỉ tiêu | Chưa biết, không giả sử bằng nhau | CI hai phía; không thêm p vào luận điểm chính |
+| 3b | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Thành thị so với nông thôn, cùng năm 2014 | Chưa biết, không giả sử bằng nhau | Hai phía |
+| 4 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Q1 năm 2014 so với Q1 năm 2010 | Chưa biết, không giả sử bằng nhau | Một phía tăng |
+| 5a | **Independent two-proportion Z-test**, pooled proportion dưới $H_0$ — Chap 7 §7.4 | Các chỉ báo `edu > 0` của hai năm | Không phải phân loại known/unknown variance của test mean; tham số là hai tỷ lệ chưa biết | Hai phía |
+| 5b, 6 | **Independent two-sample t-test, unknown variances, not assumed equal** — Chap 7 §7.2.4 | Hai nhóm hộ theo năm, lọc đúng điều kiện từng câu | Chưa biết, không giả sử bằng nhau | Hai phía |
+| 7 | **Pearson chi-square test of independence** trên bảng 4 × 2 — Chap 9 §9.2 | Một mẫu hộ của một năm cho từng tài sản, phân vào tám ô | Không có giả định cùng phương sai thu nhập | Bác bỏ ở đuôi phải của χ²; $H_1$ là có liên hệ |
+| 8A | **Partial F-tests in a multifactor linear model with selected interactions** | Hộ của cả hai năm gộp trong từng Q; các hộ độc lập theo mô hình | Chưa biết nhưng giả sử phương sai sai số chung; ước lượng từ residual mean square | F đuôi phải cho các ràng buộc hệ số bằng 0 |
+| 8B | **HC3 heteroskedasticity-robust Wald tests** cho đúng các ràng buộc của 8A | Cùng mẫu và mô hình 8A | Chưa biết, không áp đặt phương sai chung | Wald χ² đuôi phải; không phải F cổ điển |
+
+Các test mean của bài **không phải one-sample**, không phải known-variance Z-test và không phải paired t-test. Phương pháp Chap 7 §7.2.4 thường có tên phần mềm là Welch two-sample t-test; không cần chứng minh hai phương sai khác nhau trước khi dùng.
+
+### Mẫu của từng câu, trên dữ liệu hiện tại
+
+| Câu | Mẫu 2010 | Mẫu 2014 | Giá trị của một quan sát |
+|---|---|---|---|
+| 1 | 9.399 hộ có thu nhập/quy mô hợp lệ | 9.398 hộ tương ứng | Thu nhập đầu người danh nghĩa hoặc thực |
+| 2 | 9.387 hộ đủ cả 13 khoản chi và quy mô hợp lệ | 8.579 hộ tương ứng | Tiêu dùng thực đầu người |
+| 3a | Riêng từng khu vực, lấy đúng mẫu của biến thu nhập hoặc tiêu dùng | Tương tự, riêng từng khu vực năm 2014 | Thu nhập hoặc tiêu dùng thực đầu người |
+| 3b | Không dùng 2010 cho phép so sánh cuối kỳ | 2.692 hộ thành thị và 5.887 hộ nông thôn đủ chi | Tiêu dùng thực đầu người |
+| 4 | 2.346 hộ `Quart = 1` đủ chi | 1.845 hộ `Quart = 1` đủ chi | Tiêu dùng thực đầu người |
+| 5a | 9.399 hộ có `edu` hợp lệ, giữ cả chi 0 | 9.398 hộ tương ứng | 1 nếu `edu > 0`, 0 nếu `edu = 0` |
+| 5b | 5.963 hộ có `edu > 0`, quy mô hợp lệ | 5.637 hộ tương ứng | Chi giáo dục thực đầu người |
+| 6 | 2.350 hộ Q1 có `med`, `aid`, thu nhập hợp lệ và thu nhập dương | 2.352 hộ tương ứng | Tỷ số `(med + aid)/income` |
+| 7 | Mọi hộ có `Quart` và giá trị tài sản đang xét hợp lệ | Làm thành mẫu/bảng riêng năm 2014 | Một cặp nhãn `(Quart, sở hữu có/không)` |
+| 8A/8B | Hộ trong Q đang xét, đủ thu nhập/quy mô và các tài sản thật sự dùng | Gộp cùng Q năm 2014; có biến năm để phân biệt | Một thu nhập thực đầu người kèm năm và các chỉ báo tài sản |
+
+Cỡ mẫu câu 7 khác theo tài sản; ví dụ TV dùng 9.218 hộ năm 2010 và 9.354 hộ năm 2014. Cỡ mẫu cuối của câu 8 chưa khóa vì cần chốt tập nhân tố đủ điều kiện; hai phiên bản A/B phải dùng cùng các hộ. Số hộ từng khu vực và từng tài sản được ghi đầy đủ trong plan chi tiết. Các số trên là kiểm tra mẫu hợp lệ, chưa phải kết quả giả thuyết.
+
+### Câu 8 thuộc loại ANOVA nào?
+
+- **Không phải one-way ANOVA. Cũng không phải một mô hình chỉ có hai factor.** Mỗi tài sản có/không là một factor riêng.
+- Trong mỗi Q, nếu đủ chín tài sản thì có **10 factor hai mức**: năm + chín tài sản. Khi phải giảm tập tài sản còn $k_q$ biến, số factor là $k_q+1$.
+- **Có tương tác chọn lọc:** năm × từng tài sản, để hỏi mối liên hệ thu nhập–sở hữu có thay đổi từ 2010 sang 2014 không. Không có tương tác giữa các tài sản với nhau hoặc các tương tác bậc cao khác.
+- **Quart là điều kiện chia mẫu thành bốn mô hình**, không phải một factor bổ sung bên trong từng mô hình. Không dùng repeated-measures ANOVA.
+- Chap 8 §8.3 dạy **two-factor ANOVA with interaction**. Câu 8 mở rộng ý tưởng này sang nhiều factor; phần mở rộng và cách xử lý thiết kế không cân bằng cần được giải thích riêng. Nếu chỉ xét năm và TV, đó mới là ví dụ hai factor có tương tác, nhưng chưa điều chỉnh cho các tài sản khác như mô hình chính.
+
 ## I. Nguồn lực và tiêu dùng có cải thiện không?
 
 ### Câu 1. Thu nhập đầu người năm 2014 có khác năm 2010 sau điều chỉnh giá không?
