@@ -2,7 +2,7 @@
 
 Ngày nghiên cứu: 08/11/2026. Đây là ghi chú tham khảo đã nghiên cứu, không phải danh sách câu hỏi triển khai. Theo phạm vi đã rút gọn: kiểm định tỷ lệ chi vượt thu cho toàn mẫu và Q1–Q4; D/M chỉ mô tả. Bỏ y tế, FGT, equivalence scale và PCA khỏi bài; giữ phần tra cứu dưới đây để lưu nguồn. [Outline hiện tại](outline_muc_song_2010_2014.md) · [Plan phương pháp](plan_nghien_cuu_muc_song_2010_2014.md).
 
-Ký hiệu $I=income$, $C=$ tổng 13 khoản ghi nhận, $n=size$. Thu/chi cả năm, cùng đơn vị; tiền thực quy về giá 2010. Mỗi dòng là hộ, chưa có trọng số khảo sát quốc gia.
+Ký hiệu $I=income$, $C=$ tổng 13 khoản theo quy ước mới: ô `fuel` trống = 0, khoản khác thiếu vẫn giữ thiếu; $n=size$. Thu/chi cả năm, cùng đơn vị; tiền thực quy về giá 2010. Mỗi dòng là hộ, chưa có trọng số khảo sát quốc gia.
 
 ## 1. Khả năng thu nhập trang trải chi tiêu
 
@@ -10,8 +10,8 @@ Ký hiệu $I=income$, $C=$ tổng 13 khoản ghi nhận, $n=size$. Thu/chi cả
 
 - Đại lượng nghiên cứu là $P(C>I)$. Paper ước lượng phân phối chung bằng copula; bài của mình có thể dùng tỷ lệ mẫu trực tiếp, không cần tái tạo mô hình đó.
 - **Tạo biến:** $Z_i=1\{C_i>I_i\}$; $\hat p_t=\sum Z_i/N_t$.
-- **Câu hỏi đã chốt phạm vi:** tỷ lệ chi vượt thu thay đổi thế nào giữa 2010 và 2014, trong toàn mẫu và riêng Q1, Q2, Q3, Q4? Dùng giả thuyết hai phía; dấu chênh lệch/CI cho biết hướng thay đổi.
-- **Test lớp:** hai tỷ lệ độc lập, pooled dưới H₀ — Chap 7 §7.4; kiểm tra điều kiện số đếm.
+- **Câu hỏi đã chốt phạm vi:** tỷ lệ hộ chi vượt thu năm 2014 có thấp hơn 2010 không, trong toàn mẫu và riêng Q1, Q2, Q3, Q4? $H_0:p_{14}\ge p_{10}$, $H_1:p_{14}<p_{10}$; không phải câu hỏi số tiền vượt thu trung bình.
+- **Test lớp:** hai tỷ lệ độc lập, một phía trái, pooled tại biên bằng nhau — Chap 7 §7.4; kiểm tra điều kiện số đếm. Hướng giảm chốt theo câu hỏi trước khi chạy test.
 - **Giới hạn:** chỉ đo bất cân đối dòng thu/chi ghi nhận; chưa phân biệt tiêu tài sản tích lũy với khó khăn thực sự, không ước lượng rủi ro cá nhân tương lai của mô hình gốc.
 
 **Mức phù hợp:** cao; bổ sung trực tiếp cho mean thu nhập/tiêu dùng hiện có.
