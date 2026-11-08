@@ -97,6 +97,7 @@ Với mỗi phạm vi g: $H_0:p_{g,2014}=p_{g,2010}$ và $H_0:\mu_{D,g,2014}=\mu
 ## Kiểm tra và phạm vi
 
 - Mean dùng trung bình mẫu; tỷ lệ dùng trung bình chỉ báo Bernoulli — Lecture 4/Chap 4. Không lấy hai mean năm làm hai quan sát.
-- Chap 2–3: phân phối dữ liệu, CLT và ảnh hưởng đuôi; Chap 9: JB chẩn đoán biến liên tục, kiểm tra số kỳ vọng cho χ². Bỏ chuẩn chưa tự cấm mean, nhưng mẫu lớn chưa tự bảo đảm CI/p tốt.
+- Chap 2–3: phân phối dữ liệu, CLT và ảnh hưởng đuôi. **Chap 9 chỉ dùng normality test và χ² independence theo phần đã học; chưa thêm Mann–Whitney/Kruskal–Wallis hay các test phi tham số khác.** Không chuẩn chưa tự cấm suy luận mean xấp xỉ, nhưng mẫu lớn chưa tự bảo đảm CI/p tốt.
+- **Đã kiểm tra D và M:** normality test bác bỏ chuẩn trong cả năm phạm vi của hai năm; D toàn mẫu/Q4 năm 2010 có một quan sát chi phối mạnh. Năm đối chiếu tỷ lệ chi vượt thu đều đạt điều kiện số đếm. [Xem diagnostics](kiem_tra_phan_phoi_thu_chi.md). t/CI của mean vẫn cần đọc như xấp xỉ có giới hạn, chưa được xác nhận đáng tin chỉ bằng n; chưa tự đổi sang test thứ hạng.
 - Kiểm định mặc định hai phía 5%, riêng 4a một phía tăng. Bản B là kết quả chính cho danh sách tài sản khi nới giả định phương sai; A trình bày theo giả định để đối chiếu. Điều chỉnh Holm cho danh sách p chính; CI 95% thường là CI riêng lẻ.
-- Các thước đo mới từ papers còn là đề xuất, chưa tự đưa hết vào bài. Không còn mô hình nhiều nhân tố, HC3/Wald hay tương tác trong plan này. Chưa chạy kiểm định hoặc điền kết luận thực nghiệm.
+- Các thước đo mới từ papers còn là đề xuất, chưa tự đưa hết vào bài. Không còn mô hình nhiều nhân tố, HC3/Wald hay tương tác trong plan này. Đã chạy normality test/kiểm tra số đếm; chưa chạy các test thay đổi 2010–2014 hoặc điền kết luận mức sống.
