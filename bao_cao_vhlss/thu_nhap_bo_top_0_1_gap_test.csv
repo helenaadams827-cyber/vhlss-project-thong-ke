@@ -1,0 +1,2 @@
+gap_change,SE,Z,p_one_sided_right,p_left_previous,p_two_sided,CI95_low,CI95_high,reject_H0,analysis
+3.431455581055687,0.6070866584569492,5.652332386578093,7.914256177732688e-09,0.9999999920857439,1.5828512355465376e-08,2.2415875949852975,4.621323567126076,True,supplementary_direction_selected_after_data
