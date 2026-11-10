@@ -10,6 +10,7 @@ Cập nhật **10/11/2026**. Bản đang dùng: [notebook bỏ top 0,1% mỗi n�
 - `income` là tổng thu nhập cả hộ trong cả năm, đơn vị nghìn đồng. `size` gồm mọi thành viên, kể cả người chưa lao động.
 - Mỗi hộ có trọng số bằng nhau. Mean là trung bình của thu nhập đầu người từng hộ, không phải tổng thu nhập chia tổng số người.
 - Dùng CPI bình quân năm, cùng gốc **2010 = 100**: 2010 = **100**; 2014 = **143,69**, đọc từ [CSV CPI](cpi_2010_2014.csv).
+- **Đã tra cứu lại Cục Thống kê ngày 10/11/2026:** chỉ số cùng gốc vẫn đúng. Mức tăng năm 2010 là 9,19% so với 2009 và năm 2014 là 4,09% so với 2013; không lấy hai tỷ lệ này chia nhau. [Nguồn, bảng đối chiếu và phép nối chỉ số](CPI_nguon_va_cach_quy_doi.md).
 
 $$
 Y=\frac{income}{size}\times\frac{100}{CPI}\times\frac{1}{1000}.
@@ -112,6 +113,6 @@ W chỉ dùng để ước lượng SE; mean và phương sai mô tả vẫn tí
 
 Clone/download toàn repo để giữ đường dẫn `dataset/` và `bao_cao_vhlss/`. Đã chạy bằng **Python 3.12.3**. Cài thư viện bằng `python -m pip install -r bao_cao_vhlss/requirements_thu_nhap.txt`, mở notebook bằng VS Code/Jupyter, chọn môi trường Python rồi **Run All**. Có thể đọc ngay kết quả đã lưu trên GitHub mà không chạy lại.
 
-Bản chính đã chạy 10 cell code: kiểm tra đúng 10 hộ/năm, nhãn Q, mean toàn mẫu từ các Q, SE sau cắt và t/df/p Q1–Q3 với SciPy; Excel gốc và notebook trước được giữ nguyên.
+Bản chính đã chạy 11 cell code: đối chiếu CPI từ nguồn Cục Thống kê, kiểm tra đúng 10 hộ/năm, nhãn Q, mean toàn mẫu từ các Q, SE sau cắt và t/df/p Q1–Q3 với SciPy; Excel gốc được giữ nguyên. Chỉ bổ sung nguồn CPI vào các notebook trước, không thay số CPI hoặc phép tính thu nhập.
 
 **Giới hạn:** chưa có trọng số/tầng/cụm khảo sát và giá vùng; nhãn Q được coi như đã cho, chưa tính bất định điểm cắt Q; các p/CI không bảo đảm đồng thời. Kết luận áp dụng cho phần hộ sau lọc theo mô hình làm việc, không có nghĩa mọi hộ đều tăng thu nhập hoặc mức sống toàn diện đã tốt hơn.
