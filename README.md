@@ -1,5 +1,14 @@
 # Project Thống Kê: VHLSS 2010–2014
 
+## Phần đang làm: thu nhập 2010–2014 — 10/11/2026
+
+- [README riêng: câu hỏi, phương pháp, kết quả và cách chạy](bao_cao_vhlss/README_thu_nhap.md).
+- [Notebook chính: bỏ top 0,1% ở cả hai năm](bao_cao_vhlss/thu_nhap_4_cau_bo_top_0_1_phan_tram.ipynb).
+
+Bản này chỉ dùng 2010/2014, quy tiền về giá 2010 và giữ nhãn Q gốc. Notebook có kết quả đã chạy, công thức và cell ghi chú. Các bản toàn mẫu, khảo sát ngưỡng và so sánh có/không CPI được dẫn trong README riêng.
+
+## Nội dung các phiên bản trước
+
 Phân tích mô tả dữ liệu Khảo sát Mức sống Hộ gia đình Việt Nam (VHLSS) 2010, 2012 và 2014. Câu hỏi chính: hộ giàu và hộ nghèo chi tiêu, tích lũy khác nhau thế nào, và túi tiền hay nơi ở quyết định điều đó.
 
 - Trang web tương tác: https://claude.ai/artifact/GbFPSQhTG4zJVDVfpjJU4h
