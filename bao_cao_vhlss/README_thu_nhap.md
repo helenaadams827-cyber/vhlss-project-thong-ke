@@ -2,7 +2,7 @@
 
 Cập nhật **10/11/2026**. Bản đang dùng: [notebook bỏ top 0,1% mỗi năm](thu_nhap_4_cau_bo_top_0_1_phan_tram.ipynb).
 
-**Kết quả chính:** sau lọc, thu nhập thực bình quân tăng **16,73%**; mean của cả bốn Q đều tăng theo các kiểm định xấp xỉ. Phương sai mẫu tăng **3,86%** và có bằng chứng gap tuyệt đối Q4−Q1 tăng theo xấp xỉ (kiểm định bổ sung chọn hướng sau khi xem dữ liệu). Tỷ số Q4/Q1 giảm từ **7,180 xuống 6,709 lần** theo kiểm định hai phía xấp xỉ delta. Phần phương sai chưa có kiểm định F hợp lệ.
+**Kết quả chính:** sau lọc, thu nhập thực bình quân tăng **16,73%**; mean của cả bốn Q đều tăng theo các kiểm định xấp xỉ. Phương sai mẫu tăng **3,86%** và có bằng chứng gap tuyệt đối Q4−Q1 tăng theo xấp xỉ (kiểm định bổ sung chọn hướng sau khi xem dữ liệu). Tỷ số Q4/Q1 giảm từ **7,180 xuống 6,709 lần** theo kiểm định hai phía xấp xỉ delta. **Câu phương sai chưa kiểm định, chưa quyết định H₀.**
 
 ## Dữ liệu và cách tính
 
@@ -60,6 +60,8 @@ Với mỗi q, đặt $\Delta_q=\mu_{q,2014}-\mu_{q,2010}$; **H₀: $\Delta_q=0$
 
 ### 3. Độ phân hóa thu nhập — phương sai — có giảm không?
 
+**Trạng thái: CHƯA kiểm định phương sai — chưa có quyết định bác bỏ/không bác bỏ H₀.** Kiểm định tính chuẩn đã thực hiện là kiểm định một giả thuyết khác.
+
 **H₀: $\sigma^2_{2014}=\sigma^2_{2010}$; H₁: $\sigma^2_{2014}<\sigma^2_{2010}$**. Tính phương sai mẫu bằng các hộ còn lại, mẫu số n−1.
 
 F-test hai phương sai, một phía trái — **Chap 7 §7.3** — cần mô hình chuẩn phù hợp. Sau lọc, dữ liệu vẫn bác bỏ chuẩn, nên **không tính p theo F hoặc đưa ra quyết định H₀ bằng test này**. Đây không phải ANOVA.
@@ -94,6 +96,26 @@ Dưới H₀, $Z_R=\widehat\Delta_R/SE_{\Delta_R}\approx N(0,1)$. Dùng bốn m�
 **Kết luận:** tỷ số từ **7,180 xuống 6,709 lần**, thay đổi **−0,471 lần (−6,56%)**. SE ≈ **0,1243**; Z ≈ **−3,793**; p hai phía ≈ **0,000149**. Bác bỏ H₀ ở mức 5% theo xấp xỉ delta; CI 95% của thay đổi tỷ số **[−0,715; −0,228]** nằm dưới 0, cho thấy **gap tương đối giảm**. Đây là phần phân tích bổ sung sau khi đã xem dữ liệu.
 
 Gap tuyệt đối tăng nhưng gap tương đối giảm vì **Q1 tăng nhanh hơn theo phần trăm, Q4 tăng nhiều hơn theo số tiền**. Kết quả này không thay cho kiểm định Gini hay kết luận về toàn bộ bất bình đẳng.
+
+## So sánh thêm: top 1% và 1,5×IQR
+
+[Notebook so sánh riêng](so_sanh_loc_thu_nhap_0_1_1_IQR.ipynb) giữ cùng CPI, nhãn Q gốc và phương pháp của bản top 0,1%. Ngưỡng tính riêng từng năm. Với IQR, chỉ bỏ thu nhập trên $q_{75}+1,5(q_{75}-q_{25})$; phân vị được nội suy theo vị trí $(n+1)p$, như notebook khảo sát trước.
+
+| Bộ lọc | Số hộ loại 2010 / 2014 | Mean thực 2010 → 2014 | Mean tăng | Phương sai **mẫu** đổi |
+|---|---:|---:|---:|---:|
+| Top 0,1% | 10 / 10 | 17,598 → 20,543 | +16,73% | +3,86% |
+| Top 1% | 94 / 94 | 16,640 → 19,670 | +18,21% | +22,38% |
+| Trên 1,5×IQR | 519 / 474 | 14,774 → 17,824 | +20,65% | +34,75% |
+
+| Bộ lọc | Gap tuyệt đối 2010 → 2014 | p phía tăng | Tỷ số Q4/Q1 2010 → 2014 | p hai phía |
+|---|---:|---:|---:|---:|
+| Top 0,1% | 32,487 → 35,918 | 7,91×10⁻⁹ | 7,180 → 6,709 | 0,000149 |
+| Top 1% | 29,285 → 33,127 | 2,43×10⁻²⁴ | 6,571 → 6,265 | 0,000506 |
+| Trên 1,5×IQR | 24,391 → 28,343 | 3,26×10⁻⁷⁸ | 5,640 → 5,505 | 0,029353 |
+
+Theo từng kiểm định xấp xỉ ở mức 5%, cả ba bộ lọc đều cho bằng chứng **mean toàn mẫu và từng Q tăng; gap tuyệt đối tăng; gap tương đối giảm**. Phương sai chỉ có kết quả mô tả, **chưa có quyết định H₀**. Cả 30 mẫu kiểm tra (5 phạm vi × 2 năm × 3 bộ lọc) bác bỏ chuẩn theo JB. Các p ở đây là riêng lẻ, không bảo đảm đồng thời.
+
+Ngưỡng IQR theo giá 2010 là **43,368 triệu** năm 2010 và **50,402 triệu** năm 2014; loại khoảng **5,52% / 5,04%** số hộ, nhiều hơn top 1%. Mọi hộ bị loại thuộc Q4 gốc. Mỗi bộ lọc thay đổi phần hộ được phân tích; các bản này dùng để đối chiếu, chưa thay bản chính top 0,1%.
 
 ## Kiểm tra phân phối và công thức trong lớp
 
@@ -132,6 +154,7 @@ Dùng t và bậc tự do của Chap 7 §7.2.4 cho các câu mean. Toàn bộ ph
 - [Kết quả mean: n, SE, thống kê, p và CI](thu_nhap_bo_top_0_1_mean_tests.csv).
 - [Kiểm định gap tuyệt đối: phía tăng, phía giảm trước đó và CI](thu_nhap_bo_top_0_1_gap_test.csv).
 - [Kiểm định tỷ số Q4/Q1: hai phía, SE và CI](thu_nhap_bo_top_0_1_gap_tuong_doi.csv).
+- So sánh bộ lọc: [sổ mẫu](so_sanh_loc_thu_nhap_so_mau.csv), [phân phối](so_sanh_loc_thu_nhap_phan_phoi.csv), [test mean từng Q](so_sanh_loc_thu_nhap_mean_tests.csv), [gap và kết quả chung](so_sanh_loc_thu_nhap_ket_qua.csv).
 - Khảo sát ngưỡng: [theo năm](khao_sat_nguong_thu_nhap_cao_theo_nam.csv), [so sánh](khao_sat_nguong_thu_nhap_cao_so_sanh.csv), [phân phối](khao_sat_nguong_thu_nhap_cao_phan_phoi.csv).
 
 Clone/download toàn repo để giữ đường dẫn `dataset/` và `bao_cao_vhlss/`. Đã chạy bằng **Python 3.12.3**. Cài thư viện bằng `python -m pip install -r bao_cao_vhlss/requirements_thu_nhap.txt`, mở notebook bằng VS Code/Jupyter, chọn môi trường Python rồi **Run All**. Có thể đọc ngay kết quả đã lưu trên GitHub mà không chạy lại.
