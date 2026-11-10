@@ -33,11 +33,11 @@ Q1–Q3 không mất hộ. Q4 sau lọc là phần còn lại của Q4 ban đầ
 
 ## Bốn câu hỏi, giả thuyết và kết luận
 
-Mức ý nghĩa **5% cho từng phép kiểm định**. Các mean trong phần này là mean của phần hộ được giữ.
+Mức ý nghĩa **5% cho từng phép kiểm định**. Theo cách trình bày trong slide Chap 7, **H₀ viết dấu “=”**; hướng tăng/giảm nằm ở H₁ và quyết định phía kiểm định. Các mean trong phần này là mean của phần hộ được giữ.
 
 ### 1. Thu nhập bình quân đầu người có tăng không?
 
-Đặt $\Delta=\mu_{2014}-\mu_{2010}$; **H₀: $\Delta\le0$; H₁: $\Delta>0$**. Estimator là chênh lệch hai mean sau lọc.
+Đặt $\Delta=\mu_{2014}-\mu_{2010}$; **H₀: $\Delta=0$; H₁: $\Delta>0$**. Estimator là chênh lệch hai mean sau lọc.
 
 Dùng **t-test hai mẫu độc lập, phương sai tổng thể chưa biết và không giả sử bằng nhau, một phía phải — Chap 7 §7.2.4**, tính từ mẫu còn lại sau lọc.
 
@@ -45,7 +45,7 @@ Dùng **t-test hai mẫu độc lập, phương sai tổng thể chưa biết v�
 
 ### 2. Thu nhập bình quân trong từng Q1–Q4 có tăng không?
 
-Với mỗi q, đặt $\Delta_q=\mu_{q,2014}-\mu_{q,2010}$; **H₀: $\Delta_q\le0$; H₁: $\Delta_q>0$**.
+Với mỗi q, đặt $\Delta_q=\mu_{q,2014}-\mu_{q,2010}$; **H₀: $\Delta_q=0$; H₁: $\Delta_q>0$**.
 
 **Cả Q1–Q4:** cùng t-test hai mẫu độc lập, phương sai tổng thể chưa biết và không giả sử bằng nhau, một phía phải — **Chap 7 §7.2.4**. Dùng số hộ và phương sai của từng Q sau lọc; không lấy hai mean năm làm hai quan sát.
 
@@ -60,7 +60,7 @@ Với mỗi q, đặt $\Delta_q=\mu_{q,2014}-\mu_{q,2010}$; **H₀: $\Delta_q\le
 
 ### 3. Độ phân hóa thu nhập — phương sai — có giảm không?
 
-**H₀: $\sigma^2_{2014}\ge\sigma^2_{2010}$; H₁: $\sigma^2_{2014}<\sigma^2_{2010}$**. Tính phương sai mẫu bằng các hộ còn lại, mẫu số n−1.
+**H₀: $\sigma^2_{2014}=\sigma^2_{2010}$; H₁: $\sigma^2_{2014}<\sigma^2_{2010}$**. Tính phương sai mẫu bằng các hộ còn lại, mẫu số n−1.
 
 F-test hai phương sai, một phía trái — **Chap 7 §7.3** — cần mô hình chuẩn phù hợp. Sau lọc, dữ liệu vẫn bác bỏ chuẩn, nên **không tính p theo F hoặc đưa ra quyết định H₀ bằng test này**. Đây không phải ANOVA.
 
@@ -68,7 +68,7 @@ F-test hai phương sai, một phía trái — **Chap 7 §7.3** — cần mô h�
 
 ### 4. Gap thu nhập Q1–Q4 có giảm không?
 
-Gap chính là **chênh lệch tiền giữa hai mean**: $G_t=\mu_{Q4,t}-\mu_{Q1,t}$. Đặt $\Delta_G=G_{2014}-G_{2010}$; **H₀: $\Delta_G\ge0$; H₁: $\Delta_G<0$**.
+Gap chính là **chênh lệch tiền giữa hai mean**: $G_t=\mu_{Q4,t}-\mu_{Q1,t}$. Đặt $\Delta_G=G_{2014}-G_{2010}$; **H₀: $\Delta_G=0$; H₁: $\Delta_G<0$**.
 
 Dùng **tương phản bốn mean, xấp xỉ chuẩn, một phía trái**. SE cộng bốn thành phần $S^2/n$ của các nhóm sau lọc. Đây là vận dụng CLT và tính phương sai tổng từ **Chap 3**; không phải t-test với hai gap làm hai quan sát.
 
