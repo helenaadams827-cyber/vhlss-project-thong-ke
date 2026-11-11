@@ -1,3 +1,27 @@
+thầy nghĩ về mặt ý tưởng với phân tích thì oke rồi, tí thầy sẽ chỉ cho đoạn chưa follow lắm, nhưng mà thầy nghĩ nên có từ đầu 1 cái benchmark tiêu chí nào là đạt đúng điều kiện chất lượng cuộc sống tăng ấy (kiểu như xem phần phân tích của mình đã đạt hay không đạt cái tiêu chí mình đề ra từ đầu chưa) ví dụ nhé:
+## Thế nào là "mức sống cải thiện"?
+
+Mức sống có nhiều chiều (thu nhập, tiêu dùng, giáo dục, sức khoẻ, nhà ở...). Bài này chỉ xét **mặt tài chính** của mức sống qua ba khía cạnh: Thu nhập, Chi tiêu và Chi vượt thu. Mức sống năm 2014 được coi là cải thiện so với 2010 nếu đạt các tiêu chí sau:
+
+| Khía cạnh | Câu hỏi | Chỉ tiêu chính | Đạt khi |
+|---|---|---|---|
+| 1. Thu nhập | Hộ có nhiều nguồn lực hơn để sống không? | Thu nhập thực đầu người (giá 2010) | (a) Mean toàn mẫu tăng có ý nghĩa thống kê, median cùng tăng; (b) mean nhóm Q1 tăng có ý nghĩa thống kê; (c) mean ở cả thành thị và nông thôn tăng có ý nghĩa thống kê |
+| 2. Chi tiêu | | | |
+| 3. Chi vượt thu | | | |
+
+**Tiêu chí phụ cho Thu nhập:** nếu nhóm nghèo tăng nhanh hơn nhóm giàu theo % (tỷ số mean Q4/Q1 giảm) thì kết luận thêm rằng lợi ích được chia đều hơn. Đây không phải điều kiện bắt buộc.
+
+**Cách kết luận chung:**
+- Đạt cả 3 khía cạnh → mức sống (về tài chính) **cải thiện**.
+- Đạt 1–2 khía cạnh → **cải thiện một phần**, chỉ rõ khía cạnh chưa đạt.
+- Không đạt khía cạnh nào → **chưa cải thiện**.
+
+**Quy ước cho phần Thu nhập:**
+- Thu nhập thực đầu người = income ÷ size, quy về giá 2010 bằng CPI (2010 = 100; 2014 = 143,69).
+- Bỏ 0,1% hộ có thu nhập đầu người cao nhất trong từng năm.
+- Mức ý nghĩa 5%; "tăng" nghĩa là có ý nghĩa thống kê (Welch t-test một phía); median dùng để xác nhận cùng chiều.
+- Hai năm là hai mẫu hộ độc lập, không theo dõi cùng hộ; mỗi hộ có trọng số bằng nhau.
+- Q1–Q4 là nhóm thu nhập có sẵn trong dữ liệu, xác định riêng cho từng năm.
 # Thu nhập 2010–2014
 
 Cập nhật **10/11/2026**. Bản đang dùng: [notebook bỏ top 0,1% mỗi năm](thu_nhap_4_cau_bo_top_0_1_phan_tram.ipynb).
@@ -59,7 +83,7 @@ Với mỗi q, đặt $\Delta_q=\mu_{q,2014}-\mu_{q,2010}$; **H₀: $\Delta_q=0$
 **Kết luận:** cả bốn test riêng lẻ bác bỏ H₀ theo xấp xỉ đang dùng. Không suy mức tăng giữa các Q khác nhau bằng cách so các p riêng. Giá trị p cực nhỏ được ghi bằng cận, không gọi là p bằng 0.
 
 ### 3. Độ phân hóa thu nhập — phương sai — có giảm không?
-
+(Thực ra nghĩ lại thì độ phân hóa thu nhập không thật sự phản ánh mức sống cải thiện nhỉ, kiểu như bây giờ Q1 10tr, Q4 33tr xong thu nhập tất cả đều tăng thì về cơ bản độ phân hóa vẫn vậy, thầy nghĩ ý tưởng này sẽ không quá liên quan tới mục tiêu đo chất lượng cuộc sống của mình)
 **Trạng thái: CHƯA kiểm định phương sai — chưa có quyết định bác bỏ/không bác bỏ H₀.** Kiểm định tính chuẩn đã thực hiện là kiểm định một giả thuyết khác.
 
 **H₀: $\sigma^2_{2014}=\sigma^2_{2010}$; H₁: $\sigma^2_{2014}<\sigma^2_{2010}$**. Tính phương sai mẫu bằng các hộ còn lại, mẫu số n−1.
@@ -68,7 +92,7 @@ F-test hai phương sai, một phía trái — **Chap 7 §7.3** — cần mô h�
 
 **Kết luận mô tả:** phương sai mẫu tăng từ **271,865 lên 282,347**, tức **+3,86%**. Chưa khẳng định phương sai tổng thể tăng hay giảm bằng một kiểm định hợp lệ trong bài hiện tại. Phương sai đo phân tán tuyệt đối, không đồng nhất với Gini hay bất bình đẳng tương đối.
 
-### 4a. Gap tuyệt đối Q1–Q4 có tăng không?
+### 4a. Gap tuyệt đối Q1–Q4 có tăng không? cái gap này cũng đang bị tình huống giống phương sai nè, có thể bỏ đi
 
 Gap chính là **chênh lệch tiền giữa hai mean**: $G_t=\mu_{Q4,t}-\mu_{Q1,t}$. Đặt $\Delta_G=G_{2014}-G_{2010}$; **H₀: $\Delta_G=0$; H₁: $\Delta_G>0$**.
 
@@ -78,7 +102,7 @@ Dùng **tương phản bốn mean, xấp xỉ chuẩn, một phía phải**. SE 
 
 **Đổi hướng sau khi xem dữ liệu:** ban đầu câu hỏi xét gap giảm (p phía trái ≈ 0,99999999). Theo yêu cầu mới, đây là kiểm định bổ sung theo hướng tăng, mang tính khám phá; không trình bày như giả thuyết tăng đặt trước. Notebook giữ cả p cũ để đối chiếu. Tỷ số Q4/Q1 chỉ mô tả một thước đo khác.
 
-### 4b. Gap tương đối Q4/Q1 có thay đổi không?
+### 4b. Gap tương đối Q4/Q1 có thay đổi không? cái này thì mình dùng để trả lời tiêu chí phụ được
 
 Dùng $R_t=\mu_{Q4,t}/\mu_{Q1,t}$: mean Q4 gấp bao nhiêu lần mean Q1. Đặt $\Delta_R=R_{2014}-R_{2010}$; **H₀: $\Delta_R=0$; H₁: $\Delta_R\ne0$**, kiểm định **hai phía**. Nếu dùng $(\mu_{Q4}-\mu_{Q1})/\mu_{Q1}=R-1$ thì mức thay đổi và kiểm định giống hệt. CPI chung trong từng năm triệt tiêu trong tỷ số.
 
